@@ -1,0 +1,33 @@
+{
+  "manifest_version": 2,
+  "name": "ID Strava Heatmap Chrome Extension",
+  "description": "",
+  "version": "0.1",
+  "permissions": [
+    "cookies",
+    "*://*.strava.com/*",
+    "*://*.openstreetmap.org/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [ 
+        "https://www.openstreetmap.org/id*"
+      ],
+      "js": [
+        "browser-polyfill.min.js",
+        "content.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "background": {
+    "scripts": [
+      "browser-polyfill.min.js",
+      "background.js"
+    ]
+  },
+  "web_accessible_resources": [
+    "script.js"
+  ]
+}
