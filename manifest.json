@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
-  "name": "ID Strava Heatmap Chrome Extension",
-  "description": "",
+  "name": "iD Strava Heatmap",
+  "description": "\"iD Strava Heatmap\" is a Chrome extension that seamlessly integrates the popular Strava Activity Heatmap into the iD editor. Easily overlay the heatmap data onto your workspace and gain valuable insights into popular routes and activity patterns.",
   "version": "0.1",
   "permissions": [
     "cookies",
@@ -29,5 +29,9 @@
   },
   "web_accessible_resources": [
     "script.js"
-  ]
+  ],
+  "homepage_url": "https://github.com/cmoffroad/id-strava-heatmap-extension",
+  "icons": {
+    
+  }
 }

@@ -9,15 +9,21 @@ async function injectScript(content) {
 }
 
 async function main() {
+  injectScript(browser.runtime.getURL("script.js"));
+
+  window.addEventListener("message", (event) => {
+    if (event.data === 'clearStravaCredentials') {
+      browser.runtime.sendMessage({
+        name: "clearStravaCredentials"
+      });
+    }
+  }, false);
+
   const response = await browser.runtime.sendMessage({
     name: "requestStravaCredentials"
   });
-  if (response.error) {
-    // TODO
-  } else {
-    await injectScript(`window.StravaHeatmapCredentials = ${JSON.stringify(response.credentials)};`);
-    await injectScript(browser.runtime.getURL("script.js"));
-  }
+  // console.debug('requestStravaCredentials', response);
+  await injectScript(`window.stravaCredentials = ${JSON.stringify(response.credentials)};`);
 }
 
 main();
