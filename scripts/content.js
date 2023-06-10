@@ -9,7 +9,7 @@ async function injectScript(content) {
 }
 
 async function main() {
-  injectScript(browser.runtime.getURL("script.js"));
+  injectScript(browser.runtime.getURL("scripts/script.js"));
 
   window.addEventListener("message", (event) => {
     if (event.data === 'clearStravaCredentials') {

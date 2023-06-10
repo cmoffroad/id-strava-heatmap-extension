@@ -14,8 +14,8 @@
         "https://www.openstreetmap.org/id*"
       ],
       "js": [
-        "browser-polyfill.min.js",
-        "content.js"
+        "scripts/browser-polyfill.min.js",
+        "scripts/content.js"
       ],
       "run_at": "document_start",
       "all_frames": true
@@ -23,12 +23,12 @@
   ],
   "background": {
     "scripts": [
-      "browser-polyfill.min.js",
-      "background.js"
+      "scripts/browser-polyfill.min.js",
+      "scripts/background.js"
     ]
   },
   "web_accessible_resources": [
-    "script.js"
+    "scripts/script.js"
   ],
   "homepage_url": "https://github.com/cmoffroad/id-strava-heatmap-extension",
   "icons": {
