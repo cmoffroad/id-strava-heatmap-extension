@@ -1,6 +1,6 @@
 async function injectScript(content) {
   const script = document.createElement('script');
-  if (content.indexOf('chrome-extension://') === 0) 
+  if (content.indexOf('://') !== -1) 
     script.src = content;
   else 
     script.textContent = content;
@@ -9,7 +9,7 @@ async function injectScript(content) {
 }
 
 async function main() {
-  injectScript(browser.runtime.getURL("scripts/script.js"));
+  injectScript(browser.runtime.getURL("scripts/injected.js"));
 
   window.addEventListener("message", (event) => {
     if (event.data === 'clearStravaCredentials') {
