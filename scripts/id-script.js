@@ -3,7 +3,7 @@ function resolveStravaHeatmapImagery(type, color) {
   return {
     id: `StravaHeatmap${type}`,
     name: `Strava Heatmap (${type})`,
-    description: "The Strava Heatmap shows 'heat' made by aggregated, public activities over the last year.",
+    description: `The Strava Heatmap (${type}) shows heat made by aggregated, public activities over the last year.`,
     template: `https://heatmap-external-{switch:a,b,c}.strava.com/tiles/${type.toLowerCase()}/${color.toLowerCase()}/{zoom}/{x}/{y}.png`,
     terms_url: "https://wiki.openstreetmap.org/wiki/Strava#Data_Permission_-_Allowed_for_tracing!",
     zoomExtent: [0, 24],
