@@ -1,4 +1,4 @@
-// import "scripts/browser-polyfill.min.js";
+import "./browser-polyfill.min.js";
 
 let stravaCredentials = null;
 
@@ -16,12 +16,15 @@ async function getStravaCookie(name) {
 
   const { expirationDate, value } = cookie;
   const nowInSeconds = Date.now() / 1000;
-  if (expirationDate && expirationDate <= nowInSeconds)
+  if (expirationDate && expirationDate <= nowInSeconds) {
     return null;
-  if (value === undefined)
+  }
+  else if (value === undefined) {
     return null;
-  else
+  }
+  else {
     return value;
+  }
 }
 
 async function requestStravaCredentials() {
@@ -33,6 +36,26 @@ async function requestStravaCredentials() {
   const error = !keyPairId || !policy || !signature;
   const credentials = error ? null : { keyPairId, policy, signature };
 
+  browser.declarativeNetRequest.updateDynamicRules({
+    removeRuleIds: [ 1 ],
+    addRules: credentials ? [
+      {
+        id: 1,
+        priority: 1,
+        condition: {
+          regexFilter: "^https://heatmap-external-(.*).strava.com/tiles/(all|ride|run|water|winter)/(.*)/(.*)/(.*)/(.*).png",
+          resourceTypes: ['main_frame', 'sub_frame', 'image'],
+        },
+        action: {
+          type: 'redirect',
+          redirect: { 
+            regexSubstitution: `https://heatmap-external-\\1.strava.com/tiles-auth/\\2/\\3/\\4/\\5/\\6.png?Key-Pair-Id=${keyPairId}&Policy=${policy}&Signature=${signature}`
+          },
+        }
+      }
+    ] : []
+  });
+
   stravaCredentials = credentials;
 }
 
@@ -40,6 +63,10 @@ async function clearStravaCredentials() {
   await clearStravaCookie('CloudFront-Key-Pair-Id');
   await clearStravaCookie('CloudFront-Policy');
   await clearStravaCookie('CloudFront-Signature');
+
+  browser.declarativeNetRequest.updateDynamicRules({
+    removeRuleIds: [ 1 ]
+  });  
 
   stravaCredentials = null;
 }
@@ -50,31 +77,3 @@ browser.runtime.onMessage.addListener(async function(message) {
   if (message === 'clearStravaCredentials')
     return clearStravaCredentials();
 });
-
-browser.webRequest.onBeforeRequest.addListener(
-  function (info) {
-    let redirectUrl = info.url;
-
-    if (stravaCredentials) {
-      const { keyPairId, policy, signature } = stravaCredentials;
-      const url = new URL(info.url);
-      redirectUrl = url.origin 
-        + url.pathname.replace('tiles', 'tiles-auth') 
-        + `?Key-Pair-Id=${keyPairId}&Policy=${policy}&Signature=${signature}` 
-        + (url.search ? `&${url.search}` : '');
-    }
-    return { redirectUrl };
-  },
-  {
-    urls: [ 
-      'https://*.strava.com/tiles/*' 
-    ],
-    types: [ 
-      'image', 
-      'main_frame'
-    ]
-  },
-  [
-    'blocking'
-  ]
-);
