@@ -17,7 +17,7 @@
       ],
       "js": [
         "scripts/browser-polyfill.min.js",
-        "scripts/authenticate.js",
+        "scripts/strava-request.js",
         "scripts/id-content.js"
       ],
       "run_at": "document_start",
@@ -28,7 +28,8 @@
         "https://www.strava.com/heatmap"
       ],
       "js": [
-        "scripts/authenticate.js"
+        "scripts/browser-polyfill.min.js",
+        "scripts/strava-request.js"
       ],
       "run_at": "document_idle"
     }
