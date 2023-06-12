@@ -5,6 +5,8 @@
   "version": "0.1",
   "permissions": [
     "cookies",
+    "webRequest",
+    "webRequestBlocking",
     "*://*.strava.com/*",
     "*://*.openstreetmap.org/*"
   ],
@@ -15,10 +17,20 @@
       ],
       "js": [
         "scripts/browser-polyfill.min.js",
-        "scripts/content.js"
+        "scripts/authenticate.js",
+        "scripts/id-content.js"
       ],
       "run_at": "document_start",
       "all_frames": true
+    },
+    {
+      "matches": [ 
+        "https://www.strava.com/heatmap"
+      ],
+      "js": [
+        "scripts/authenticate.js"
+      ],
+      "run_at": "document_idle"
     }
   ],
   "background": {
@@ -28,7 +40,7 @@
     ]
   },
   "web_accessible_resources": [
-    "scripts/injected.js"
+    "scripts/id-script.js"
   ],
   "homepage_url": "https://github.com/cmoffroad/id-strava-heatmap-extension",
   "icons": {

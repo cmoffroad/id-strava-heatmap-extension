@@ -1,3 +1,5 @@
+let stravaCredentials = null;
+
 async function clearStravaCookie(name) {
   return browser.cookies.remove({ name, url: `https://www.strava.com/heatmap` });
 }
@@ -20,7 +22,7 @@ async function getStravaCookie(name) {
     return value;
 }
 
-async function getStravaCredentials() {
+async function requestStravaCredentials() {
   const url = 'https://www.strava.com/heatmap';
   const keyPairId = await getStravaCookie('CloudFront-Key-Pair-Id');
   const policy    = await getStravaCookie('CloudFront-Policy');
@@ -29,7 +31,7 @@ async function getStravaCredentials() {
   const error = !keyPairId || !policy || !signature;
   const credentials = error ? null : { keyPairId, policy, signature };
 
-  return { error, credentials };
+  stravaCredentials = credentials;
 }
 
 async function clearStravaCredentials() {
@@ -37,21 +39,40 @@ async function clearStravaCredentials() {
   await clearStravaCookie('CloudFront-Policy');
   await clearStravaCookie('CloudFront-Signature');
 
-  // const cookies = await browser.cookies.getAll({domain: ".strava.com"});
-  // await Promise.all(
-  //   cookies.map(({ path, name }) => {
-  //     chrome.cookies.remove({ name, url: `https://www.strava.com${path}` });
-  //   })
-  // );
+  stravaCredentials = null;
 }
 
-
 browser.runtime.onMessage.addListener(async function(message) {
-  // const cookies = await browser.cookies.getAll({domain: ".strava.com"});
-  // console.log(cookies)
-
-  if (message.name === 'requestStravaCredentials')
-    return getStravaCredentials();
-  if (message.name === 'clearStravaCredentials')
+  if (message === 'requestStravaCredentials')
+    return requestStravaCredentials();
+  if (message === 'clearStravaCredentials')
     return clearStravaCredentials();
 });
+
+browser.webRequest.onBeforeRequest.addListener(
+  function (info) {
+    let redirectUrl = info.url;
+
+    if (stravaCredentials) {
+      const { keyPairId, policy, signature } = stravaCredentials;
+      const url = new URL(info.url);
+      redirectUrl = url.origin 
+        + url.pathname.replace('tiles', 'tiles-auth') 
+        + `?Key-Pair-Id=${keyPairId}&Policy=${policy}&Signature=${signature}` 
+        + (url.search ? `&${url.search}` : '');
+    }
+    return { redirectUrl };
+  },
+  {
+    urls: [ 
+      'https://*.strava.com/tiles/*' 
+    ],
+    types: [ 
+      'image', 
+      'main_frame'
+    ]
+  },
+  [
+    'blocking'
+  ]
+);
