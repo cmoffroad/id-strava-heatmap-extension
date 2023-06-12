@@ -1,3 +1,5 @@
+// import "scripts/browser-polyfill.min.js";
+
 let stravaCredentials = null;
 
 async function clearStravaCookie(name) {

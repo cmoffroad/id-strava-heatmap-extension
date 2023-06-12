@@ -1,0 +1,54 @@
+{
+  "manifest_version": 3,
+  "name": "iD Strava Heatmap",
+  "description": "Easily overlay the Strava Heatmap in your iD editor and gain valuable insights into popular routes and activity patterns.",
+  "version": "0.2",
+  "permissions": [
+    "cookies",
+    "webRequest",
+    "webRequestBlocking"
+  ],
+  "host_permissions": [
+    "*://*.strava.com/*",
+    "*://*.openstreetmap.org/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [ 
+        "https://www.openstreetmap.org/id*"
+      ],
+      "js": [
+        "scripts/browser-polyfill.min.js",
+        "scripts/authenticate.js",
+        "scripts/id-content.js"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN",
+      "all_frames": true
+    },
+    {
+      "matches": [ 
+        "https://www.strava.com/heatmap"
+      ],
+      "js": [
+        "scripts/authenticate.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "scripts/id-script.js"  
+      ],
+      "matches": [
+        "*://*/*"
+      ]
+    }
+  ],
+  "homepage_url": "https://github.com/cmoffroad/id-strava-heatmap-extension",
+  "icons": {
+    "48": "icons/icon-48.png"
+  }
+}
