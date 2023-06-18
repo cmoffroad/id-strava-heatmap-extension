@@ -2,7 +2,7 @@
 
 This browser extension brings a seamless integration of the [Strava Global Heatmap](https://www.strava.com/heatmap) into the OpenStreetMap [iD editor](https://www.openstreetmap.org/edit?editor=id), enhancing your mapping capabilities.
 
-![Strava Heatmap Overlays](./images/screenshot.png)
+![Strava Heatmap Overlays](./images/screenshot2.png)
 
 ## Background
 
@@ -18,7 +18,7 @@ To learn more about using the Strava Heatmap in OpenStreetMap, consult the [Stra
 
 ## Installation
 
-Available as a [Chrome extension](). 
+Available as a [Chrome extension](https://chrome.google.com/webstore/detail/eglbcifjafncknmpmnelckombmgddlco). 
 
 ## Instructions
 
