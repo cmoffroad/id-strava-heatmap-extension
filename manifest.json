@@ -3,6 +3,7 @@
   "name": "iD Strava Heatmap",
   "description": "Easily overlay the Strava Global Heatmap in your iD editor and gain valuable insights into popular routes and activity patterns.",
   "version": "0.8",
+  "minimum_chrome_version": "63",
   "permissions": [
     "cookies",
     "declarativeNetRequest"
