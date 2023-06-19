@@ -1,3 +1,3 @@
-const config = require('../package.json');
+const manifest = require('../manifest.json');
 
-console.log(`zip dist/${config.version}.zip manifest.json icons/* scripts/*`);
+console.log(`zip dist/${manifest.version}.zip manifest.json icons/* scripts/*`);
