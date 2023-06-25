@@ -43,12 +43,12 @@ async function requestStravaCredentials() {
         id: 1,
         priority: 1,
         condition: {
-          regexFilter: "^https://heatmap-external-(.*).strava.com/tiles/(all|ride|run|water|winter)/(.*)/(.*)/(.*)/(.*).png",
+          regexFilter: "^https://heatmap-external-(.*).strava.com/tiles/(all|ride|run|water|winter)/(.*)/(.*)/(.*)/(.*).png\??(.*)",
           resourceTypes: ['main_frame', 'sub_frame', 'image'],
         },
         action: {
           type: 'redirect',
-          redirect: { 
+          redirect: {
             regexSubstitution: `https://heatmap-external-\\1.strava.com/tiles-auth/\\2/\\3/\\4/\\5/\\6.png?Key-Pair-Id=${keyPairId}&Policy=${policy}&Signature=${signature}`
           },
         }
@@ -66,7 +66,7 @@ async function clearStravaCredentials() {
 
   browser.declarativeNetRequest.updateDynamicRules({
     removeRuleIds: [ 1 ]
-  });  
+  });
 
   stravaCredentials = null;
 }
@@ -77,3 +77,5 @@ browser.runtime.onMessage.addListener(async function(message) {
   if (message === 'clearStravaCredentials')
     return clearStravaCredentials();
 });
+
+requestStravaCredentials();
