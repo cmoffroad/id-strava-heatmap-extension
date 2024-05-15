@@ -1,15 +1,10 @@
 import "./browser-polyfill.min.js";
 
-async function clearStravaCookie (name) {
-  return browser.cookies.remove({
-    url: `https://www.strava.com/heatmap`,
-    name
-  });
-}
+let stravaUrl = 'https://www.strava.com';
 
 async function getStravaCookie (name) {
   const cookie = await browser.cookies.get({
-    url: 'https://www.strava.com/heatmap',
+    url: stravaUrl,
     name: name,
   });
   if (!cookie)
@@ -29,9 +24,16 @@ async function getStravaCookie (name) {
 }
 
 async function clearCredentials() {
-  await clearStravaCookie('CloudFront-Key-Pair-Id');
-  await clearStravaCookie('CloudFront-Policy');
-  await clearStravaCookie('CloudFront-Signature');
+  const cookies = await browser.cookies.getAll({
+    url: stravaUrl,
+  })
+  await cookies.map(async (cookie) => {
+    await browser.cookies.remove({
+      url: stravaUrl,
+      name: cookie.name
+    })
+  })
+  return null;
 }
 
 async function getCredentials () {
@@ -60,12 +62,18 @@ async function getSettings () {
 }
 
 async function updateRules (credentials, settings) {
+  if (!credentials) {
+    return browser.declarativeNetRequest.updateDynamicRules({
+      removeRuleIds: [ 1 ]
+    });
+  }
+
   const { color, activity, ts } = settings;
   const { keyPairId, policy, signature } = credentials;
 
-  const updatedRules = browser.declarativeNetRequest.updateDynamicRules({
+  return browser.declarativeNetRequest.updateDynamicRules({
     removeRuleIds: [ 1 ],
-    addRules: credentials ? [
+    addRules: [
       {
         id: 1,
         priority: 1,
@@ -80,9 +88,8 @@ async function updateRules (credentials, settings) {
           },
         }
       }
-    ] : []
+    ]
   });
-  return updatedRules;
 }
 
 async function updateSettings(tabsQuery) {
@@ -100,7 +107,15 @@ async function requestSettings() {
   updateSettings({ currentWindow: true, active: true })
 }
 
+async function logout() {
+  const credentials = await clearCredentials();
+  const settings = await getSettings();
+  const rules = await updateRules(credentials, settings);
+}
+
 browser.runtime.onMessage.addListener(async function(message) {
+  if (message === 'getSettings')
+    return getSettings();
   if (message === 'requestSettings')
     return requestSettings();
   if (message === 'updateSettings')
@@ -109,6 +124,8 @@ browser.runtime.onMessage.addListener(async function(message) {
     return getCredentials();
   if (message === 'clearCredentials')
     return clearCredentials();
+  if (message === 'logout')
+    return logout();
 });
 
 //requestStravaCredentials();

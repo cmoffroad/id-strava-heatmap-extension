@@ -1,30 +1,38 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>iD Strava Heatmap Options</title>
+    <title>iD Strava Heatmap Settings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   </head>
-  <body>
-    <label>Color</label>
-    <select id="color">
-      <option value="blue">Blue</option>
-      <option value="hot">Hot</option>
-      <option value="gray">Gray</option>
-      <option value="purple">Purple</option>
-      <option value="bluered">Blue Red</option>
-      <option value="orange">Orange</option>
-    </select>
-    <label>Activity</label>
-    <select id="activity">
-      <option value="all">All</option>
-      <option value="ride">Ride</option>
-      <option value="run">Run</option>
-      <option value="water">Water</option>
-      <option value="winter">Winter</option>
-    </select>
-    <label>Opacity</label>
-    <input id="opacity" type="number" value="80" min="0" max="100" />
+  <body style="width: 150px; display: none">
+    <div id="logged_out">
+      <a href="https://www.strava.com/heatmap" target="_blank">Login into Strava</a>
+    </div>
+    <div id="logged_in">
+      <label>Color</label>
+      <select id="color">
+        <option value="blue">Blue</option>
+        <option value="hot">Hot</option>
+        <option value="gray">Gray</option>
+        <option value="purple">Purple</option>
+        <option value="bluered">Blue Red</option>
+        <option value="orange">Orange</option>
+      </select>
+      <label>Activity</label>
+      <select id="activity">
+        <option value="all">All</option>
+        <option value="ride">Ride</option>
+        <option value="run">Run</option>
+        <option value="water">Water</option>
+        <option value="winter">Winter</option>
+      </select>
+      <label>Opacity</label>
+      <input id="opacity" type="number" value="80" min="0" max="100" />
 
-    <div id="status"></div>
+      <div id="status"></div>
+
+      <button id="logout">Logout from Strava</a>
+    </div>
 
     <script src="scripts/browser-polyfill.min.js"></script>
     <script src="scripts/options.js"></script>
