@@ -6,7 +6,9 @@
   "minimum_chrome_version": "88",
   "permissions": [
     "cookies",
-    "declarativeNetRequest"
+    "declarativeNetRequest",
+    "storage",
+    "tabs"
   ],
   "host_permissions": [
     "*://*.strava.com/*",
@@ -23,7 +25,6 @@
       ],
       "js": [
         "scripts/browser-polyfill.min.js",
-        "scripts/strava-request.js",
         "scripts/id-content.js"
       ],
       "run_at": "document_start",
@@ -60,6 +61,9 @@
       ]
     }
   ],
+  "action": {
+    "default_popup": "options.html"
+  },
   "homepage_url": "https://github.com/cmoffroad/id-strava-heatmap-extension",
   "icons": {
     "48": "icons/icon-48.png"

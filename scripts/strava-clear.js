@@ -1,1 +1,1 @@
-browser.runtime.sendMessage('clearStravaCredentials');
+browser.runtime.sendMessage('clearCredentials');

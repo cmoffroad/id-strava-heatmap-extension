@@ -1,1 +1,1 @@
-browser.runtime.sendMessage('requestStravaCredentials');
+browser.runtime.sendMessage('getCredentials');
