@@ -19,7 +19,7 @@ window.fetch = async (...args) => {
 
   const response = await originalFetch(resource, config);
 
-  if (resource.match('/assets/iD/data/imagery.')) {
+  if (resource.match('/data/imagery.min')) {
 
     const json = () => response
       .clone()

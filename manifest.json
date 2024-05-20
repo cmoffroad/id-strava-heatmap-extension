@@ -10,7 +10,8 @@
   ],
   "host_permissions": [
     "*://*.strava.com/*",
-    "*://*.openstreetmap.org/*"
+    "*://*.openstreetmap.org/*",
+    "*://rapideditor.org/*"
   ],
   "background": {
     "service_worker": "scripts/background.js",
@@ -19,7 +20,8 @@
   "content_scripts": [
     {
       "matches": [
-        "https://www.openstreetmap.org/id*"
+        "https://www.openstreetmap.org/id*",
+        "https://rapideditor.org/edit*"
       ],
       "js": [
         "scripts/browser-polyfill.min.js",
@@ -56,7 +58,8 @@
         "scripts/id-script.js"
       ],
       "matches": [
-        "*://*.openstreetmap.org/*"
+        "*://*.openstreetmap.org/*",
+        "*://rapideditor.org/*"
       ]
     }
   ],

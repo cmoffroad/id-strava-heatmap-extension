@@ -37,13 +37,13 @@ async function requestStravaCredentials() {
   const credentials = error ? null : { keyPairId, policy, signature };
 
   browser.declarativeNetRequest.updateDynamicRules({
-    removeRuleIds: [ 1 ],
+    removeRuleIds: [ 1, 2 ],
     addRules: credentials ? [
       {
-        id: 1,
-        priority: 1,
+        id: 2,
+        priority: 2,
         condition: {
-          regexFilter: "^https://heatmap-external-(.*).strava.com/tiles/(all|ride|run|water|winter)/(.*)/(.*)/(.*)/(.*).png\??(.*)",
+          regexFilter: "^https://heatmap-external-(.*).strava.com/tiles/(.*)/(.*)/(.*)/(.*)/(.*).png\??(.*)",
           resourceTypes: ['main_frame', 'sub_frame', 'image'],
         },
         action: {
@@ -51,6 +51,20 @@ async function requestStravaCredentials() {
           redirect: {
             regexSubstitution: `https://heatmap-external-\\1.strava.com/tiles-auth/\\2/\\3/\\4/\\5/\\6.png?Key-Pair-Id=${keyPairId}&Policy=${policy}&Signature=${signature}`
           },
+        }
+      }, {
+        id: 1,
+        priority: 1,
+        condition: {
+          regexFilter: "^https://heatmap-external-(.*).strava.com/tiles",
+          resourceTypes: ['main_frame', 'sub_frame', 'image'],
+        },
+        action: {
+          type: "modifyHeaders",
+          requestHeaders: [
+            { "header": "Referer", "operation": "set", value: "https://www.openstreetmap.org/" },
+            { "header": "Access-Control-Allow-Origin", "operation": "set", "value": "*" }
+          ]
         }
       }
     ] : []
