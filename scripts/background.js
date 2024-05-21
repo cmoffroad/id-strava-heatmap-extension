@@ -40,8 +40,8 @@ async function requestStravaCredentials() {
     removeRuleIds: [ 1, 2 ],
     addRules: credentials ? [
       {
-        id: 2,
-        priority: 2,
+        id: 1,
+        priority: 1,
         condition: {
           regexFilter: "^https://heatmap-external-(.*).strava.com/tiles/(.*)/(.*)/(.*)/(.*)/(.*).png\??(.*)",
           resourceTypes: ['main_frame', 'sub_frame', 'image'],
@@ -53,17 +53,38 @@ async function requestStravaCredentials() {
           },
         }
       }, {
-        id: 1,
+        id: 2,
         priority: 1,
         condition: {
-          regexFilter: "^https://heatmap-external-(.*).strava.com/tiles",
-          resourceTypes: ['main_frame', 'sub_frame', 'image'],
+          initiatorDomains: [ browser.runtime.id ],
+          // regexFilter: "^https://heatmap-external-(.*).strava.com/tiles-auth",
+          resourceTypes: ['xmlhttprequest'],
         },
         action: {
           type: "modifyHeaders",
           requestHeaders: [
-            { "header": "Referer", "operation": "set", value: "https://www.openstreetmap.org/" },
-            { "header": "Access-Control-Allow-Origin", "operation": "set", "value": "*" }
+            {
+              header: "Referer",
+              operation: "set",
+              value: "https://www.openstreetmap.org/"
+            },
+            {
+              header: 'Sec-Fetch-Site',
+              operation: 'set',
+              value: 'same-origin'
+            }
+          ],
+          responseHeaders: [
+            {
+              header: "Referer",
+              operation: "set",
+              value: "https://www.openstreetmap.org/"
+            },
+            {
+              header: 'Sec-Fetch-Site',
+              operation: 'set',
+              value: 'same-origin'
+            }
           ]
         }
       }
