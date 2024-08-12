@@ -6,7 +6,7 @@ function resolveStravaHeatmapImagery(type, color) {
     description: `The Strava Heatmap (${type}) shows heat made by aggregated, public activities over the last year.`,
     template: `https://heatmap-external-{switch:a,b,c}.strava.com/tiles/${type.toLowerCase()}/${color.toLowerCase()}/{zoom}/{x}/{y}.png?v=19`,
     terms_url: "https://wiki.openstreetmap.org/wiki/Strava#Data_Permission_-_Allowed_for_tracing!",
-    zoomExtent: [0, 24],
+    zoomExtent: [0, 15],
     overlay: true
   };
 }
