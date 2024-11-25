@@ -18,7 +18,7 @@ To learn more about using the Strava Heatmap in OpenStreetMap, consult the [Stra
 
 ## Installation
 
-Available as a [Chrome extension](https://chrome.google.com/webstore/detail/eglbcifjafncknmpmnelckombmgddlco). 
+Available as a [Chrome extension](https://chrome.google.com/webstore/detail/eglbcifjafncknmpmnelckombmgddlco), and a [Firefox extension](https://addons.mozilla.org/en-US/firefox/addon/id-strava-heatmap/). 
 
 ## Instructions
 
