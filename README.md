@@ -18,7 +18,7 @@ To learn more about using the Strava Heatmap in OpenStreetMap, consult the [Stra
 
 ## Installation
 
-Available as a [Chrome extension](https://chrome.google.com/webstore/detail/eglbcifjafncknmpmnelckombmgddlco), and a [Firefox extension](https://addons.mozilla.org/en-US/firefox/addon/id-strava-heatmap/). 
+Available as a [Chrome extension](https://chrome.google.com/webstore/detail/eglbcifjafncknmpmnelckombmgddlco), and a [Firefox extension](https://addons.mozilla.org/en-US/firefox/addon/id-strava-heatmap/).
 
 ## Instructions
 
@@ -26,7 +26,7 @@ To get started, follow these simple installation steps:
 
 1. Begin by installing the extension in your browser.
 2. Next, log in into [Strava](https://www.strava.com/login). If you don't have an account yet, sign up for a free one.
-3. Visit the [Strava Global Heatmap](https://www.strava.com/heatmap) webpage. 
+3. Visit the [Strava Global Heatmap](https://www.strava.com/heatmap) webpage.
 4. Launch the [iD editor](https://www.openstreetmap.org/edit?editor=id) to access your mapping workspace.
 5. Within the iD editor, open the `Background Settings` (shortcut: `B`) to configure your preferences.
 6. Look for the `Overlays` section and expand it.
