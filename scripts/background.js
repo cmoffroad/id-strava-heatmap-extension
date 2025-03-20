@@ -37,11 +37,11 @@ async function requestStravaCredentials() {
   const credentials = error ? null : { keyPairId, policy, signature };
 
   browser.declarativeNetRequest.updateDynamicRules({
-    removeRuleIds: [ 1 ],
+    removeRuleIds: [ 2 ],
     addRules: credentials ? [
       {
-        id: 1,
-        priority: 1,
+        id: 2,
+        priority: 2,
         condition: {
           regexFilter: "^https://heatmap-external-(.*).strava.com/tiles/(all|ride|run|water|winter)/(.*)/(.*)/(.*)/(.*).png\??(.*)",
           resourceTypes: ['main_frame', 'sub_frame', 'image'],
