@@ -173,19 +173,6 @@ function createContextMenu() {
     title: 'Check for Updates',
     contexts: ['page'],
   });
-
-  // Handle menu clicks
-  browser.contextMenus.onClicked.addListener(async (info, tab) => {
-    if (info.menuItemId === 'forumSupport') {
-      browser.tabs.create({ url: EXTENSION_FORUM_URL });
-    } else if (info.menuItemId === 'submitIssue') {
-      browser.tabs.create({ url: EXTENSION_ISSUES_URL });
-    } else if (info.menuItemId === 'extensionPage') {
-      browser.tabs.create({ url: EXTENSION_UPDATE_URL });
-    } else if (info.menuItemId === 'checkForUpdate') {
-      checkForUpdate();
-    }
-  });
 }
 
 async function onMessage(message) {
@@ -211,9 +198,22 @@ async function onInstalled(details) {
   }
 }
 
+async function onContextMenusClicked(info, tab){
+  if (info.menuItemId === 'forumSupport') {
+    browser.tabs.create({ url: EXTENSION_FORUM_URL });
+  } else if (info.menuItemId === 'submitIssue') {
+    browser.tabs.create({ url: EXTENSION_ISSUES_URL });
+  } else if (info.menuItemId === 'extensionPage') {
+    browser.tabs.create({ url: EXTENSION_UPDATE_URL });
+  } else if (info.menuItemId === 'checkForUpdate') {
+    checkForUpdate();
+  }
+}
+
 async function main() {
   browser.runtime.onMessage.addListener(onMessage);
   browser.runtime.onInstalled.addListener(onInstalled);
+  browser.contextMenus.onClicked.addListener(onContextMenusClicked);
 
   requestStravaCredentials();
 }
