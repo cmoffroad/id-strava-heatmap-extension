@@ -173,6 +173,13 @@ function createContextMenu() {
     title: 'Check for Updates',
     contexts: ['page'],
   });
+
+  browser.contextMenus.create({
+    id: 'clearCookies',
+    parentId: 'mainMenu',
+    title: 'Clear Cookies',
+    contexts: ['page'],
+  });
 }
 
 async function onMessage(message) {
@@ -207,6 +214,8 @@ async function onContextMenusClicked(info, tab) {
     browser.tabs.create({ url: EXTENSION_UPDATE_URL });
   } else if (info.menuItemId === 'checkForUpdate') {
     checkForUpdate();
+  } else if (info.menuItemId === 'clearCookies') {
+    clearStravaCredentials();
   }
 }
 
