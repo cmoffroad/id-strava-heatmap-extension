@@ -3,8 +3,12 @@
   "version": "0",
   "description": "This browser extension brings a seamless integration of the Strava Global Heatmap into the OpenStreetMap iD editor, enhancing your mapping capabilities.",
   "scripts": {
-    "dist": "node scripts/dist.js"
+    "dist": "node scripts/dist.js",
+    "dist:force": "node scripts/dist.js --force"
   },
   "author": "Julien Etienne <etienne.julien@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "commander": "^13.1.0"
+  }
 }
