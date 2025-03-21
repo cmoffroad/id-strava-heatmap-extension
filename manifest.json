@@ -6,25 +6,20 @@
   "permissions": ["cookies", "contextMenus", "declarativeNetRequest", "notifications"],
   "host_permissions": ["*://*.strava.com/*", "*://*.openstreetmap.org/*"],
   "background": {
-    "service_worker": "scripts/background.js",
+    "service_worker": "src/background.js",
     "type": "module"
   },
   "content_scripts": [
     {
       "matches": ["https://www.openstreetmap.org/id*"],
-      "js": [
-        "scripts/browser-polyfill.min.js",
-        "scripts/check-updates.js",
-        "scripts/strava-request.js",
-        "scripts/id-content.js"
-      ],
+      "js": ["lib/browser-polyfill.min.js", "src/content.js"],
       "run_at": "document_idle",
       "all_frames": true
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["scripts/id-script.js", "assets/imagery.json"],
+      "resources": ["src/inject.js", "assets/imagery.json"],
       "matches": ["*://*.openstreetmap.org/*"]
     }
   ],
