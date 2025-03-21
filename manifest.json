@@ -18,26 +18,25 @@
         "scripts/strava-request.js",
         "scripts/id-content.js"
       ],
-      "run_at": "document_start",
+      "run_at": "document_idle",
       "all_frames": true
-    },
-    {
-      "matches": ["https://www.strava.com/heatmap"],
-      "js": ["scripts/browser-polyfill.min.js", "scripts/strava-request.js"],
-      "run_at": "document_idle"
-    },
-    {
-      "matches": ["https://www.strava.com/login"],
-      "js": ["scripts/browser-polyfill.min.js", "scripts/strava-clear.js"],
-      "run_at": "document_start"
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["scripts/id-script.js"],
+      "resources": ["scripts/id-script.js", "assets/imagery.json"],
       "matches": ["*://*.openstreetmap.org/*"]
     }
   ],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "ruleset_1",
+        "enabled": true,
+        "path": "rules/imagery.json"
+      }
+    ]
+  },
   "homepage_url": "https://chromewebstore.google.com/detail/id-strava-heatmap/eglbcifjafncknmpmnelckombmgddlco",
   "icons": {
     "48": "icons/icon-48.png"

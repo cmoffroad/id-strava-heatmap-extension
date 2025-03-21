@@ -1,50 +1,15 @@
 {
-  "manifest_version": 3,
-  "name": "iD Strava Heatmap",
-  "description": "Easily overlay the Strava Global Heatmap in your iD editor and gain valuable insights into popular routes and activity patterns.",
-  "version": "0.9.2",
-  "permissions": ["cookies", "contextMenus", "declarativeNetRequest", "notifications"],
-  "host_permissions": ["*://*.strava.com/*", "*://*.openstreetmap.org/*"],
   "background": {
     "scripts": ["scripts/background.js"],
     "type": "module"
-  },
-  "content_scripts": [
-    {
-      "matches": ["https://www.openstreetmap.org/id*"],
-      "js": [
-        "scripts/browser-polyfill.min.js",
-        "scripts/check-updates.js",
-        "scripts/strava-request.js",
-        "scripts/id-content.js"
-      ],
-      "run_at": "document_start",
-      "all_frames": true
-    },
-    {
-      "matches": ["https://www.strava.com/heatmap"],
-      "js": ["scripts/browser-polyfill.min.js", "scripts/strava-request.js"],
-      "run_at": "document_idle"
-    },
-    {
-      "matches": ["https://www.strava.com/login"],
-      "js": ["scripts/browser-polyfill.min.js", "scripts/strava-clear.js"],
-      "run_at": "document_start"
-    }
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": ["scripts/id-script.js"],
-      "matches": ["*://*.openstreetmap.org/*"]
-    }
-  ],
-  "icons": {
-    "48": "icons/icon-48.png"
   },
   "browser_specific_settings": {
     "gecko": {
       "id": "id-strava-heatmap-extension@julcnx",
       "strict_min_version": "113.0"
     }
-  }
+  },
+  "minimum_chrome_version": null,
+  "homepage_url": null,
+  "update_url": "https://addons.mozilla.org/en-US/firefox/addon/id-strava-heatmap/"
 }
