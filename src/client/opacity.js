@@ -1,18 +1,22 @@
+import { createSection } from './section.js';
+
 // Function to initialize mouse listeners for opacity slider
 export function initializeOpacitySlider(parentElement, initialValue, callback) {
+  const section = createSection(parentElement, 'Display');
   const container = document.createElement('div');
-  container.className = 'display-options-container';
+  container.className = 'display-options-container controls-list';
   container.innerHTML = `
     <label class="display-control display-control-opacity">
-    <span class="localized-text" lang="en-US">Opacity</span>
-    <span class="display-option-value display-option-value-opacity">${
-      initialValue * 100
-    }%</span>
-    <div class="control-wrap">
+      <span class="localized-text" lang="en-US">Opacity</span>
+      <span class="display-option-value display-option-value-opacity">${Math.round(
+        initialValue * 100
+      )}%</span>
+      <div class="control-wrap">
         <input class="display-option-input display-option-input-opacity" type="range" min="0" max="1" step="0.01" value="${initialValue}">
-    </div>
-    </label>
+      </div>
+      </label>
     `;
+  section.appendChild(container);
 
   const opacityInput = container.querySelector('.display-option-input-opacity');
   if (!opacityInput) return;
@@ -41,8 +45,6 @@ export function initializeOpacitySlider(parentElement, initialValue, callback) {
       document.removeEventListener('mousemove', onMouseMove);
     });
   });
-
-  parentElement.appendChild(container);
 }
 
 // Function to update slider value based on mouse position
@@ -52,14 +54,14 @@ function updateSliderValue(opacityInput, event, callback) {
 
   // Ensure the value stays within 0 to 1 range
   const sliderWidth = rect.width;
-  const newValue = Math.round(Math.max(0, Math.min(1, mouseX / sliderWidth)));
+  const newValue = Math.max(0, Math.min(1, mouseX / sliderWidth));
 
   // Update the slider value
   opacityInput.value = newValue;
 
   // Optionally, update a visual display (e.g., a percentage display)
   document.querySelector('.display-option-value-opacity').textContent =
-    newValue * 100 + '%';
+    Math.round(newValue * 100) + '%';
 
   callback(newValue);
 }

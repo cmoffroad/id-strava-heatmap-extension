@@ -15,12 +15,12 @@ export function initializeStravaHeatmapTileObserver(callback) {
     mutationsList.forEach((mutation) => {
       if (mutation.type === 'childList') {
         mutation.addedNodes.forEach((node) => {
-          if (node.nodeName === 'DIV' && node.classList.contains('layer-overlay')) {
-            // Check for images with the specific Strava heatmap URL
-            const imgTiles = node.querySelectorAll('img.tile[src*=".strava.com/tiles"]');
-            imgTiles.forEach((img) => {
-              callback(img);
-            });
+          if (
+            node.nodeName === 'IMG' &&
+            node.classList.contains('tile') &&
+            node.src.includes('strava.com/tiles')
+          ) {
+            callback(node);
           }
         });
       }

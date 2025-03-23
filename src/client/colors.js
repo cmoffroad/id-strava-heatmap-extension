@@ -1,3 +1,5 @@
+import { createSection } from './section.js';
+
 const COLORS = {
   blue: 'Blue',
   hot: 'Hot',
@@ -8,36 +10,40 @@ const COLORS = {
 };
 
 export function initializeColorList(parentElement, initialValue, callback) {
+  const section = createSection(parentElement, 'Color');
   const container = document.createElement('div');
-  container.innerHTML = `
-    <ul class="layer-list layer-fill-list">
-      ${Object.entries(COLORS)
-        .map(
-          ([color, label]) => `
-            <li class="${color === initialValue ? 'active' : ''}">
-                <label>
-                <input type="radio" name="strava_heatmap_color" value="${color}" checked=${
-            color === initialValue ? 'true' : 'false'
-          }>
-                    <span><span class="localized-text" lang="en-US">${label}</span></span>
-                </label>
-            </li>`
-        )
-        .join('\n')}
-    </ul>
-    `;
+  const ul = document.createElement('ul');
+  ul.className = 'layer-list layer-fill-list';
 
-  container
-    .querySelectorAll('input[type="radio"][name="strava_heatmap_color"]')
-    .forEach((radio) => {
-      radio.addEventListener('change', (event) => {
-        if (event.target.checked) {
-          const selectedColor = event.target.value;
-          event.target.closest('li').classList.toggle('active', true);
-          callback(selectedColor);
-        }
-      });
+  Object.entries(COLORS).forEach(([color, label]) => {
+    const li = document.createElement('li');
+    if (color === initialValue) li.classList.add('active');
+
+    const labelElement = document.createElement('label');
+    const input = document.createElement('input');
+    input.type = 'radio';
+    input.name = 'strava_heatmap_color';
+    input.value = color;
+    input.checked = color === initialValue;
+
+    input.addEventListener('change', () => {
+      ul.querySelector('.active')?.classList.remove('active');
+      li.classList.add('active');
+      callback(color);
     });
 
-  parentElement.appendChild(container);
+    const span = document.createElement('span');
+    const localizedText = document.createElement('span');
+    localizedText.className = 'localized-text';
+    localizedText.lang = 'en-US';
+    localizedText.textContent = label;
+
+    span.appendChild(localizedText);
+    labelElement.append(input, span);
+    li.appendChild(labelElement);
+    ul.appendChild(li);
+  });
+
+  container.appendChild(ul);
+  section.appendChild(container);
 }

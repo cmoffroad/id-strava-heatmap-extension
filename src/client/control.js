@@ -1,3 +1,10 @@
+function onHashChange(paneContent) {
+  const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+  const overlays = hashParams.get('overlays')?.split(',') || [];
+  const disabled = !overlays.includes('strava-heatmap');
+  paneContent.querySelectorAll('input').forEach((input) => (input.disabled = disabled));
+}
+
 export function createPaneContent(controlsContainer, panesContainer) {
   const pane = document.createElement('div');
   pane.className = 'fillL map-pane stravaheatmap-pane hide';
@@ -58,7 +65,11 @@ export function createPaneContent(controlsContainer, panesContainer) {
     pane.classList.toggle('shown');
     pane.style.right = 0;
   });
+
+  const paneContent = pane.querySelector('.pane-content');
+  window.addEventListener('hashchange', () => onHashChange(paneContent));
+
   controlsContainer.appendChild(control);
 
-  return pane.querySelector('.pane-content');
+  return paneContent;
 }

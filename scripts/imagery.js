@@ -12,7 +12,7 @@ const outputPath = path.join(process.cwd(), 'assets', 'imagery.json');
 // Data to add to the imagery.json array
 const newImagery = `,
   {
-    "id": "StravaHeatmap",
+    "id": "strava-heatmap",
     "name": "Strava Heatmap",
     "description": "The Strava Heatmap shows heat made by aggregated, public activities over the last year.",
     "template":
