@@ -19,7 +19,17 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["src/inject.js", "assets/imagery.json"],
+      "resources": [
+        "assets/imagery.json",
+        "src/client/index.js",
+        "src/client/activities.js",
+        "src/client/control.js",
+        "src/client/colors.js",
+        "src/client/section.js",
+        "src/client/opacity.js",
+        "src/client/tiles.js",
+        "src/client/utils.js"
+      ],
       "matches": ["*://*.openstreetmap.org/*"]
     }
   ],

@@ -1,6 +1,6 @@
 // inject script
 const script = document.createElement('script');
-script.src = browser.runtime.getURL('src/inject.js');
+script.src = browser.runtime.getURL('src/client/index.js');
 script.type = 'module'; // Specify it as a module
 script.onload = () => script.remove(); // Removes after execution
 (document.head || document.documentElement).appendChild(script);
