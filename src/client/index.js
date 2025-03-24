@@ -1,18 +1,13 @@
 // import {} from './activities.js';
-import { createPaneContent } from './control.js';
+import { createPaneContent } from './panel.js';
 import { initializeColorList } from './colors.js';
 import { initializeOpacitySlider } from './opacity.js';
+import { getSetting, updateSetting } from './settings.js';
 import {
   initializeStravaHeatmapTileObserver,
   updateExistingStravaHeatmapTiles,
 } from './tiles.js';
-import { waitForDom } from './utils.js';
-
-const settings = {
-  opacity: 0.5,
-  color: 'hot',
-  activity: 'all',
-};
+import { onHashChange, toggleOverlay, waitForDom } from './utils.js';
 
 waitForDom('.map-controls', (mapControls) => {
   const paneContent = createPaneContent(
@@ -20,25 +15,44 @@ waitForDom('.map-controls', (mapControls) => {
     document.querySelector('.map-panes')
   );
 
-  // Call this function to initialize the observer once the page is loaded
-  initializeStravaHeatmapTileObserver(tileCallback);
+  waitForDom('.supersurface', (supersurfaceElement) => {
+    initializeStravaHeatmapTileObserver(supersurfaceElement, tileCallback);
 
-  // Initialize the opacity slider functionality
-  initializeOpacitySlider(paneContent, settings.opacity, (opacity) => {
-    settings.opacity = opacity;
-    updateExistingStravaHeatmapTiles(tileCallback);
-  });
+    // Initialize the opacity slider functionality
+    initializeOpacitySlider(paneContent, getSetting('opacity'), (opacity) => {
+      updateSetting('opacity', opacity);
+      updateExistingStravaHeatmapTiles(supersurfaceElement, tileCallback);
+    });
 
-  initializeColorList(paneContent, settings.color, (color) => {
-    settings.color = color;
-    updateExistingStravaHeatmapTiles(tileCallback);
+    initializeColorList(paneContent, getSetting('color'), (color) => {
+      updateSetting('color', color);
+      updateExistingStravaHeatmapTiles(supersurfaceElement, tileCallback);
+    });
+
+    window.addEventListener('hashchange', () => onHashChange(paneContent));
+
+    updateExistingStravaHeatmapTiles(supersurfaceElement, tileCallback);
+
+    onHashChange(paneContent);
+
+    const layer = Array.from(document.querySelector('.layer-overlay-list').children).find(
+      (child) => child.innerText === 'Strava Heatmap'
+    );
+
+    document.addEventListener('keydown', (event) => {
+      if ((event.code === 'KeyS')) {
+        layer.click();
+      }
+    });
   });
 });
 
 function tileCallback(img) {
-  img.style.opacity = settings.opacity;
+  img.style.opacity = getSetting('opacity');
+  const activity = getSetting('activity');
+  const color = getSetting('color');
   return (img.src = img.src.replace(
-    /^https:\/\/heatmap-external-(.*)\.strava\.com\/tiles(.*)\/(.*?)\/(.*?)\/(\d+)\/(\d+)\/(\d+)\.png/,
-    `https://heatmap-external-$1.strava.com/tiles$2/${settings.activity}/${settings.color}/$5/$6/$7.png`
+    /^https:\/\/heatmap-external-(.*)\.strava\.com\/tiles(.*)\/(.*?)\/(.*?)\/(\d+)\/(\d+)\/(\d+)\.png(.*)$/,
+    `https://heatmap-external-$1.strava.com/tiles$2/${activity}/${color}/$5/$6/$7.png$8`
   ));
 }

@@ -11,6 +11,14 @@ browser.runtime.sendMessage('checkForUpdate').catch((error) => {
 });
 
 // request Strava Credentials
-browser.runtime.sendMessage('requestStravaCredentials').catch((error) => {
-  console.error('Failed to send message:', error);
-});
+browser.runtime
+  .sendMessage('requestStravaCredentials')
+  .then((credentials) => {})
+  .catch((error) => {
+    console.error('Failed to send message:', error);
+  });
+
+let settingsDiv = document.createElement('div');
+settingsDiv.id = 'extension-settings';
+settingsDiv.style.display = 'none';
+document.body.appendChild(settingsDiv);
