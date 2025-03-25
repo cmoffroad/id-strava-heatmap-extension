@@ -7,15 +7,13 @@ import {
   initializeStravaHeatmapTileObserver,
   updateExistingStravaHeatmapTiles,
 } from './tiles.js';
-import { onHashChange, toggleOverlay, waitForDom } from './utils.js';
+import { onHashChange, setupOverlay, waitForDom } from './utils.js';
 
-waitForDom('.map-controls', (mapControls) => {
-  const paneContent = createPaneContent(
-    mapControls,
-    document.querySelector('.map-panes')
-  );
+waitForDom(
+  ['.map-controls', '.map-panes', '.supersurface', '.layer-overlay-list'],
+  (mapControls, mapPanes, supersurfaceElement, overlaysList) => {
+    const paneContent = createPaneContent(mapControls, mapPanes);
 
-  waitForDom('.supersurface', (supersurfaceElement) => {
     initializeStravaHeatmapTileObserver(supersurfaceElement, tileCallback);
 
     // Initialize the opacity slider functionality
@@ -34,18 +32,9 @@ waitForDom('.map-controls', (mapControls) => {
     updateExistingStravaHeatmapTiles(supersurfaceElement, tileCallback);
 
     onHashChange(paneContent);
-
-    const layer = Array.from(document.querySelector('.layer-overlay-list').children).find(
-      (child) => child.innerText === 'Strava Heatmap'
-    );
-
-    document.addEventListener('keydown', (event) => {
-      if ((event.code === 'KeyS')) {
-        layer.click();
-      }
-    });
-  });
-});
+    setupOverlay(overlaysList);
+  }
+);
 
 function tileCallback(img) {
   img.style.opacity = getSetting('opacity');
