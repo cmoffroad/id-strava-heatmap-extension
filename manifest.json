@@ -6,7 +6,7 @@
   "permissions": ["cookies", "contextMenus", "declarativeNetRequest", "notifications"],
   "host_permissions": ["*://*.strava.com/*", "*://*.openstreetmap.org/*"],
   "background": {
-    "service_worker": "src/background.js",
+    "service_worker": "src/background/index.js",
     "type": "module"
   },
   "content_scripts": [
@@ -15,6 +15,16 @@
       "js": ["lib/browser-polyfill.min.js", "src/content.js"],
       "run_at": "document_idle",
       "all_frames": true
+    },
+    {
+      "matches": ["https://www.strava.com/login"],
+      "js": ["lib/browser-polyfill.min.js", "src/logout.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["https://www.strava.com/maps"],
+      "js": ["lib/browser-polyfill.min.js", "src/login.js"],
+      "run_at": "document_idle"
     }
   ],
   "web_accessible_resources": [
@@ -23,6 +33,7 @@
         "assets/imagery.json",
         "src/client/index.js",
         "src/client/activities.js",
+        "src/client/auth.js",
         "src/client/control.js",
         "src/client/colors.js",
         "src/client/panel.js",
@@ -30,7 +41,8 @@
         "src/client/opacity.js",
         "src/client/settings.js",
         "src/client/tiles.js",
-        "src/client/utils.js"
+        "src/client/utils.js",
+        "src/unauthenticated.svg"
       ],
       "matches": ["*://*.openstreetmap.org/*"]
     }
@@ -38,7 +50,12 @@
   "declarative_net_request": {
     "rule_resources": [
       {
-        "id": "ruleset_1",
+        "id": "rules_cors",
+        "enabled": true,
+        "path": "rules/cors.json"
+      },
+      {
+        "id": "rules_imagery",
         "enabled": true,
         "path": "rules/imagery.json"
       }

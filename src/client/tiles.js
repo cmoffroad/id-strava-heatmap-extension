@@ -9,7 +9,7 @@ export function initializeStravaHeatmapTileObserver(supersurfaceElement, callbac
           if (
             node.nodeName === 'IMG' &&
             node.classList.contains('tile') &&
-            node.src.includes('strava.com/tiles')
+            node.src.includes('strava.com')
           ) {
             callback(node);
           }
@@ -24,9 +24,7 @@ export function initializeStravaHeatmapTileObserver(supersurfaceElement, callbac
 
 // Update opacity for all existing and future heatmap tiles
 export function updateExistingStravaHeatmapTiles(supersurfaceElement, callback) {
-  const images = supersurfaceElement.querySelectorAll(
-    'img.tile[src*="strava.com/tiles"]'
-  );
+  const images = supersurfaceElement.querySelectorAll('img.tile[src*="strava.com"]');
   images.forEach((img) => {
     callback(img);
   });

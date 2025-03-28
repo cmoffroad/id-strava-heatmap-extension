@@ -15,36 +15,52 @@ function togglePaneContent(panesContainer, pane) {
 export function createPaneContent(controlsContainer, panesContainer) {
   const pane = document.createElement('div');
   pane.className = 'fillL map-pane stravaheatmap-pane hide';
-  pane.innerHTML = `
-    <div class="" pane="stravaheatmap" style="right: 0px;">
-        <div class="pane-heading">
-            <h2><span class="localized-text" lang="en-US">Strava Heatmap</span></h2>
-            <button class="close title="close">
-                <svg class="icon ">
-                    <use xlink:href="#iD-icon-close"></use>
-                </svg>
-            </button>
-        </div>
-        <div class="pane-content">
-            
-        </div>
-    </div>
-  `;
+
+  const paneWrapper = document.createElement('div');
+  paneWrapper.setAttribute('pane', 'stravaheatmap');
+  paneWrapper.style.right = '0';
+
+  const heading = document.createElement('div');
+  heading.className = 'pane-heading';
+
+  const title = document.createElement('h2');
+  const titleText = document.createElement('span');
+  titleText.className = 'localized-text';
+  titleText.setAttribute('lang', 'en-US');
+  titleText.textContent = 'Strava Heatmap';
+  title.appendChild(titleText);
+
+  const closeButton = document.createElement('button');
+  closeButton.className = 'close';
+  closeButton.setAttribute('title', 'Close');
+
+  const closeIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  closeIcon.classList.add('icon');
+  const useIcon = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+  useIcon.setAttribute('xlink:href', '#iD-icon-close');
+  closeIcon.appendChild(useIcon);
+  closeButton.appendChild(closeIcon);
+
+  heading.append(title, closeButton);
+
+  const paneContent = document.createElement('div');
+  paneContent.className = 'pane-content';
+
+  paneWrapper.append(heading, paneContent);
+  pane.appendChild(paneWrapper);
   panesContainer.appendChild(pane);
 
   const control = createControl(controlsContainer);
-  control.addEventListener('click', () => togglePaneContent(panesContainer, pane));
-  pane
-    .querySelector('.close')
-    .addEventListener('click', () => togglePaneContent(panesContainer, pane));
+  const togglePane = () => togglePaneContent(panesContainer, pane);
+
+  control.addEventListener('click', togglePane);
+  closeButton.addEventListener('click', togglePane);
 
   document.addEventListener('keydown', (event) => {
     if (event.key === 's' && !event.metaKey && !event.ctrlKey && !event.altKey) {
-      togglePaneContent(panesContainer, pane);
+      togglePane();
     }
   });
-
-  const paneContent = pane.querySelector('.pane-content');
 
   return paneContent;
 }

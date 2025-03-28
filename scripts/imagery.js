@@ -15,10 +15,8 @@ const newImagery = `,
     "id": "strava-heatmap",
     "name": "Strava Heatmap",
     "description": "The Strava Heatmap shows heat made by aggregated, public activities over the last year.",
-    "template":
-        "https://heatmap-external-{switch:a,b,c}.strava.com/tiles/all/hot/{zoom}/{x}/{y}.png?v=19",
-    "terms_url":
-        "https://wiki.openstreetmap.org/wiki/Strava#Data_Permission_-_Allowed_for_tracing!",
+    "template": "https://content-a.strava.com/anon/globalheat/all/hot/{zoom}/{x}/{y}.png?v=19",
+    "terms_url": "https://wiki.openstreetmap.org/wiki/Strava#Data_Permission_-_Allowed_for_tracing!",
     "zoomExtent": [0, 15],
     "overlay": true
   }

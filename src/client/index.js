@@ -1,4 +1,5 @@
 // import {} from './activities.js';
+import { observeAuthMeta } from './auth.js';
 import { createPaneContent } from './panel.js';
 import { initializeColorList } from './colors.js';
 import { initializeOpacitySlider } from './opacity.js';
@@ -10,8 +11,14 @@ import {
 import { onHashChange, setupOverlay, waitForDom } from './utils.js';
 
 waitForDom(
-  ['.map-controls', '.map-panes', '.supersurface', '.layer-overlay-list'],
-  (mapControls, mapPanes, supersurfaceElement, overlaysList) => {
+  [
+    '.map-controls',
+    '.map-panes',
+    '.supersurface',
+    '.layer-overlay-list',
+    'meta[name="strava-heatmap-authenticated"]',
+  ],
+  (mapControls, mapPanes, supersurfaceElement, overlaysList, metaTag) => {
     const paneContent = createPaneContent(mapControls, mapPanes);
 
     initializeStravaHeatmapTileObserver(supersurfaceElement, tileCallback);
@@ -33,15 +40,24 @@ waitForDom(
 
     onHashChange(paneContent);
     setupOverlay(overlaysList);
+
+    observeAuthMeta(metaTag, (isAuthenticated) => {
+      console.log(isAuthenticated);
+      updateExistingStravaHeatmapTiles(supersurfaceElement, tileCallback);
+    });
   }
 );
 
 function tileCallback(img) {
-  img.style.opacity = getSetting('opacity');
+  const opacity = getSetting('opacity');
   const activity = getSetting('activity');
   const color = getSetting('color');
-  return (img.src = img.src.replace(
-    /^https:\/\/heatmap-external-(.*)\.strava\.com\/tiles(.*)\/(.*?)\/(.*?)\/(\d+)\/(\d+)\/(\d+)\.png(.*)$/,
-    `https://heatmap-external-$1.strava.com/tiles$2/${activity}/${color}/$5/$6/$7.png$8`
-  ));
+
+  img.style.opacity = opacity;
+  img.style.backgroundColor = color;
+
+  img.src = img.src.replace(
+    /^\/(.*?)\/(.*?)\/(\d+)\/(\d+)\/(\d+)\.png(.*)$/,
+    `/${activity}/${color}/$3/$4/$5.png$6`
+  );
 }
