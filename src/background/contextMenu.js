@@ -42,13 +42,6 @@ export function createContextMenu() {
     title: 'Check for Updates',
     contexts: ['page'],
   });
-
-  browser.contextMenus.create({
-    id: 'requestStravaCredentials',
-    parentId: 'mainMenu',
-    title: 'Request Strava Credentials',
-    contexts: ['page'],
-  });
 }
 export function setupContextMenuListener(checkForUpdate) {
   browser.contextMenus.onClicked.addListener((info, tab) => {

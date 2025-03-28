@@ -1,6 +1,10 @@
 import '../../lib/browser-polyfill.min.js';
 import { createContextMenu, setupContextMenuListener } from './contextMenu.js';
-import { requestStravaCredentials, clearStravaCredentials } from './credentials.js';
+import {
+  requestStravaCredentials,
+  clearStravaCredentials,
+  isUserAuthenticated,
+} from './credentials.js';
 import { notifyInstallationUpdate } from './installs.js';
 import { checkForUpdate } from './updates.js';
 
@@ -15,11 +19,14 @@ async function setupInstalledListener() {
 
 async function setupMessageListener() {
   browser.runtime.onMessage.addListener((message) => {
+    console.log(message);
     switch (message) {
       case 'requestStravaCredentials':
         return requestStravaCredentials();
       case 'clearStravaCredentials':
         return clearStravaCredentials();
+      case 'isUserAuthenticated':
+        return isUserAuthenticated();
       case 'checkForUpdate':
         return checkForUpdate();
     }

@@ -24,26 +24,16 @@ function injectOrUpdateAuthStatus(loggedIn) {
 }
 
 async function checkStravaAuth() {
-  const isAuthenticated = await browser.runtime.sendMessage('requestStravaCredentials');
+  const isAuthenticated = await browser.runtime.sendMessage('isUserAuthenticated');
   injectOrUpdateAuthStatus(isAuthenticated);
 }
-
-// chrome.runtime.onMessage.addListener((message) => {
-//   switch (message) {
-//     case 'isUserLoggedIn':
-//       return injectOrUpdateAuthStatus(true);
-//     case 'isUserLoggedOut':
-//       return injectOrUpdateAuthStatus(false);
-//     default:
-//       return null;
-//   }
-// });
 
 async function main() {
   injectClientScript();
 
   // Initial check
-  await checkStravaAuth();
+  browser.runtime.sendMessage('requestStravaCredentials');
+  checkStravaAuth();
 
   // Periodically check for changes (in case of logout/login)
   // setInterval(checkStravaAuth, 5000);

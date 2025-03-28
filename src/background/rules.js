@@ -13,7 +13,7 @@ const FALLBACK_SVG = `data:image/svg+xml;base64,${btoa(`
 `)}`;
 
 const RULE_REGEX_FILTER =
-  '^https://([^/]+)\\.strava\\.com/anon/globalheat/([^/]+)/([^/]+)/([^/]+)/([^/]+)/([^/]+)\\.png(\\?(v=[^&]+))?$';
+  '^https://([^/]+)\\.strava\\.com/(anon|identified)/globalheat/([^/]+)/([^/]+)/([^/]+)/([^/]+)/([^/]+)\\.png(\\?(v=[^&]+))?$';
 
 const RULE_REGEX_SUBSTITUTION = (credentials) =>
   `https://\\1.strava.com/identified/globalheat/\\2/\\3/\\4/\\5/\\6.png?\\8`;
@@ -23,7 +23,7 @@ export async function updateRequestRules(credentials) {
     removeRuleIds: [RULE_ID],
     addRules: credentials
       ? [
-          {
+          /*{
             id: RULE_ID,
             priority: 1,
             condition: {
@@ -36,7 +36,7 @@ export async function updateRequestRules(credentials) {
                 regexSubstitution: RULE_REGEX_SUBSTITUTION(credentials),
               },
             },
-          },
+          }*/
         ]
       : [
           {

@@ -1,8 +1,6 @@
 import { getStravaCookie, clearStravaCookie } from './cookies.js';
 import { updateRequestRules } from './rules.js';
 
-const STRAVA_URL = 'https://www.strava.com/heatmap';
-
 const COOKIE_NAMES = [
   'CloudFront-Key-Pair-Id',
   'CloudFront-Policy',
@@ -32,11 +30,14 @@ export async function requestStravaCredentials(force = false) {
     await updateRequestRules(newStravaCredentials);
     stravaCredentials = newStravaCredentials;
   }
-  return newStravaCredentials !== null;
 }
 
 export async function clearStravaCredentials() {
   await Promise.all(COOKIE_NAMES.map(clearStravaCookie));
+  await updateRequestRules(null);
   stravaCredentials = null;
-  return await updateRequestRules(null);
+}
+
+export async function isUserAuthenticated() {
+  return stravaCredentials !== null;
 }

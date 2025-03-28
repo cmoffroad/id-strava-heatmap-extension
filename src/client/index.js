@@ -42,8 +42,7 @@ waitForDom(
     setupOverlay(overlaysList);
 
     observeAuthMeta(metaTag, (isAuthenticated) => {
-      console.log(isAuthenticated);
-      updateExistingStravaHeatmapTiles(supersurfaceElement, tileCallback);
+      //updateExistingStravaHeatmapTiles(supersurfaceElement, tileCallback);
     });
   }
 );
