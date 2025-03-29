@@ -2,42 +2,46 @@
   "manifest_version": 3,
   "name": "iD Strava Heatmap",
   "description": "Easily overlay the Strava Global Heatmap in your iD editor and gain valuable insights into popular routes and activity patterns.",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "permissions": ["cookies", "contextMenus", "declarativeNetRequest", "notifications"],
   "host_permissions": ["*://*.strava.com/*", "*://*.openstreetmap.org/*"],
   "background": {
-    "service_worker": "scripts/background.js",
+    "service_worker": "src/background/index.js",
     "type": "module"
   },
   "content_scripts": [
     {
       "matches": ["https://www.openstreetmap.org/id*"],
-      "js": [
-        "scripts/browser-polyfill.min.js",
-        "scripts/check-updates.js",
-        "scripts/strava-request.js",
-        "scripts/id-content.js"
-      ],
-      "run_at": "document_start",
+      "js": ["lib/browser-polyfill.min.js", "src/content/id.js"],
+      "run_at": "document_idle",
       "all_frames": true
     },
     {
-      "matches": ["https://www.strava.com/heatmap"],
-      "js": ["scripts/browser-polyfill.min.js", "scripts/strava-request.js"],
+      "matches": ["https://www.strava.com/login*"],
+      "js": ["lib/browser-polyfill.min.js", "src/content/strava-login.js"],
       "run_at": "document_idle"
     },
     {
-      "matches": ["https://www.strava.com/login"],
-      "js": ["scripts/browser-polyfill.min.js", "scripts/strava-clear.js"],
-      "run_at": "document_start"
+      "matches": ["https://www.strava.com/maps/global-heatmap*"],
+      "js": ["lib/browser-polyfill.min.js", "src/content/strava-maps.js"],
+      "run_at": "document_idle"
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["scripts/id-script.js"],
+      "resources": ["assets/imagery.json"],
       "matches": ["*://*.openstreetmap.org/*"]
     }
   ],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "rules_imagery",
+        "enabled": true,
+        "path": "rules/imagery.json"
+      }
+    ]
+  },
   "homepage_url": "https://chromewebstore.google.com/detail/id-strava-heatmap/eglbcifjafncknmpmnelckombmgddlco",
   "icons": {
     "48": "icons/icon-48.png"

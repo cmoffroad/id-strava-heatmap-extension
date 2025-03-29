@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "condition": {
+      "regexFilter": "^https://www.openstreetmap.org/assets/iD/data/imagery.min-(.*).json$",
+      "resourceTypes": ["main_frame", "xmlhttprequest"]
+    },
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "regexSubstitution": "chrome.runtime.getURL('assets/imagery.json')"
+      }
+    }
+  }
+]
