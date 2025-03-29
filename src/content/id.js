@@ -1,22 +1,56 @@
+import { name as extensionName } from './extension.js';
+
+// Function to check for software updates
+async function checkForUpdates() {
+  try {
+    const updateInfo = await browser.runtime.sendMessage('checkForUpdates');
+    return updateInfo;
+  } catch (error) {
+    console.error('Error checking for updates:', error);
+    return null;
+  }
+}
+
+// Function to format the update message
+function formatUpdateMessage(updateInfo) {
+  const { number, changes } = updateInfo;
+  return `
+    A new version of the ${extensionName} extension (${number}) is available.
+
+    Please update to access the latest features and improvements:
+    ${changes.map((change) => `- ${change}`).join('\n')}
+
+    Click OK to proceed to the update page.
+  `;
+}
+
+// Function to handle the user confirmation and redirect if necessary
+function handleUpdateConfirmation(message, url) {
+  const userConfirmed = confirm(message);
+
+  if (userConfirmed) {
+    window.location.href = url;
+  }
+}
+
+// Function to request Strava credentials
+async function requestCredentials() {
+  try {
+    await browser.runtime.sendMessage('requestCredentials');
+  } catch (error) {
+    console.error('Error requesting credentials:', error);
+  }
+}
+
+// Main function to orchestrate everything
 async function main() {
-  // check of for software updates
-  const newUpdate = await browser.runtime.sendMessage('checkForUpdate');
-  if (newUpdate) {
-    const { version, url, changes } = newUpdate;
-    const message = [
-      `A new version of the iD Strava Heatmap extension (${version}) is available.`,
-      '',
-      'Please update to access the latest features and improvements:',
-      ...changes.map((change) => `- ${change}`),
-      '',
-      'Click OK to proceed to the update page.',
-    ].join('\n');
-    if (confirm(message)) {
-      window.location.href = url;
-    }
+  const updateInfo = await checkForUpdates();
+  if (updateInfo) {
+    const message = formatUpdateMessage(updateInfo);
+    handleUpdateConfirmation(message, updateInfo.url);
   }
 
-  await browser.runtime.sendMessage('requestStravaCredentials');
+  window.onhashchange = checkOverlayParam;
 }
 
 main();

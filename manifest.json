@@ -33,15 +33,6 @@
       "matches": ["*://*.openstreetmap.org/*"]
     }
   ],
-  "declarative_net_request": {
-    "rule_resources": [
-      {
-        "id": "rules_imagery",
-        "enabled": true,
-        "path": "rules/imagery.json"
-      }
-    ]
-  },
   "homepage_url": "https://chromewebstore.google.com/detail/id-strava-heatmap/eglbcifjafncknmpmnelckombmgddlco",
   "icons": {
     "48": "icons/icon-48.png"

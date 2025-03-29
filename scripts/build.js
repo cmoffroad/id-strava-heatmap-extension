@@ -5,7 +5,7 @@ const { execSync } = require('child_process');
 
 const DIST = path.join(process.cwd(), 'dist');
 const MANIFEST = 'manifest.json';
-const FOLDERS = ['assets', 'icons', 'lib', 'rules', 'src'];
+const FOLDERS = ['assets', 'icons', 'lib', 'src'];
 
 // Function to copy shared files
 function copySharedFiles() {
