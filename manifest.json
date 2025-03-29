@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "iD Strava Heatmap",
   "description": "Easily overlay the Strava Global Heatmap in your iD editor and gain valuable insights into popular routes and activity patterns.",
-  "version": "0.9.2",
+  "version": "1.0.0",
   "permissions": ["cookies", "contextMenus", "declarativeNetRequest", "notifications"],
   "host_permissions": ["*://*.strava.com/*", "*://*.openstreetmap.org/*"],
   "background": {
@@ -48,11 +48,6 @@
   ],
   "declarative_net_request": {
     "rule_resources": [
-      {
-        "id": "rules_cors",
-        "enabled": true,
-        "path": "rules/cors.json"
-      },
       {
         "id": "rules_imagery",
         "enabled": true,

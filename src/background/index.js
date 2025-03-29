@@ -13,6 +13,8 @@ async function setupInstalledListener() {
     // important: only once
     createContextMenu();
 
+    console.log(details);
+
     notifyInstallationUpdate(details.reason);
   });
 }
@@ -37,7 +39,6 @@ async function main() {
   setupInstalledListener();
   setupContextMenuListener(checkForUpdate);
   setupMessageListener();
-
   requestStravaCredentials(true);
 }
 

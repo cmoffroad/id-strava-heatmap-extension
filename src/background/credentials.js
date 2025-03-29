@@ -2,6 +2,7 @@ import { getStravaCookie, clearStravaCookie } from './cookies.js';
 import { updateRequestRules } from './rules.js';
 
 const COOKIE_NAMES = [
+  '_strava_idcf',
   'CloudFront-Key-Pair-Id',
   'CloudFront-Policy',
   'CloudFront-Signature',
@@ -27,7 +28,8 @@ export async function requestStravaCredentials(force = false) {
     force ||
     JSON.stringify(newStravaCredentials) !== JSON.stringify(stravaCredentials)
   ) {
-    await updateRequestRules(newStravaCredentials);
+    const credentialsCookieHeader = getCredentialsHeader(newStravaCredentials);
+    await updateRequestRules(credentialsCookieHeader);
     stravaCredentials = newStravaCredentials;
   }
 }
@@ -40,4 +42,10 @@ export async function clearStravaCredentials() {
 
 export async function isUserAuthenticated() {
   return stravaCredentials !== null;
+}
+
+export function getCredentialsHeader(credentials) {
+  if (!credentials) return null;
+
+  return COOKIE_NAMES.map((name) => `${name}=${credentials[name]}`).join('; ');
 }

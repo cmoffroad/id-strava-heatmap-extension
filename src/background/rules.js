@@ -15,15 +15,12 @@ const FALLBACK_SVG = `data:image/svg+xml;base64,${btoa(`
 const RULE_REGEX_FILTER =
   '^https://([^/]+)\\.strava\\.com/(anon|identified)/globalheat/([^/]+)/([^/]+)/([^/]+)/([^/]+)/([^/]+)\\.png(\\?(v=[^&]+))?$';
 
-const RULE_REGEX_SUBSTITUTION = (credentials) =>
-  `https://\\1.strava.com/identified/globalheat/\\2/\\3/\\4/\\5/\\6.png?\\8`;
-
-export async function updateRequestRules(credentials) {
+export async function updateRequestRules(credentialsCookieHeader) {
   await browser.declarativeNetRequest.updateDynamicRules({
     removeRuleIds: [RULE_ID],
-    addRules: credentials
+    addRules: credentialsCookieHeader
       ? [
-          /*{
+          {
             id: RULE_ID,
             priority: 1,
             condition: {
@@ -31,12 +28,23 @@ export async function updateRequestRules(credentials) {
               resourceTypes: ['main_frame', 'sub_frame', 'image'],
             },
             action: {
-              type: 'redirect',
-              redirect: {
-                regexSubstitution: RULE_REGEX_SUBSTITUTION(credentials),
-              },
+              type: 'modifyHeaders',
+              requestHeaders: [
+                {
+                  header: 'Cookie',
+                  operation: 'set',
+                  value: credentialsCookieHeader,
+                },
+              ],
+              responseHeaders: [
+                {
+                  header: 'Access-Control-Allow-Origin',
+                  operation: 'set',
+                  value: '*',
+                },
+              ],
             },
-          }*/
+          },
         ]
       : [
           {

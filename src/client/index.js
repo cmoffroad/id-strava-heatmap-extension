@@ -47,16 +47,31 @@ waitForDom(
   }
 );
 
-function tileCallback(img) {
+async function tileCallback(img) {
   const opacity = getSetting('opacity');
   const activity = getSetting('activity');
   const color = getSetting('color');
 
   img.style.opacity = opacity;
-  img.style.backgroundColor = color;
+  // img.style.backgroundColor = color;
 
   img.src = img.src.replace(
     /^\/(.*?)\/(.*?)\/(\d+)\/(\d+)\/(\d+)\.png(.*)$/,
     `/${activity}/${color}/$3/$4/$5.png$6`
   );
+
+  // const newSrc = img.src.replace(
+  //   /^https:\/\/([^/]+)\.strava\.com\/anon\/globalheat\/([^/]+)\/([^/]+)\/(\d+)\/(\d+)\/(\d+)\.png(.*)$/,
+  //   (match, subdomain, activity, color, z, x, y, query) => {
+  //     return `https://${subdomain}.strava.com/identified/globalheat/${activity}/${color}/${z}/${x}/${y}.png${query}`;
+  //   }
+  // );
+
+  // const imageBlob = await fetch(newSrc, {
+  //   method: 'GET', // The request method
+  //   // credentials: 'include', // Ensure cookies are sent with the request
+  //   mode: 'no-cors',
+  // });
+  // const imageUrl = URL.createObjectURL(imageBlob);
+  // img.src = imageUrl;
 }
