@@ -5,7 +5,8 @@
   "scripts": {
     "build": "node scripts/build.js",
     "build:force": "node scripts/build.js --force",
-    "imagery": "node scripts/imagery.js"
+    "imagery": "node scripts/imagery.js",
+    "changelog": "node scripts/changelog.js"
   },
   "author": "Julien Etienne <etienne.julien@gmail.com>",
   "license": "MIT",
