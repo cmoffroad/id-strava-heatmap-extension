@@ -1,5 +1,14 @@
 const manifest = browser.runtime.getManifest();
 
+// inject script
+function injectClientScript() {
+  const script = document.createElement('script');
+  script.src = browser.runtime.getURL('src/client/index.js');
+  script.type = 'module'; // Specify it as a module
+  script.onload = () => script.remove(); // Removes after execution
+  (document.head || document.documentElement).appendChild(script);
+}
+
 // Function to check for software updates
 async function checkForUpdates() {
   try {
@@ -35,6 +44,8 @@ function handleUpdateConfirmation(message, url) {
 
 // Main function to orchestrate everything
 async function main() {
+  injectClientScript();
+
   const updateInfo = await checkForUpdates();
   if (updateInfo) {
     const message = formatUpdateMessage(updateInfo);
