@@ -1,4 +1,4 @@
-import { browser, versionNumber, installationUrl } from './extension.js';
+import extension from './extension.js';
 import { fetchWithTimeout } from './utils.js';
 
 const UPDATES_URL =
@@ -25,18 +25,20 @@ async function fetchUpdatesJson(url = UPDATES_URL, timeout = 5000) {
 function getUpdateInfo(updates) {
   if (!updates) return null;
 
-  const latestVersionNumber = updates.latest_version?.[browser];
+  const latestVersionNumber = updates.latest_version?.[extension.browser];
   if (!latestVersionNumber) {
-    console.warn(`No latest version found for browser: ${browser}`);
+    console.warn(`No latest version found for browser: ${extension.browser}`);
     return null;
   }
 
   const latestVersion = updates.versions.find((v) => v.number === latestVersionNumber);
-  const currentVersion = updates.versions.find((v) => v.number === versionNumber);
+  const currentVersion = updates.versions.find(
+    (v) => v.number === extension.versionNumber
+  );
 
   if (!currentVersion) {
     console.log(
-      `Development mode detected: ${versionNumber} is not listed in updates.json.`
+      `Development mode detected: ${extension.versionNumber} is not listed in updates.json.`
     );
     return null; // Skip updates in development mode
   }
@@ -50,7 +52,7 @@ function getUpdateInfo(updates) {
 
   return {
     ...latestVersion,
-    url: installationUrl,
+    url: extension.installationUrl,
   };
 }
 

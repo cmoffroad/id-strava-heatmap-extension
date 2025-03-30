@@ -15,7 +15,7 @@ function resolveStravaHeatmapImagery(type, color) {
   const lowerColor = color.toLowerCase();
 
   return {
-    id: `StravaHeatmap${type}`,
+    id: `strava-heatmap${lowerType !== 'all' ? `-${lowerType}` : ''}`,
     name: `Strava Heatmap (${type})`,
     description: `The Strava Heatmap (${type}) shows heat made by aggregated, public activities over the last year.`,
     template: `https://content-{switch:a,b,c}.strava.com/identified/globalheat/${lowerType}/${lowerColor}/{zoom}/{x}/{y}.png?v=19`,

@@ -1,6 +1,6 @@
-import { name as extensionName } from './extension.js';
+import extension from './extension.js';
 
-const FEEDBACK = `For questions or issue reports, right-click and hover over "${extensionName}" to access helpful links.`;
+const FEEDBACK = `For questions or issue reports, right-click and hover over "${extension.name}" to access helpful links.`;
 
 const TITLES = {
   install: 'Welcome to the extension!',

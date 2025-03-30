@@ -6,15 +6,15 @@ import { showInstalledNotification } from './installs.js';
 import { updateHeatmapRules, updateImageryRules } from './rules.js';
 import { checkForUpdates } from './updates.js';
 
-async function onMessage(message) {
-  const handlers = {
-    requestCredentials,
-    resetCredentials,
-    checkForUpdates,
-  };
+const MESSAGE_HANDLERS = {
+  requestCredentials,
+  resetCredentials,
+  checkForUpdates,
+};
 
-  if (handlers[message]) {
-    return handlers[message]();
+async function onMessage(message) {
+  if (MESSAGE_HANDLERS[message]) {
+    return MESSAGE_HANDLERS[message]();
   }
 
   console.warn(`Unknown message received: ${message}`);

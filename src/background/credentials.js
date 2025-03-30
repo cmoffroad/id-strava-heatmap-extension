@@ -1,3 +1,6 @@
+import { clearCookies, fetchCookies } from './cookies.js';
+import { updateHeatmapRules } from './rules.js';
+
 const STRAVA_COOKIE_URL = 'https://www.strava.com';
 const STRAVA_COOKIE_NAMES = [
   '_strava_idcf',

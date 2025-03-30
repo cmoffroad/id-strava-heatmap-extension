@@ -1,27 +1,27 @@
-import { name, installationUrl, issuesTrackerUrl, forumSupportUrl } from './extension.js';
+import extension from './extension.js';
 
 const CONTEXT_MENU_ITEMS = [
   {
     id: 'forumSupport',
     title: 'Forum Support',
-    url: forumSupportUrl,
+    url: extension.forumSupportUrl,
   },
   {
     id: 'submitIssue',
     title: 'Submit Issue',
-    url: issuesTrackerUrl,
+    url: extension.issuesTrackerUrl,
   },
   {
     id: 'extensionPage',
     title: 'Extension Page',
-    url: installationUrl,
+    url: extension.installationUrl,
   },
 ];
 
 export function createContextMenu() {
   const mainMenu = {
     id: 'mainMenu',
-    title: name,
+    title: extension.name,
     contexts: ['page'],
   };
 
