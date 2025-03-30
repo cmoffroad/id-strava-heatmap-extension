@@ -12,37 +12,28 @@
   "content_scripts": [
     {
       "matches": ["https://www.openstreetmap.org/id*"],
+      "js": ["lib/browser-polyfill.min.js", "src/content/request-credentials.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    },
+    {
+      "matches": ["https://www.openstreetmap.org/id*"],
       "js": ["lib/browser-polyfill.min.js", "src/content/id.js"],
       "run_at": "document_idle",
       "all_frames": true
     },
     {
-      "matches": ["https://www.strava.com/login*"],
-      "js": ["lib/browser-polyfill.min.js", "src/content/strava-login.js"],
+      "matches": ["https://www.strava.com/login*", "https://www.strava.com/"],
+      "js": ["lib/browser-polyfill.min.js", "src/content/reset-credentials.js"],
       "run_at": "document_idle"
     },
     {
       "matches": ["https://www.strava.com/maps/global-heatmap*"],
-      "js": ["lib/browser-polyfill.min.js", "src/content/strava-maps.js"],
+      "js": ["lib/browser-polyfill.min.js", "src/content/request-credentials.js"],
       "run_at": "document_idle"
     }
   ],
-  "web_accessible_resources": [
-    {
-      "resources": ["assets/imagery.json"],
-      "matches": ["*://*.openstreetmap.org/*"]
-    }
-  ],
-  "declarative_net_request": {
-    "rule_resources": [
-      {
-        "id": "rules_imagery",
-        "enabled": true,
-        "path": "rules/imagery.json"
-      }
-    ]
-  },
-  "homepage_url": "https://chromewebstore.google.com/detail/id-strava-heatmap/eglbcifjafncknmpmnelckombmgddlco",
+  "homepage_url": "https://github.com/cmoffroad/id-strava-heatmap-extension",
   "icons": {
     "48": "icons/icon-48.png"
   },
