@@ -49,15 +49,26 @@ if (!fs.existsSync(DIST)) {
 }
 
 // Check if version already exists
-if (
-  (fs.existsSync(path.join(DIST, chromeZip)) ||
-    fs.existsSync(path.join(DIST, firefoxZip))) &&
-  !options.force
-) {
-  console.log(
-    `Version ${version} already exists - bump version first or use --force option.`
-  );
-  process.exit(1);
+if (fs.existsSync(path.join(DIST, chromeZip))) {
+  if (options.force) {
+    fs.rmSync(path.join(DIST, chromeZip));
+  } else {
+    console.log(
+      `Chrome Version ${version} already exists - bump version first or use --force option.`
+    );
+    process.exit(1);
+  }
+}
+
+if (fs.existsSync(path.join(DIST, firefoxZip))) {
+  if (options.force) {
+    fs.rmSync(path.join(DIST, firefoxZip));
+  } else {
+    console.log(
+      `Firefox Version ${version} already exists - bump version first or use --force option.`
+    );
+    process.exit(1);
+  }
 }
 
 // Copy shared files to dist folder
