@@ -22,6 +22,9 @@ export default {
 	heatmapFallbackUrl:
 		'https://raw.githubusercontent.com/cmoffroad/id-strava-heatmap-extension/refs/heads/master/assets/heatmap-fallback.svg',
 
+	imageryUrl:
+		'https://raw.githubusercontent.com/cmoffroad/id-strava-heatmap-extension/refs/heads/master/assets/imagery.json',
+
 	// URLs for issue tracking and forum support
 	issuesTrackerUrl: 'https://github.com/cmoffroad/id-strava-heatmap-extension/issues/',
 	forumSupportUrl:

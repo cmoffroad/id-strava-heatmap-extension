@@ -5,7 +5,7 @@ const { execSync } = require('child_process');
 
 const DIST = path.join(process.cwd(), 'dist');
 const MANIFEST = 'manifest.json';
-const FOLDERS = ['assets', 'icons', 'lib', 'src'];
+const FOLDERS = ['icons', 'lib', 'src'];
 
 // Function to copy shared files
 function copySharedFiles() {
@@ -68,10 +68,12 @@ const manifestChrome = { ...manifest };
 createZip(chromeZip, manifestChrome);
 
 // Create Firefox build
-const manifestFirefox = {
-  ...manifest,
-  ...JSON.parse(fs.readFileSync('manifest-firefox.json', 'utf-8')),
-};
+const manifestFirefox = Object.fromEntries(
+  Object.entries({
+    ...manifest,
+    ...JSON.parse(fs.readFileSync('manifest-firefox.json', 'utf-8')),
+  }).filter(([, value]) => value !== null)
+);
 createZip(firefoxZip, manifestFirefox);
 
 // Clean up dist folder

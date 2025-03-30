@@ -33,12 +33,6 @@
       "run_at": "document_idle"
     }
   ],
-  "web_accessible_resources": [
-    {
-      "resources": ["assets/imagery.json"],
-      "matches": ["*://*.openstreetmap.org/*"]
-    }
-  ],
   "homepage_url": "https://github.com/cmoffroad/id-strava-heatmap-extension",
   "icons": {
     "48": "icons/icon-48.png"

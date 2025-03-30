@@ -9,8 +9,6 @@ const IMAGERY_REGEX_FILTER = [
   'imagery.min-(.+).json',
 ].join('');
 
-const IMAGERY_REDIRECT_URL = browser.runtime.getURL('assets/imagery.json');
-
 const HEATMAP_RULE_ID = 2;
 
 const HEATMAP_REGEX_FILTER = [
@@ -18,8 +16,6 @@ const HEATMAP_REGEX_FILTER = [
   '(anon|identified)/globalheat/',
   '([^/]+)/([^/]+)/([^/]+)/([^/]+)/([^/]+)\\.png',
 ].join('');
-
-const HEATMAP_FALLBACK_URL = browser.runtime.getURL('assets/heatmap-fallback.svg');
 
 export function updateImageryRules() {
   const rule = {
@@ -32,7 +28,7 @@ export function updateImageryRules() {
     action: {
       type: 'redirect',
       redirect: {
-        url: IMAGERY_REDIRECT_URL,
+        url: extension.imageryUrl,
       },
     },
   };

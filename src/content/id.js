@@ -29,7 +29,7 @@ function handleUpdateConfirmation(message, url) {
   const userConfirmed = confirm(message);
 
   if (userConfirmed) {
-    window.location.href = url;
+    window.top.location.href = url;
   }
 }
 
