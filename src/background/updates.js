@@ -1,11 +1,21 @@
 import extension from './extension.js';
 import { fetchWithTimeout } from './utils.js';
 
-const UPDATES_URL =
-  'https://raw.githubusercontent.com/cmoffroad/id-strava-heatmap-extension/refs/heads/master/updates.json';
+// Helper function to compare semantic version numbers
+function isNewerVersion(latest, current) {
+  const latestParts = latest.split('.').map(Number);
+  const currentParts = current.split('.').map(Number);
+
+  for (let i = 0; i < latestParts.length; i++) {
+    if ((latestParts[i] || 0) > (currentParts[i] || 0)) return true;
+    if ((latestParts[i] || 0) < (currentParts[i] || 0)) return false;
+  }
+
+  return false;
+}
 
 // Fetch updates.json and validate
-async function fetchUpdatesJson(url = UPDATES_URL, timeout = 5000) {
+async function fetchUpdatesJson(url, timeout = 5000) {
   try {
     const response = await fetchWithTimeout(url, timeout);
     const updates = await response.json();
@@ -43,8 +53,11 @@ function getUpdateInfo(updates) {
     return null; // Skip updates in development mode
   }
 
-  if (latestVersion?.number === currentVersion.number) {
-    console.log(`Already up-to-date (v${currentVersion.number}). No update needed.`);
+  // Check if the latest version is actually newer
+  if (!isNewerVersion(latestVersion.number, currentVersion.number)) {
+    console.log(
+      `No update needed (current: v${currentVersion.number}, latest: v${latestVersion.number}).`
+    );
     return null;
   }
 
@@ -58,6 +71,6 @@ function getUpdateInfo(updates) {
 
 // Main function to check for updates
 export async function checkForUpdates() {
-  const updates = await fetchUpdatesJson();
+  const updates = await fetchUpdatesJson(extension.checkUpdatesUrl);
   return getUpdateInfo(updates);
 }

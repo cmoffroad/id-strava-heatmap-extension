@@ -39,7 +39,7 @@
       "matches": ["*://*.openstreetmap.org/*"]
     }
   ],
-  "homepage_url": "https://chromewebstore.google.com/detail/id-strava-heatmap/eglbcifjafncknmpmnelckombmgddlco",
+  "homepage_url": "https://github.com/cmoffroad/id-strava-heatmap-extension",
   "icons": {
     "48": "icons/icon-48.png"
   },

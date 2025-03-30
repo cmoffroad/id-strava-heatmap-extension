@@ -43,6 +43,11 @@ const options = program
   .parse(process.argv)
   .opts();
 
+// make sure dist folder exists, if not create it
+if (!fs.existsSync(DIST)) {
+  fs.mkdirSync(DIST);
+}
+
 // Check if version already exists
 if (
   (fs.existsSync(path.join(DIST, chromeZip)) ||

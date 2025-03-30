@@ -18,7 +18,7 @@ function resolveStravaHeatmapImagery(type, color) {
     id: `strava-heatmap${lowerType !== 'all' ? `-${lowerType}` : ''}`,
     name: `Strava Heatmap (${type})`,
     description: `The Strava Heatmap (${type}) shows heat made by aggregated, public activities over the last year.`,
-    template: `https://content-{switch:a,b,c}.strava.com/identified/globalheat/${lowerType}/${lowerColor}/{zoom}/{x}/{y}.png?v=19`,
+    template: `https://content-{switch:a}.strava.com/identified/globalheat/${lowerType}/${lowerColor}/{zoom}/{x}/{y}.png?v=19`,
     terms_url:
       'https://wiki.openstreetmap.org/wiki/Strava#Data_Permission_-_Allowed_for_tracing!',
     zoomExtent: [0, 15],

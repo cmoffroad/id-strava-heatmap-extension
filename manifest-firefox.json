@@ -9,7 +9,5 @@
       "strict_min_version": "113.0"
     }
   },
-  "minimum_chrome_version": null,
-  "homepage_url": null,
-  "update_url": "https://addons.mozilla.org/en-US/firefox/addon/id-strava-heatmap/"
+  "minimum_chrome_version": null
 }
