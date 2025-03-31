@@ -1,5 +1,17 @@
 const manifest = browser.runtime.getManifest();
 
+// Detect browser type
+const browserName =
+	manifest.browser_specific_settings?.gecko !== undefined ? 'firefox' : 'chrome';
+
+const EXTENSION_PAGE = {
+	chrome:
+		'https://chromewebstore.google.com/detail/id-strava-heatmap/eglbcifjafncknmpmnelckombmgddlco',
+	firefox: 'https://addons.mozilla.org/en-US/firefox/addon/id-strava-heatmap/',
+};
+
+console.log(manifest);
+
 export default {
 	// Extension name fro mthe manifest
 	name: manifest.name,
@@ -7,14 +19,11 @@ export default {
 	// Current extension version from the manifest
 	versionNumber: manifest.version,
 
-	// test if dev Mode
-	isDevMode: !manifest.update_url,
-
-	// Detect browser type
-	browser: manifest.browser_specific_settings?.gecko !== undefined ? 'firefox' : 'chrome',
+	// browser name
+	browserName,
 
 	// Determine the installation/update URL
-	installationUrl: manifest.update_url ?? manifest.homepage_url,
+	installationUrl: EXTENSION_PAGE[browserName],
 
 	checkUpdatesUrl:
 		'https://raw.githubusercontent.com/cmoffroad/id-strava-heatmap-extension/refs/heads/master/updates.json',

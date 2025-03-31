@@ -35,9 +35,9 @@ async function fetchUpdatesJson(url, timeout = 5000) {
 function getUpdateInfo(updates) {
   if (!updates) return null;
 
-  const latestVersionNumber = updates.latest_version?.[extension.browser];
+  const latestVersionNumber = updates.latest_version?.[extension.browserName];
   if (!latestVersionNumber) {
-    console.warn(`No latest version found for browser: ${extension.browser}`);
+    console.warn(`No latest version found for browser: ${extension.browserName}`);
     return null;
   }
 
