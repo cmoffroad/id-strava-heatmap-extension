@@ -1,29 +1,23 @@
-function togglePopup(popupContainer, open = popupContainer.style.display === 'none') {
-  popupContainer.style.display = open ? 'flex' : 'none';
+function togglePopup(toolbarContainer, open) {
+  toolbarContainer.classList.toggle('opened', open);
 }
 
-function toggleLayer(popupContainer, enabled) {
-  const controls = popupContainer.querySelectorAll('.control select, .control input');
+function toggleLayer(toolbarContainer, enabled) {
+  toolbarContainer.querySelector('.switch-layer > input').checked = enabled;
+  const controls = toolbarContainer.querySelectorAll('.control select, .control input');
   controls.forEach((ctrl) => {
     ctrl.disabled = !enabled;
-    ctrl.parentElement.classList.toggle('disabled', ctrl.disabled);
   });
+  toolbarContainer.classList.toggle('layer-enabled', enabled);
 }
 
-function updateOpacityValue(popupContainer, value) {
-  popupContainer.querySelector('.opacity-value').textContent = value + '%';
+function updateOpacityValue(toolbarContainer, value) {
+  toolbarContainer.querySelector('.control-opacity > input').value = value;
+  toolbarContainer.querySelector('.control-opacity > .caption').textContent = value + '%';
 }
 
-function toggleAuthentication(popupContainer, authenticated) {
-  popupContainer.querySelector('.unauthenticated').style.display = authenticated
-    ? 'none'
-    : 'flex';
-  popupContainer.querySelector('.authenticated').style.display = !authenticated
-    ? 'none'
-    : 'flex';
-  popupContainer.querySelector('.logout-btn').style.display = !authenticated
-    ? 'none'
-    : 'block';
+function toggleAuthentication(toolbarContainer, authenticated) {
+  toolbarContainer.classList.toggle('authenticated', authenticated);
 }
 
 function initializeToolbar(
@@ -32,79 +26,80 @@ function initializeToolbar(
 ) {
   const containerElement = document.querySelector(containerSelector);
 
+  // Create the new intermediate root div
+  const toolbarDiv = document.createElement('div');
+  toolbarDiv.className = 'toolbar-container'; // Optional: add a class for styling or reference
+
   const popupContainer = document.createElement('div');
   popupContainer.className = 'popup-container';
-  popupContainer.style.display = 'none';
 
   const icon = document.createElement('img');
   icon.src = 'icons/icon-48.png';
   icon.alt = 'Extension Icon';
-  icon.className = 'extension-icon';
-  icon.addEventListener('click', () => togglePopup(popupContainer));
-  containerElement.appendChild(icon);
+  icon.className = 'icon';
+  icon.addEventListener('click', () => togglePopup(toolbarDiv));
+
+  // Append icon and popupContainer to the toolbarDiv instead of containerElement
+  toolbarDiv.appendChild(icon);
+  toolbarDiv.appendChild(popupContainer);
+
+  // Append the toolbarDiv to the containerElement
+  containerElement.appendChild(toolbarDiv);
 
   popupContainer.innerHTML = `
     <div class="popup-left">
         <span class="label">Strava Heatmap</span>
-        <label class="switch">
-            <input type="checkbox" class="toggle-heatmap" ${enabled ? 'checked' : ''} />
-            <span class="slider"></span>
+        <label class="switch switch-layer">
+          <input type="checkbox" />
+          <span class="slider"></span>
         </label>
     </div>
-    <div class="popup-center unauthenticated">
-        <div class="hint">
-            Log in at <a href="https://www.strava.com/login?redirect=https%3A%2F%2Fwww.strava.com%2Fmaps" target="_blank">strava.com/login</a> and navigate to <b>Maps</b>
-        </div>
+   
+    <div class="popup-center">
+    <div class="error">
+      Log in at <a href="https://www.strava.com/login?redirect=https%3A%2F%2Fwww.strava.com%2Fmaps" target="_blank">strava.com/login</a> and navigate to <b>Maps</b>
     </div>
-    <div class="popup-center authenticated">
-        <div class="control">
+        <div class="control control-activity">
             <span class="label">Activity</span>
-            <select id="activity-select">
-                <option value="all" ${activity === 'all' ? 'selected' : ''}>All</option>
-                <option value="ride" ${
-                  activity === 'ride' ? 'selected' : ''
-                }>Ride</option>
-                <option value="winter" ${
-                  activity === 'winter' ? 'selected' : ''
-                }>Winter</option>
+            <select>
+                <option value="all">All</option>
+                <option value="ride">Ride</option>
+                <option value="winter">Winter</option>
             </select>
         </div>
-        <div class="control">
+        <div class="control control-color">
             <span class="label">Color</span>
-            <select id="color-select">
-                <option ${color === 'Hot' ? 'selected' : ''}>Hot</option>
-                <option ${color === 'Blue Red' ? 'selected' : ''}>Blue Red</option>
+            <select>
+                <option value="hot">Hot</option>
+                <option value="blueRed">Blue Red</option>
             </select>
         </div>
-        <div class="control">
+        <div class="control control-opacity">
             <span class="label">Opacity</span>
-            <input type="range" min="0" max="100" class="opacity-slider" value="${opacity}" />
-            <span class="opacity-value"></span>
+            <input type="range" min="0" max="100" />
+            <span class="caption"></span>
         </div>
     </div>
     <div class="popup-right">
-        <button class="logout-btn">Log Out</button>
-        <button class="close-btn">X</button>
+        <button class="btn-close">X</button>
     </div>
 `;
 
-  containerElement.appendChild(popupContainer);
+  popupContainer
+    .querySelector('.control-opacity > input')
+    .addEventListener('input', (e) => updateOpacityValue(toolbarDiv, e.target.value));
 
   popupContainer
-    .querySelector('.opacity-slider')
-    .addEventListener('input', (e) => updateOpacityValue(popupContainer, e.target.value));
+    .querySelector('.switch-layer > input')
+    .addEventListener('change', (e) => toggleLayer(toolbarDiv, e.target.checked));
 
   popupContainer
-    .querySelector('.toggle-heatmap')
-    .addEventListener('change', (e) => toggleLayer(popupContainer, e.target.checked));
+    .querySelector('.btn-close')
+    .addEventListener('click', () => togglePopup(toolbarDiv));
 
-  popupContainer
-    .querySelector('.close-btn')
-    .addEventListener('click', () => togglePopup(popupContainer));
+  togglePopup(toolbarDiv, opened);
+  toggleLayer(toolbarDiv, enabled);
+  updateOpacityValue(toolbarDiv, opacity);
 
-  togglePopup(popupContainer, opened);
-  toggleLayer(popupContainer, enabled);
-  updateOpacityValue(popupContainer, opacity);
-
-  toggleAuthentication(popupContainer, authenticated);
+  toggleAuthentication(toolbarDiv, authenticated);
 }

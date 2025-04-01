@@ -1,57 +1,57 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Popup UI</title>
-    <link rel="stylesheet" href="options.css" />
-    <script src="options.js"></script>
-    <style>
-      html,
-      body {
-        height: 100%;
-      }
-      body {
-        font-family: Arial, sans-serif;
-        background: grey;
-        padding: 0;
-        margin: 0;
-      }
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Popup UI</title>
+		<link rel="stylesheet" href="options.css" />
+		<script src="options.js"></script>
+		<style>
+			html,
+			body {
+				height: 100%;
+			}
+			body {
+				font-family: Arial, sans-serif;
+				background: grey;
+				padding: 0;
+				margin: 0;
+			}
 
-      html,
-      body,
-      section {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-      }
+			html,
+			body,
+			section {
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+			}
 
-      section {
-        position: relative;
-        border: 1px solid black;
-      }
-    </style>
-  </head>
-  <body>
-    <section id="section1"></section>
-    <section id="section2"></section>
-  </body>
-  <script>
-    initializeToolbar('#section1', {
-      opened: true,
-      authenticated: false,
-      enabled: false,
-      activity: 'all',
-      color: 'hot',
-      opacity: 50,
-    });
-    initializeToolbar('#section2', {
-      opened: true,
-      authenticated: true,
-      enabled: true,
-      activity: 'all',
-      color: 'hot',
-      opacity: 50,
-    });
-  </script>
+			section {
+				position: relative;
+				border: 1px solid black;
+			}
+		</style>
+	</head>
+	<body>
+		<section id="section1"></section>
+		<section id="section2"></section>
+	</body>
+	<script>
+		initializeToolbar('#section1', {
+			opened: true,
+			authenticated: false,
+			enabled: false,
+			activity: 'all',
+			color: 'hot',
+			opacity: 50,
+		});
+		initializeToolbar('#section2', {
+			opened: true,
+			authenticated: true,
+			enabled: true,
+			activity: 'all',
+			color: 'hot',
+			opacity: 50,
+		});
+	</script>
 </html>
