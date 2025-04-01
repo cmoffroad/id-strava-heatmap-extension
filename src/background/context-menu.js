@@ -23,6 +23,10 @@ export function createContextMenu() {
     id: 'mainMenu',
     title: extension.name,
     contexts: ['page'],
+    documentUrlPatterns: [
+      'https://www.openstreetmap.org/edit*',
+      'https://www.openstreetmap.org/id*',
+    ],
   };
 
   try {
@@ -36,6 +40,7 @@ export function createContextMenu() {
         parentId: mainMenu.id,
         title,
         contexts: mainMenu.contexts,
+        documentUrlPatterns: mainMenu.documentUrlPatterns,
       });
     });
   } catch (error) {
