@@ -2,7 +2,7 @@
   /* Define CSS variables for reusability */
   --icon-size: 32px;
   --primary-color: #4caf50;
-  --popup-bg: rgba(0, 0, 0, 0.9);
+  --popup-bg: rgba(0, 0, 0, 0.5);
   --text-color: white;
   --error-color: orange;
 }
@@ -11,34 +11,31 @@
   position: relative;
   display: inline-block;
 
-  > .icon {
+  > .icon-toggle {
     width: var(--icon-size);
     height: var(--icon-size);
     cursor: pointer;
     position: absolute;
-    top: 2px;
-    left: 2px;
+    top: 5px;
+    left: 5px;
     z-index: 100;
-    border: 2px solid transparent;
     border-radius: 12px;
-    transition: border-color 0.3s ease;
   }
 
   &:not(.layer-enabled).authenticated {
-    .icon {
+    .icon-toggle {
       filter: grayscale(100%);
     }
   }
 
-  /*&:not(.layer-enabled),
   &:not(.authenticated) {
-    .icon {
-      filter: grayscale(100%);
+    .icon-toggle {
+      /*filter: hue-rotate(50deg) saturate(200%);*/
     }
-  }*/
+  }
 
   &.layer-enabled.authenticated {
-    .icon {
+    .icon-toggle {
       filter: hue-rotate(90deg);
     }
   }
@@ -171,6 +168,7 @@
           padding: 4px;
           border-radius: 4px;
           /*appearance: none;*/
+          width: 100px;
         }
 
         .caption {
