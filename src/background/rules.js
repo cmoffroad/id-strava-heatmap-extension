@@ -70,6 +70,7 @@ export function updateHeatmapRules(credentials) {
     condition: {
       regexFilter: HEATMAP_REGEX_FILTER,
       resourceTypes: ['main_frame', 'sub_frame', 'image', 'xmlhttprequest'],
+      excludedInitiatorDomains: ['strava.com'], // Exclude requests from strava.com
     },
     action,
   };
