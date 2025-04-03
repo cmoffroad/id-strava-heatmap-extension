@@ -69,7 +69,7 @@ export function updateHeatmapRules(credentials) {
     priority: 1,
     condition: {
       regexFilter: HEATMAP_REGEX_FILTER,
-      resourceTypes: ['main_frame', 'sub_frame', 'image'],
+      resourceTypes: ['main_frame', 'sub_frame', 'image', 'xmlhttprequest'],
     },
     action,
   };
