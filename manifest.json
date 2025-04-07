@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "iD Strava Heatmap",
   "description": "Easily overlay the Strava Global Heatmap in your iD editor and gain valuable insights into popular routes and activity patterns.",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "permissions": ["cookies", "contextMenus", "declarativeNetRequest", "notifications"],
   "host_permissions": [
     "*://*.strava.com/*",
@@ -21,14 +21,12 @@
     },
     {
       "matches": ["https://www.openstreetmap.org/id*"],
-      "js": ["lib/browser-polyfill.min.js", "src/content/request-credentials.js"],
+      "js": [
+        "lib/browser-polyfill.min.js",
+        "src/content/request-credentials.js",
+        "src/content/check-updates.js"
+      ],
       "run_at": "document_start",
-      "all_frames": true
-    },
-    {
-      "matches": ["https://www.openstreetmap.org/id*"],
-      "js": ["lib/browser-polyfill.min.js", "src/content/id.js"],
-      "run_at": "document_idle",
       "all_frames": true
     },
     {

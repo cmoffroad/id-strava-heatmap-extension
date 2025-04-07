@@ -2,9 +2,9 @@ async function resetCredentials() {
 	try {
 		// Send message to reset credentials
 		await browser.runtime.sendMessage('resetCredentials');
-		console.log('Credentials reset successfully.');
+		console.log('[SH] Credentials reset successfully.');
 	} catch (error) {
-		console.error('Error resetting credentials:', error);
+		console.error('[SH] Error resetting credentials:', error);
 	}
 }
 
