@@ -2,9 +2,9 @@ async function resetCredentials() {
 	try {
 		// Send message to reset credentials
 		await browser.runtime.sendMessage('resetCredentials');
-		console.log('[SH] Credentials reset successfully.');
+		console.log('[StravaHeatmap] Credentials reset successfully.');
 	} catch (error) {
-		console.error('[SH] Error resetting credentials:', error);
+		console.error('[StravaHeatmap] Error resetting credentials:', error);
 	}
 }
 

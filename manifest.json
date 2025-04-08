@@ -23,6 +23,8 @@
       "matches": ["https://www.openstreetmap.org/id*"],
       "js": [
         "lib/browser-polyfill.min.js",
+        "lib/inject-client.js",
+        "src/id/inject.js",
         "src/content/request-credentials.js",
         "src/content/check-updates.js"
       ],
@@ -38,6 +40,12 @@
       "matches": ["https://www.strava.com/maps/global-heatmap*"],
       "js": ["lib/browser-polyfill.min.js", "src/content/request-credentials.js"],
       "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["src/id/index.js"],
+      "matches": ["*://*.openstreetmap.org/*"]
     }
   ],
   "homepage_url": "https://github.com/cmoffroad/id-strava-heatmap-extension",

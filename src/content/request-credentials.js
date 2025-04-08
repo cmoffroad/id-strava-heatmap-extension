@@ -2,9 +2,9 @@ async function requestCredentials() {
 	try {
 		// Send message to request credentials
 		await browser.runtime.sendMessage('requestCredentials');
-		console.log('[SH] Credentials requested successfully.');
+		console.log('[StravaHeatmap] Credentials requested successfully.');
 	} catch (error) {
-		console.error('[SH] Error requesting credentials:', error);
+		console.error('[StravaHeatmap] Error requesting credentials:', error);
 	}
 }
 
