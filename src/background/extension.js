@@ -28,6 +28,7 @@ export default {
   checkUpdatesUrl:
     'https://raw.githubusercontent.com/cmoffroad/id-strava-heatmap-extension/refs/heads/master/updates.json',
 
+  // Required by Firefox, which cannot handle redirects to local extension files—therefore, the resource must be loaded from the internet.
   heatmapFallbackUrl:
     'https://raw.githubusercontent.com/cmoffroad/id-strava-heatmap-extension/refs/heads/master/assets/heatmap-fallback.png',
 
