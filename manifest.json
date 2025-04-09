@@ -15,16 +15,10 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://gpx.studio/app*"],
-      "js": ["lib/browser-polyfill.min.js", "src/content/request-credentials.js"],
-      "run_at": "document_start"
-    },
-    {
-      "matches": ["https://www.openstreetmap.org/id*"],
+      "matches": ["https://www.openstreetmap.org/id*", "https://gpx.studio/app*"],
       "js": [
         "lib/browser-polyfill.min.js",
-        "lib/inject-client.js",
-        "src/id/inject.js",
+        "src/content/inject-client.js",
         "src/content/request-credentials.js",
         "src/content/check-updates.js"
       ],
@@ -44,8 +38,12 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["src/id/index.js"],
-      "matches": ["*://*.openstreetmap.org/*"]
+      "resources": ["src/clients/www.openstreetmap.org/index.js"],
+      "matches": ["*://www.openstreetmap.org/*"]
+    },
+    {
+      "resources": ["src/clients/gpx.studio/index.js"],
+      "matches": ["*://gpx.studio/*"]
     }
   ],
   "homepage_url": "https://github.com/cmoffroad/id-strava-heatmap-extension",

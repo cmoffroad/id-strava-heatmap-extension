@@ -4,10 +4,10 @@ const manifest = browser.runtime.getManifest();
 async function checkForUpdates() {
   try {
     const updateInfo = await browser.runtime.sendMessage('checkForUpdates');
-    console.log('[StravaHeatmap] Checking for updates completed', updateInfo);
+    console.log('[StravaHeatmapExt] Checked for updates.', updateInfo);
     return updateInfo;
   } catch (error) {
-    console.error('[StravaHeatmap] Error checking for updates:', error);
+    console.error('[StravaHeatmapExt] Error checking for updates:', error);
     return null;
   }
 }
