@@ -6,7 +6,7 @@
   "permissions": ["cookies", "contextMenus", "declarativeNetRequest", "notifications"],
   "host_permissions": [
     "*://*.strava.com/*",
-    "*://*.openstreetmap.org/*",
+    "*://www.openstreetmap.org/*",
     "*://gpx.studio/*"
   ],
   "background": {
@@ -44,6 +44,10 @@
     {
       "resources": ["src/clients/gpx.studio/index.js"],
       "matches": ["*://gpx.studio/*"]
+    },
+    {
+      "resources": ["src/clients/common/layers.js"],
+      "matches": ["*://www.openstreetmap.org/*", "*://gpx.studio/*"]
     }
   ],
   "homepage_url": "https://github.com/cmoffroad/id-strava-heatmap-extension",
