@@ -39,9 +39,9 @@ async function enhanceResponseWithStravaHeatmapLayers(response) {
   }
 }
 
-function createStravaHeatmapLayerConfig({ id, name, description, template, zoomExtent }) {
+function createStravaHeatmapLayerConfig({ name, description, template, zoomExtent }) {
   return {
-    id,
+    id: `strava-heatmap-${index}`,
     name,
     description,
     template,

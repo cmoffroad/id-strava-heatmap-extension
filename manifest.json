@@ -42,7 +42,7 @@
       "matches": ["*://www.openstreetmap.org/*"]
     },
     {
-      "resources": ["src/clients/gpx.studio/index.js"],
+      "resources": ["src/clients/gpx.studio/index.js", "src/clients/gpx.studio/db.js"],
       "matches": ["*://gpx.studio/*"]
     },
     {
