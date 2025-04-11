@@ -52,11 +52,12 @@ async function getLayersConfiguration() {
 function getLayerOption(index, activity, color) {
   const activityName = formatStravaActivityLabel(activity);
   const colorName = COLOR_OPTIONS[color] || '❓';
+  const sortPrefix = new Array(index).join('󠀠');
 
   return {
     id: `strava-heatmap-${index}`,
     index,
-    name: `${colorName} Strava Heatmap ${activityName}`,
+    name: `${sortPrefix}${colorName} Strava Heatmap ${activityName}`,
     description: 'Shows aggregated, public Strava activities over the last year',
     template: `https://content-a.strava.com/identified/globalheat/${activity}/${color}/{z}/{x}/{y}.png?v=19`,
     zoomExtent: [0, 15],

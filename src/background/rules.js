@@ -48,7 +48,7 @@ export function updateImageryRules() {
 
   return browser.declarativeNetRequest.updateDynamicRules({
     removeRuleIds: [rule.id],
-    addRules: [rule],
+    // addRules: [rule],
   });
 }
 
