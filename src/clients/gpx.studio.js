@@ -1,5 +1,5 @@
-import { openDatabase } from './db.js';
-import { getLayers } from '../common/layers.js';
+import { openDatabase } from './gpx.studio/db.js';
+import { getLayers } from './common/layers.js';
 
 // Utility function to get next custom ID
 const getNextCustomId = (existingIds) => {
@@ -103,11 +103,8 @@ async function main() {
   });
 
   // Save and log
-  const result = await store.put(newSettings);
-  console.log(
-    '[StravaHeatmapExt] Extended custom overlays with Strava Heatmap layers',
-    result
-  );
+  await store.put(newSettings);
+  console.log('[StravaHeatmapExt] Extended custom overlays with Strava Heatmap layers');
 }
 
 window.onload = async () => {

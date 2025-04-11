@@ -1,7 +1,7 @@
 function injectClientScript() {
   try {
     const host = window.location.host;
-    const path = `src/clients/${host}/index.js`;
+    const path = `src/clients/${host}.js`;
     const script = document.createElement('script');
     script.src = browser.runtime.getURL(path);
     script.type = 'module';

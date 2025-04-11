@@ -1,11 +1,14 @@
-import { getLayers } from '../common/layers.js';
+import { getLayers } from './common/layers.js';
 
 export function extendImageryWithStravaHeatmapLayers(originalFetch = window.fetch) {
   // Store the original fetch if not provided
   const fetchImplementation = originalFetch;
 
   window.fetch = async (resource, config) => {
-    const response = await fetchImplementation(resource, config);
+    const response = await fetchImplementation(resource, {
+      ...config,
+      cache: 'no-store', // ensure not cached
+    });
 
     // Skip if not imagery JSON or response failed
     if (!isImageryResource(resource) || !response.ok) {
@@ -39,7 +42,13 @@ async function enhanceResponseWithStravaHeatmapLayers(response) {
   }
 }
 
-function createStravaHeatmapLayerConfig({ name, description, template, zoomExtent }) {
+function createStravaHeatmapLayerConfig({
+  index,
+  name,
+  description,
+  template,
+  zoomExtent,
+}) {
   return {
     id: `strava-heatmap-${index}`,
     name,
