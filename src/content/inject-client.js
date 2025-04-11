@@ -5,7 +5,7 @@ function injectClientScript() {
     const script = document.createElement('script');
     script.src = browser.runtime.getURL(path);
     script.type = 'module';
-    script.async = true; // Ensure the script loads asynchronously to avoid blocking page load
+    script.async = false;
     script.onload = () => {
       script.remove();
       console.log('[StravaHeatmapExt] Injected client script.', path);

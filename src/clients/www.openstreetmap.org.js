@@ -7,7 +7,7 @@ export function extendImageryWithStravaHeatmapLayers(originalFetch = window.fetc
   window.fetch = async (resource, config) => {
     const response = await fetchImplementation(resource, {
       ...config,
-      cache: 'no-store', // ensure not cached
+      cache: 'reload', // ensure not cached
     });
 
     // Skip if not imagery JSON or response failed
@@ -51,7 +51,7 @@ function createStravaHeatmapLayerConfig({
 }) {
   return {
     id: `strava-heatmap-${index}`,
-    name,
+    name: `${new Array(index).join('󠀠')}` + name,
     description,
     template,
     terms_url:
