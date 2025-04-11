@@ -40,14 +40,16 @@
     {
       "resources": [
         "src/clients/common/layers.js",
-        "src/clients/www.openstreetmap.org.js"
+        "src/clients/www.openstreetmap.org/index.css",
+        "src/clients/www.openstreetmap.org/index.js"
       ],
       "matches": ["*://www.openstreetmap.org/*"]
     },
     {
       "resources": [
         "src/clients/common/layers.js",
-        "src/clients/gpx.studio.js",
+        "src/clients/gpx.studio/index.css",
+        "src/clients/gpx.studio/index.js",
         "src/clients/gpx.studio/db.js"
       ],
       "matches": ["*://gpx.studio/*"]

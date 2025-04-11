@@ -1,4 +1,4 @@
-import { getLayers } from './common/layers.js';
+import { getLayers } from '../common/layers.js';
 
 export function extendImageryWithStravaHeatmapLayers(originalFetch = window.fetch) {
   // Store the original fetch if not provided
@@ -65,3 +65,9 @@ function createStravaHeatmapLayerConfig({
 if (typeof window !== 'undefined' && window.fetch) {
   extendImageryWithStravaHeatmapLayers(window.fetch);
 }
+
+document.addEventListener('keydown', (event) => {
+  if (event.code === 'KeyO' && event.altKey) {
+    document.body.classList.toggle('hide-overlays');
+  }
+});
