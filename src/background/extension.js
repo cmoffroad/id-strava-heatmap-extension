@@ -1,5 +1,7 @@
 const manifest = browser.runtime.getManifest();
 
+console.log('[StravaHeatmapExt] Loaded manifest', manifest);
+
 // Detect browser type
 const browserName =
   manifest.browser_specific_settings?.gecko !== undefined ? 'firefox' : 'chrome';
@@ -9,8 +11,6 @@ const EXTENSION_PAGE = {
     'https://chromewebstore.google.com/detail/id-strava-heatmap/eglbcifjafncknmpmnelckombmgddlco',
   firefox: 'https://addons.mozilla.org/en-US/firefox/addon/id-strava-heatmap/',
 };
-
-console.log(manifest);
 
 export default {
   // Extension name fro mthe manifest
@@ -32,8 +32,10 @@ export default {
   heatmapFallbackUrl:
     'https://raw.githubusercontent.com/cmoffroad/id-strava-heatmap-extension/refs/heads/master/assets/heatmap-fallback.png',
 
-  // URLs for issue tracking and forum support
+  // URLs for issue tracking
   issuesTrackerUrl: 'https://github.com/cmoffroad/id-strava-heatmap-extension/issues/',
+
+  // forum support
   forumSupportUrl:
     'https://community.openstreetmap.org/t/new-strava-heatmap-extension-for-id/100544',
 };

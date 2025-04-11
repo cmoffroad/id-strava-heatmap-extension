@@ -1,6 +1,4 @@
-/**
- * Available color schemes for the heatmap
- */
+// Available color schemes for the heatmap
 const COLOR_OPTIONS = {
   blue: '🔵',
   hot: '🔥',
@@ -27,11 +25,8 @@ function formatStravaActivityLabel(param) {
   return clean.replace(/E\s/g, 'E-');
 }
 
-/**
- * Retrieves the default layer configurations for the Strava heatmap
- * @returns {Promise<Array>} Promise resolving to an array of layer configurations
- */
-async function getLayersConfiguration() {
+// Retrieves the default layer configurations for the Strava heatmap
+function getLayersConfiguration() {
   const defaultConfigs = [
     { activity: 'all', color: 'hot' },
     { activity: 'ride', color: 'purple' },
@@ -39,16 +34,10 @@ async function getLayersConfiguration() {
     { activity: 'water', color: 'blue' },
     { activity: 'winter', color: 'gray' },
   ];
-  return defaultConfigs; // Already wrapped in Promise by async
+  return defaultConfigs;
 }
 
-/**
- * Creates a layer configuration object
- * @param {number} index - Unique index for the layer
- * @param {string} activity - Activity type
- * @param {string} color - Color scheme
- * @returns {Object} Layer configuration object
- */
+// Creates a layer configuration object
 function getLayerOption(index, activity, color) {
   const activityName = formatStravaActivityLabel(activity);
   const colorName = COLOR_OPTIONS[color] || '❓';
@@ -63,18 +52,13 @@ function getLayerOption(index, activity, color) {
   };
 }
 
-/**
- * Generates layer options with optional callback for extension
- * @param {Function} [optionsCb] - Optional callback to extend layer options
- * @returns {Promise<Array>} Array of layer options
- * @throws {Error} If optionsCb is provided but not a function
- */
-export async function getLayers(optionsCb) {
+// Generates layer options with optional callback for extension
+export function getLayers(optionsCb) {
   if (optionsCb && typeof optionsCb !== 'function') {
     throw new Error('optionsCb must be a function if provided');
   }
 
-  const layersConfiguration = await getLayersConfiguration();
+  const layersConfiguration = getLayersConfiguration();
 
   return layersConfiguration.map((config, index) => {
     const baseLayerOption = getLayerOption(index + 1, config.activity, config.color);

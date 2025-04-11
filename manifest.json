@@ -40,8 +40,10 @@
     {
       "resources": [
         "src/clients/common/layers.js",
+        "src/clients/www.openstreetmap.org/imagery.js",
         "src/clients/www.openstreetmap.org/index.css",
-        "src/clients/www.openstreetmap.org/index.js"
+        "src/clients/www.openstreetmap.org/index.js",
+        "src/clients/www.openstreetmap.org/overlays.js"
       ],
       "matches": ["*://www.openstreetmap.org/*"]
     },
