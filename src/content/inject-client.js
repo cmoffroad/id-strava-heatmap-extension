@@ -17,7 +17,7 @@
         console.warn('[StravaHeatmapExt] Failed to inject client script', path);
 
       // Inject the script as early as possible
-      (document.head || document.documentElement).prepend(script);
+      (document.head || document.documentElement).append(script);
     } catch (e) {
       console.error('[StravaHeatmapExt] Unexpected error injecting client script:', e);
     }
@@ -38,7 +38,7 @@
       link.onerror = () =>
         console.warn('[StravaHeatmapExt] Failed to inject client CSS', path);
 
-      (document.head || document.documentElement).prepend(link);
+      (document.head || document.documentElement).append(link);
     } catch (e) {
       console.error('[StravaHeatmapExt] Unexpected error injecting client CSS:', e);
     }
