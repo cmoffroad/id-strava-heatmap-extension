@@ -1,3 +1,24 @@
-body.hide-overlays .layer.layer-overlay {
-  opacity: 0;
+body {
+  &.overlays-hidden {
+    .layer.layer-overlay {
+      display: none;
+    }
+    .layer-list.layer-overlay-list li label,
+    .section.section-overlay-list h3 a {
+      color: #888;
+    }
+  }
+
+  &[class*='overlays-opacity-']:not(.overlays-hidden) {
+    .layer.layer-overlay {
+      opacity: var(--overlays-opacity);
+    }
+    .layer-list.layer-overlay-list {
+      li.active label::after {
+        counter-reset: variable var(--overlays-opacity-percent);
+        content: counter(variable) '%';
+        color: #444;
+      }
+    }
+  }
 }

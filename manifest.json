@@ -41,6 +41,7 @@
   "web_accessible_resources": [
     {
       "resources": [
+        "src/clients/common/hash.js",
         "src/clients/common/layers.js",
         "src/clients/www.openstreetmap.org/imagery.js",
         "src/clients/www.openstreetmap.org/index.css",

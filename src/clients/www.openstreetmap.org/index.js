@@ -1,7 +1,7 @@
-import { setupToggleOverlaysKeyboardListener } from './overlays.js';
+import { setupOverlaysListeners } from './overlays.js';
 
 async function main() {
-  setupToggleOverlaysKeyboardListener();
+  setupOverlaysListeners();
 }
 
 main();

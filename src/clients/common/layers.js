@@ -40,13 +40,13 @@ function getLayersConfiguration() {
 // Creates a layer configuration object
 function getLayerOption(index, activity, color) {
   const activityName = formatStravaActivityLabel(activity);
-  const colorName = COLOR_OPTIONS[color] || '❓';
+  const colorEmoji = COLOR_OPTIONS[color] || '❓';
 
   return {
     id: `strava-heatmap-${index}`,
     index,
-    name: `${colorName} Strava Heatmap ${activityName}`,
-    description: 'Shows aggregated, public Strava activities over the last year',
+    name: `${colorEmoji} Strava Heatmap ${activityName}`,
+    description: `Shows ${activityName.toLowerCase()} aggregated, public Strava activities over the last year in ${colorEmoji} color.`,
     template: `https://content-a.strava.com/identified/globalheat/${activity}/${color}/{z}/{x}/{y}.png?v=19`,
     zoomExtent: [0, 15],
   };
