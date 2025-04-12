@@ -47,64 +47,74 @@ async function main() {
     opacities: {},
   });
 
-  // Extract existing custom IDs
-  const existingCustomIds = Object.keys(previousSettings.customLayers)
-    .filter((key) => !/strava heatmap/i.test(previousSettings.customLayers[key]?.name))
-    .map((key) => parseInt(key.replace('custom-', '')))
-    .filter(Number.isFinite);
-
-  const nextCustomId = getNextCustomId(existingCustomIds);
-
-  // Get and transform layers
-  const layers = await getLayers((baseLayer) =>
-    transformLayer(baseLayer, nextCustomId - 1)
-  );
-  const newLayerIds = new Set(layers.map((l) => l.id));
-
-  // Identify layers to remove
-  const oldLayerIds = Object.keys(previousSettings.customLayers).filter(
-    (key) =>
-      /strava heatmap/i.test(previousSettings.customLayers[key]?.name) &&
-      previousSettings.customLayers[key]?.layerType === 'overlay'
+  // Check if customLayers contains any tileUrls matching strava.com
+  const hasStravaLayer = Object.values(previousSettings.customLayers).some(
+    (layer) => layer.tileUrls && layer.tileUrls.some((url) => url.includes('strava.com'))
   );
 
-  const otherLayerIds = Object.keys(previousSettings.customLayers).filter(
-    (key) =>
-      !oldLayerIds.includes(key) &&
-      previousSettings.customLayers[key]?.layerType === 'overlay'
-  );
+  // Only update settings if no strava.com layers exist
+  if (!hasStravaLayer) {
+    // Extract existing custom IDs
+    const existingCustomIds = Object.keys(previousSettings.customLayers)
+      .filter((key) => !/strava heatmap/i.test(previousSettings.customLayers[key]?.name))
+      .map((key) => parseInt(key.replace('custom-', '')))
+      .filter(Number.isFinite);
 
-  const layerIdsToRemove = oldLayerIds.filter((id) => !newLayerIds.has(id));
+    const nextCustomId = getNextCustomId(existingCustomIds);
 
-  // Update settings
-  const newSettings = structuredClone(previousSettings);
+    // Get and transform layers
+    const layers = await getLayers((baseLayer) =>
+      transformLayer(baseLayer, nextCustomId - 1)
+    );
+    const newLayerIds = new Set(layers.map((l) => l.id));
 
-  // Remove old layers
-  layerIdsToRemove.forEach((id) => {
-    delete newSettings.customLayers[id];
-    delete newSettings.opacities[id];
-    delete newSettings.selectedOverlayTree.overlays.custom[id];
-    delete newSettings.currentOverlays.overlays.custom[id];
-    // delete newSettings.previousOverlays.overlays.custom[id];
-  });
+    // Identify layers to remove
+    const oldLayerIds = Object.keys(previousSettings.customLayers).filter(
+      (key) =>
+        /strava heatmap/i.test(previousSettings.customLayers[key]?.name) &&
+        previousSettings.customLayers[key]?.layerType === 'overlay'
+    );
 
-  newSettings.customOverlayOrder = newSettings.customOverlayOrder.filter((key) =>
-    otherLayerIds.includes(key)
-  );
+    const otherLayerIds = Object.keys(previousSettings.customLayers).filter(
+      (key) =>
+        !oldLayerIds.includes(key) &&
+        previousSettings.customLayers[key]?.layerType === 'overlay'
+    );
 
-  // Add new layers
-  layers.forEach((layer) => {
-    newSettings.customLayers[layer.id] = layer;
-    newSettings.opacities[layer.id] = 0.8;
-    newSettings.selectedOverlayTree.overlays.custom[layer.id] = true;
-    newSettings.currentOverlays.overlays.custom[layer.id] ??= true;
-    // newSettings.previousOverlays.overlays.custom[layer.id] ??= true;
-    newSettings.customOverlayOrder.push(layer.id);
-  });
+    const layerIdsToRemove = oldLayerIds.filter((id) => !newLayerIds.has(id));
 
-  // Save and log
-  await store.put(newSettings);
-  console.log('[StravaHeatmapExt] Extended custom overlays with Strava Heatmap layers');
+    // Update settings
+    const newSettings = structuredClone(previousSettings);
+
+    // Remove old layers
+    layerIdsToRemove.forEach((id) => {
+      delete newSettings.customLayers[id];
+      delete newSettings.opacities[id];
+      delete newSettings.selectedOverlayTree.overlays.custom[id];
+      delete newSettings.currentOverlays.overlays.custom[id];
+      // delete newSettings.previousOverlays.overlays.custom[id];
+    });
+
+    newSettings.customOverlayOrder = newSettings.customOverlayOrder.filter((key) =>
+      otherLayerIds.includes(key)
+    );
+
+    // Add new layers
+    layers.forEach((layer) => {
+      newSettings.customLayers[layer.id] = layer;
+      newSettings.opacities[layer.id] = 0.8;
+      newSettings.selectedOverlayTree.overlays.custom[layer.id] = true;
+      newSettings.currentOverlays.overlays.custom[layer.id] ??= true;
+      // newSettings.previousOverlays.overlays.custom[layer.id] ??= true;
+      newSettings.customOverlayOrder.push(layer.id);
+    });
+
+    // Save and log
+    await store.put(newSettings);
+    console.log('[StravaHeatmapExt] Extended custom overlays with Strava Heatmap layers');
+  } else {
+    console.log('[StravaHeatmapExt] Skipped update: Strava layers already exist');
+  }
 }
 
 window.onload = async () => {

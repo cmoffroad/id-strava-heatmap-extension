@@ -59,7 +59,8 @@
         "src/clients/common/layers.js",
         "src/clients/gpx.studio/index.css",
         "src/clients/gpx.studio/index.js",
-        "src/clients/gpx.studio/db.js"
+        "src/clients/gpx.studio/db.js",
+        "src/clients/gpx.studio/start.js"
       ],
       "matches": ["*://gpx.studio/*"]
     }
