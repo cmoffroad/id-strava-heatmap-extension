@@ -8,13 +8,9 @@ const IMAGERY_REGEX_FILTER = [
   'imagery.min-(.+).json',
 ].join('');
 
-const HEATMAP_RULE_ID = 2;
-
-const HEATMAP_REGEX_FILTER = [
-  '^https://([^/]+)\\.strava\\.com/',
-  '(anon|identified)/globalheat/',
-  '([^/]+)/([^/]+)/([^/]+)/([^/]+)/([^/]+)\\.png',
-].join('');
+const HEATMAP_REDIRECT_RULE_ID = 2;
+const HEATMAP_HEADERS_RULE_ID = 3;
+const HEATMAP_FALLBACK_RULE_ID = 4;
 
 export function updateImageryRules() {
   const rule = {
@@ -30,17 +26,7 @@ export function updateImageryRules() {
         {
           header: 'Cache-Control',
           operation: 'set',
-          value: 'no-store, no-cache, must-revalidate',
-        },
-        {
-          header: 'Pragma',
-          operation: 'set',
-          value: 'no-cache',
-        },
-        {
-          header: 'Expires',
-          operation: 'set',
-          value: '0',
+          value: 'no-store, no-cache, must-revalidate, max-age=0',
         },
       ],
     },
@@ -53,44 +39,90 @@ export function updateImageryRules() {
 }
 
 export function updateHeatmapRules(credentials) {
-  const action = credentials
-    ? {
-        type: 'modifyHeaders',
-        requestHeaders: [
-          {
-            header: 'Cookie',
-            operation: 'set',
-            value: credentials,
-          },
-        ],
-        responseHeaders: [
-          {
-            header: 'Access-Control-Allow-Origin',
-            operation: 'set',
-            value: '*',
-          },
-        ],
-      }
-    : {
-        type: 'redirect',
-        redirect: {
-          url: extension.heatmapFallbackUrl,
-        },
-      };
+  const timestamp = Date.now().toString();
 
-  const rule = {
-    id: HEATMAP_RULE_ID,
-    priority: 1,
-    condition: {
-      regexFilter: HEATMAP_REGEX_FILTER,
-      resourceTypes: ['main_frame', 'sub_frame', 'image', 'xmlhttprequest'],
-      excludedInitiatorDomains: ['strava.com'],
-    },
-    action,
+  const removeRuleIds = [
+    HEATMAP_REDIRECT_RULE_ID,
+    HEATMAP_HEADERS_RULE_ID,
+    HEATMAP_FALLBACK_RULE_ID,
+  ];
+
+  const condition = {
+    regexFilter:
+      '^https://[^/]+\\.strava\\.com/identified/globalheat/[^/]+/[^/]+/[^/]+/[^/]+/[^/]+\\.png',
+    resourceTypes: ['image', 'xmlhttprequest'],
+    excludedInitiatorDomains: ['strava.com'],
   };
 
-  return browser.declarativeNetRequest.updateDynamicRules({
-    removeRuleIds: [rule.id],
-    addRules: [rule],
-  });
+  if (!credentials) {
+    return browser.declarativeNetRequest.updateDynamicRules({
+      removeRuleIds,
+      addRules: [
+        {
+          id: HEATMAP_FALLBACK_RULE_ID,
+          priority: 1,
+          condition,
+          action: {
+            type: 'redirect',
+            redirect: {
+              url: extension.heatmapFallbackUrl + `?t=` + timestamp,
+            },
+          },
+        },
+      ],
+    });
+  } else {
+    return browser.declarativeNetRequest.updateDynamicRules({
+      removeRuleIds,
+      addRules: [
+        {
+          id: HEATMAP_REDIRECT_RULE_ID,
+          priority: 1,
+          condition,
+          action: {
+            type: 'redirect',
+            redirect: {
+              transform: {
+                queryTransform: {
+                  addOrReplaceParams: [
+                    {
+                      key: 't',
+                      value: timestamp,
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+        {
+          id: HEATMAP_HEADERS_RULE_ID,
+          priority: 1,
+          condition,
+          action: {
+            type: 'modifyHeaders',
+            requestHeaders: [
+              {
+                header: 'Cookie',
+                operation: 'set',
+                value: credentials,
+              },
+            ],
+            responseHeaders: [
+              {
+                header: 'Access-Control-Allow-Origin',
+                operation: 'set',
+                value: '*',
+              },
+              {
+                header: 'Cache-Control',
+                operation: 'set',
+                value: 'no-store, no-cache, must-revalidate, max-age=0',
+              },
+            ],
+          },
+        },
+      ],
+    });
+  }
 }

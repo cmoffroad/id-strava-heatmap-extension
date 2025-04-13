@@ -54,7 +54,8 @@
         "src/clients/www.openstreetmap.org/index.css",
         "src/clients/www.openstreetmap.org/index.js",
         "src/clients/www.openstreetmap.org/overlays.js",
-        "src/clients/www.openstreetmap.org/start.js"
+        "src/clients/www.openstreetmap.org/start.js",
+        "src/clients/www.openstreetmap.org/tiles.js"
       ],
       "matches": ["*://www.openstreetmap.org/*"]
     }

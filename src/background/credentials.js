@@ -17,8 +17,8 @@ export async function requestCredentials() {
   await browser.storage.local.set({ authenticated });
   console.debug('[StravaHeatmapExt] Set authenticated to:', authenticated);
 
-  await updateHeatmapRules(credentials);
-  console.debug('[StravaHeatmapExt] Heatmap rules updated');
+  const rules = await updateHeatmapRules(credentials);
+  console.debug('[StravaHeatmapExt] Heatmap rules updated', rules);
   return authenticated;
 }
 
@@ -29,6 +29,6 @@ export async function resetCredentials() {
   await browser.storage.local.set({ authenticated: false });
   console.debug('[StravaHeatmapExt] Set authenticated to: false');
 
-  await updateHeatmapRules(null);
-  console.debug('[StravaHeatmapExt] Heatmap rules reset');
+  const rules = await updateHeatmapRules(null);
+  console.debug('[StravaHeatmapExt] Heatmap rules reset', rules);
 }
