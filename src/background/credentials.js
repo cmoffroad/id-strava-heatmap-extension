@@ -11,11 +11,24 @@ const STRAVA_COOKIE_NAMES = [
 
 export async function requestCredentials() {
   const credentials = await fetchCookies(STRAVA_COOKIE_URL, STRAVA_COOKIE_NAMES);
+  console.debug('[StravaHeatmapExt] Credentials fetched:', credentials);
+
+  const authenticated = credentials !== null;
+  await browser.storage.local.set({ authenticated });
+  console.debug('[StravaHeatmapExt] Set authenticated to:', authenticated);
+
   await updateHeatmapRules(credentials);
-  return credentials !== null;
+  console.debug('[StravaHeatmapExt] Heatmap rules updated');
+  return authenticated;
 }
 
 export async function resetCredentials() {
   await clearCookies(STRAVA_COOKIE_URL, STRAVA_COOKIE_NAMES);
+  console.debug('[StravaHeatmapExt] Credentials cleared');
+
+  await browser.storage.local.set({ authenticated: false });
+  console.debug('[StravaHeatmapExt] Set authenticated to: false');
+
   await updateHeatmapRules(null);
+  console.debug('[StravaHeatmapExt] Heatmap rules reset');
 }
