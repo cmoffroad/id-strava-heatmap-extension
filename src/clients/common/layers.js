@@ -41,13 +41,14 @@ function getLayersConfiguration() {
 function getLayerOption(index, activity, color) {
   const activityName = formatStravaActivityLabel(activity);
   const colorEmoji = COLOR_OPTIONS[color] || '❓';
+  const timestamp = Date.now().toString();
 
   return {
     id: `strava-heatmap-${index}`,
     index,
     name: `${colorEmoji} Strava Heatmap ${activityName}`,
     description: `Shows ${activityName.toLowerCase()} aggregated, public Strava activities over the last year in ${colorEmoji} color.`,
-    template: `https://content-a.strava.com/identified/globalheat/${activity}/${color}/{z}/{x}/{y}.png?v=19`,
+    template: `https://content-a.strava.com/identified/globalheat/${activity}/${color}/{z}/{x}/{y}.png?v=19&t=${timestamp}`,
     zoomExtent: [0, 15],
   };
 }

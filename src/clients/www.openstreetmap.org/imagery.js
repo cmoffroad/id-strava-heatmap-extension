@@ -19,26 +19,14 @@ function createStravaHeatmapLayerConfig({
 	};
 }
 
-export function extendImageryWithStravaHeatmapLayers() {
+export async function extendImageryWithStravaHeatmapLayers(context, authenticated) {
 	const extraLayers = getLayers(createStravaHeatmapLayerConfig);
 
-	const { fetch: originalFetch } = window;
-	window.fetch = async (resource, config) => {
-		const response = await originalFetch(resource, config);
-
-		if (resource.includes('/assets/iD/data/imagery.')) {
-			const json = () =>
-				response
-					.clone()
-					.json()
-					.then((data) => {
-						return [...data, ...extraLayers];
-					});
-			response.json = json;
-		}
-
-		return response;
-	};
+	const data = await context.background().ensureLoaded();
+	extraLayers.forEach((layer) => {
+		data.imagery.push(layer);
+		data.backgrounds.push(iD.rendererBackgroundSource(layer));
+	});
 
 	console.log('[StravaHeatmapExt] Extended iD imagery with Strava layers', extraLayers);
 }

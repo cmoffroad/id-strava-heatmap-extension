@@ -3,7 +3,7 @@ import '../../lib/browser-polyfill.min.js';
 import { createContextMenu, onContextMenuClicked } from './context-menu.js';
 import { requestCredentials, resetCredentials } from './credentials.js';
 import { showInstalledNotification } from './installs.js';
-import { updateHeatmapRules, updateImageryRules } from './rules.js';
+import { updateHeatmapRules } from './rules.js';
 import { checkForUpdates } from './updates.js';
 
 const MESSAGE_HANDLERS = {
@@ -31,7 +31,6 @@ async function main() {
   browser.runtime.onInstalled.addListener(onInstalled);
   browser.contextMenus.onClicked.addListener(onContextMenuClicked);
 
-  await updateImageryRules();
   await requestCredentials();
 }
 

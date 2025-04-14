@@ -18,7 +18,7 @@
   "content_scripts": [
     {
       "matches": ["https://www.openstreetmap.org/id*"],
-      "js": ["lib/browser-polyfill.min.js", "src/content/inject-start.js"],
+      "js": ["src/clients/www.openstreetmap.org/start.js"],
       "run_at": "document_start",
       "all_frames": true
     },
@@ -26,7 +26,6 @@
       "matches": ["https://www.openstreetmap.org/id*"],
       "js": [
         "lib/browser-polyfill.min.js",
-        "src/content/request-credentials.js",
         "src/content/inject-client.js",
         "src/content/monitor-auth.js",
         "src/content/check-updates.js"
@@ -51,6 +50,7 @@
         "src/clients/common/auth.js",
         "src/clients/common/hash.js",
         "src/clients/common/layers.js",
+        "src/clients/www.openstreetmap.org/id.js",
         "src/clients/www.openstreetmap.org/imagery.js",
         "src/clients/www.openstreetmap.org/index.css",
         "src/clients/www.openstreetmap.org/index.js",

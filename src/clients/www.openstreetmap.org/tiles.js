@@ -1,10 +1,10 @@
-export function refreshTiles() {
+export function refreshTiles(context) {
 	console.debug('[StravaHeatmapExt] Starting tile refresh');
+	const map = context.map();
 	const tiles = document.querySelectorAll('img[src*="strava.com"]');
 	tiles.forEach((tile) => {
-		const url = new URL(tile.src);
-		url.searchParams.set('r', Date.now().toString());
-		requestAnimationFrame(() => (tile.src = url.toString()));
+		tile.remove();
 	});
+	map.zoom(map.zoom()); // redraw
 	console.debug(`[StravaHeatmapExt] Refreshed ${tiles.length} local tiles`);
 }
