@@ -1,9 +1,12 @@
+import { setupAuthStatusChangeListener } from '../common/auth.js';
 import { setupOverlaysListeners } from './overlays.js';
-import { setupRefreshTilesListener } from './tiles.js';
+import { refreshTiles } from './tiles.js';
 
 async function main() {
   setupOverlaysListeners();
-  setupRefreshTilesListener();
+  setupAuthStatusChangeListener((authenticated) => {
+    refreshTiles();
+  });
 }
 
 main();

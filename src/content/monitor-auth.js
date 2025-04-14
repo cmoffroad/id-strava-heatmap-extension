@@ -1,5 +1,5 @@
 (() => {
-  console.debug('[StravaHeatmapExt] Setting up storage change listener');
+  console.debug('[StravaHeatmapExt] Setting auth change listener via storage');
   browser.storage.onChanged.addListener((changes, area) => {
     console.debug('[StravaHeatmapExt] Storage change detected in', area, ':', changes);
     if (area === 'local' && 'authenticated' in changes) {
@@ -11,10 +11,11 @@
         newValue
       );
       if (oldValue !== newValue) {
-        console.debug(
-          '[StravaHeatmapExt] Triggering tile refresh due to authenticated change'
+        console.debug('[StravaHeatmapExt] Broadcasting authenticated change to client');
+        window.postMessage(
+          { type: 'authStatusChanged', payload: newValue },
+          window.location.origin
         );
-        window.postMessage({ type: 'REFRESH_TILES' }, window.location.origin);
       }
     }
   });

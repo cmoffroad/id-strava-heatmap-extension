@@ -38,7 +38,7 @@ export function updateImageryRules() {
   });
 }
 
-export function updateHeatmapRules(credentials) {
+export async function updateHeatmapRules(credentials) {
   const timestamp = Date.now().toString();
 
   const removeRuleIds = [
@@ -55,74 +55,82 @@ export function updateHeatmapRules(credentials) {
   };
 
   if (!credentials) {
-    return browser.declarativeNetRequest.updateDynamicRules({
-      removeRuleIds,
-      addRules: [
-        {
-          id: HEATMAP_FALLBACK_RULE_ID,
-          priority: 1,
-          condition,
-          action: {
-            type: 'redirect',
-            redirect: {
-              url: extension.heatmapFallbackUrl + `?t=` + timestamp,
-            },
+    const addRules = [
+      {
+        id: HEATMAP_FALLBACK_RULE_ID,
+        priority: 1,
+        condition,
+        action: {
+          type: 'redirect',
+          redirect: {
+            url: extension.heatmapFallbackUrl + `?t=` + timestamp,
           },
         },
-      ],
+      },
+    ];
+
+    await browser.declarativeNetRequest.updateDynamicRules({
+      removeRuleIds,
+      addRules,
     });
+    return addRules;
   } else {
-    return browser.declarativeNetRequest.updateDynamicRules({
-      removeRuleIds,
-      addRules: [
-        {
-          id: HEATMAP_REDIRECT_RULE_ID,
-          priority: 1,
-          condition,
-          action: {
-            type: 'redirect',
-            redirect: {
-              transform: {
-                queryTransform: {
-                  addOrReplaceParams: [
-                    {
-                      key: 't',
-                      value: timestamp,
-                    },
-                  ],
-                },
+    const addRules = [
+      {
+        id: HEATMAP_REDIRECT_RULE_ID,
+        priority: 1,
+        condition,
+        action: {
+          type: 'redirect',
+          redirect: {
+            transform: {
+              queryTransform: {
+                addOrReplaceParams: [
+                  {
+                    key: 't',
+                    value: timestamp,
+                  },
+                ],
+                removeParams: ['r'],
               },
             },
           },
         },
-        {
-          id: HEATMAP_HEADERS_RULE_ID,
-          priority: 1,
-          condition,
-          action: {
-            type: 'modifyHeaders',
-            requestHeaders: [
-              {
-                header: 'Cookie',
-                operation: 'set',
-                value: credentials,
-              },
-            ],
-            responseHeaders: [
-              {
-                header: 'Access-Control-Allow-Origin',
-                operation: 'set',
-                value: '*',
-              },
-              {
-                header: 'Cache-Control',
-                operation: 'set',
-                value: 'no-store, no-cache, must-revalidate, max-age=0',
-              },
-            ],
-          },
+      },
+      {
+        id: HEATMAP_HEADERS_RULE_ID,
+        priority: 1,
+        condition,
+        action: {
+          type: 'modifyHeaders',
+          requestHeaders: [
+            {
+              header: 'Cookie',
+              operation: 'set',
+              value: credentials,
+            },
+          ],
+          responseHeaders: [
+            {
+              header: 'Access-Control-Allow-Origin',
+              operation: 'set',
+              value: '*',
+            },
+            {
+              header: 'Cache-Control',
+              operation: 'set',
+              value: 'no-store, no-cache, must-revalidate, max-age=0',
+            },
+          ],
         },
-      ],
+      },
+    ];
+
+    await browser.declarativeNetRequest.updateDynamicRules({
+      removeRuleIds,
+      addRules,
     });
+
+    return addRules;
   }
 }

@@ -13,12 +13,12 @@ body {
     .layer.layer-overlay {
       opacity: var(--overlays-opacity);
     }
-    .layer-list.layer-overlay-list {
+    /*.layer-list.layer-overlay-list {
       li.active label::after {
         counter-reset: variable var(--overlays-opacity-percent);
         content: counter(variable) '%';
         color: #444;
       }
-    }
+    }*/
   }
 }

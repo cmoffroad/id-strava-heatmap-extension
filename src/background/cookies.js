@@ -42,6 +42,7 @@ export async function clearCookies(url, cookieNames) {
   try {
     await Promise.all(cookieNames.map((name) => clearCookie(url, name)));
     console.log(`Cookies for ${url} cleared successfully.`);
+    return null;
   } catch (error) {
     console.error(`Error clearing cookies for ${url}:`, error);
   }
