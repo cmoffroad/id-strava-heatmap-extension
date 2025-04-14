@@ -25,7 +25,8 @@ export async function resetCredentials() {
 
 async function processCredentials(credentials) {
   const authenticated = credentials !== null;
-  const previousAuthenticated = await browser.storage.local.get('authenticated');
+  const { authenticated: previousAuthenticated } =
+    await browser.storage.local.get('authenticated');
   if (authenticated != previousAuthenticated) {
     await browser.storage.local.set({ authenticated });
     console.debug('[StravaHeatmapExt] Set authenticated to:', authenticated);
