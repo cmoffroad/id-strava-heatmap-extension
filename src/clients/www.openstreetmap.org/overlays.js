@@ -3,10 +3,18 @@ import { addHashChangeListener, getHashParams } from '../common/hash.js';
 const opacityStep = 10;
 const opacityClassPrefix = 'overlays-opacity';
 const hiddenClass = 'overlays-hidden';
-
-let overlayOpacity = parseInt(localStorage.getItem(opacityClassPrefix) || '80');
+const storageKeyLastUsed = 'overlays-last-used';
+const storageKeyOpacity = opacityClassPrefix;
 
 export function setupOverlaysListeners() {
+	const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+	const altPrefix = isMac ? '⌥' : 'Alt+';
+
+	document.body.style.setProperty(
+		`--${opacityClassPrefix}-help`,
+		`"ℹ️ Use ⌨️ shortcuts ${altPrefix}+O to toggle all layers visibility, and ${altPrefix}+[ or ${altPrefix}+] to adjust opacity."`
+	);
+
 	document.addEventListener('keydown', (event) => {
 		// Prevent execution if focused on an input, textarea, or content editable element.
 		const tagName = event.target.tagName;
@@ -21,23 +29,26 @@ export function setupOverlaysListeners() {
 				toggleHiddenOverlays();
 				break;
 			case 'BracketLeft':
-				if (!isOverlaysHidden()) changeOverlayOpacity(-opacityStep);
+				changeOverlayOpacity(-opacityStep);
 				break;
 			case 'BracketRight':
-				if (!isOverlaysHidden()) changeOverlayOpacity(opacityStep);
+				changeOverlayOpacity(opacityStep);
 				break;
 		}
 	});
 
 	addHashChangeListener((oldHash, newHash) => {
-		// if overlays selection changed, do not hide overlays
+		// if overlays selection changed,
 		if (oldHash.get('overlays') !== newHash.get('overlays')) {
+			// do not hide overlays
 			toggleHiddenOverlays(false);
-			localStorage.setItem('overlays-last-used', newHash.get('overlays'));
+
+			// keep track of last used overlays
+			localStorage.setItem(storageKeyLastUsed, newHash.get('overlays'));
 		}
 	});
 
-	updateOverlayOpacityClass(overlayOpacity);
+	changeOverlayOpacity();
 	ensureOverlaysInHash();
 }
 
@@ -47,12 +58,21 @@ function isOverlaysHidden() {
 
 function toggleHiddenOverlays(hidden) {
 	document.body.classList.toggle(hiddenClass, hidden);
+	changeOverlayOpacity();
 }
 
-function changeOverlayOpacity(step) {
-	overlayOpacity = Math.max(opacityStep, Math.min(overlayOpacity + step, 100));
-	localStorage.setItem(opacityClassPrefix, `${overlayOpacity}`);
-	updateOverlayOpacityClass(overlayOpacity);
+function changeOverlayOpacity(step = 0) {
+	if (isOverlaysHidden()) {
+		document.body.style.setProperty(`--${opacityClassPrefix}-summary`, '"Hidden"');
+		return;
+	}
+
+	const oldOpacity = parseInt(localStorage.getItem(storageKeyOpacity)) || 100;
+	const newOpacity = Math.max(opacityStep, Math.min(oldOpacity + step, 100));
+
+	localStorage.setItem(storageKeyOpacity, newOpacity);
+
+	updateOverlayOpacityClass(newOpacity);
 }
 
 function updateOverlayOpacityClass(value) {
@@ -65,15 +85,18 @@ function updateOverlayOpacityClass(value) {
 		document.body.classList.add(`${opacityClassPrefix}-${value}`);
 	}
 
-	document.body.style.setProperty(`--${opacityClassPrefix}`, overlayOpacity / 100);
-	document.body.style.setProperty(`--${opacityClassPrefix}-percent`, overlayOpacity);
+	document.body.style.setProperty(`--${opacityClassPrefix}`, value / 100);
+	document.body.style.setProperty(
+		`--${opacityClassPrefix}-summary`,
+		`"Opacity: ${value}%"`
+	);
 }
 
 function ensureOverlaysInHash(location = window.location) {
 	const currentHashParams = getHashParams(location);
 
 	if (!currentHashParams.has('overlays')) {
-		const lastUsedOverlays = localStorage.getItem('overlays-last-used');
+		const lastUsedOverlays = localStorage.getItem(storageKeyLastUsed);
 		if (lastUsedOverlays && lastUsedOverlays.trim() !== '') {
 			currentHashParams.set('overlays', lastUsedOverlays);
 			const newHash = `#${currentHashParams.toString()}`;

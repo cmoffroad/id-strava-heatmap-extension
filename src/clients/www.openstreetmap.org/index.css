@@ -1,4 +1,18 @@
 body {
+  .section.section-overlay-list {
+    .disclosure-wrap::before {
+      content: var(--overlays-opacity-help);
+      padding-bottom: 8px;
+      display: block;
+    }
+    h3::after {
+      line-height: 22px;
+      content: var(--overlays-opacity-summary);
+      float: right;
+      font-size: 12px;
+      font-weight: 400;
+    }
+  }
   &.overlays-hidden {
     .layer.layer-overlay {
       display: none;
@@ -13,12 +27,5 @@ body {
     .layer.layer-overlay {
       opacity: var(--overlays-opacity);
     }
-    /*.layer-list.layer-overlay-list {
-      li.active label::after {
-        counter-reset: variable var(--overlays-opacity-percent);
-        content: counter(variable) '%';
-        color: #444;
-      }
-    }*/
   }
 }
