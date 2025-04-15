@@ -23,7 +23,7 @@ export async function updateHeatmapRules(credentials) {
         action: {
           type: 'redirect',
           redirect: {
-            url: extension.heatmapFallbackUrl + `?t=` + timestamp,
+            url: extension.heatmapFallbackUrl,
           },
         },
       },

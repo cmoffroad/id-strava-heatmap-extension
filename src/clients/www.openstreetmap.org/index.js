@@ -5,22 +5,26 @@ import { setupOverlaysListeners } from './overlays.js';
 import { refreshTiles } from './tiles.js';
 
 async function main() {
-  const { authenticated } = document.querySelector('script[data-authenticated]').dataset;
+  // const { authenticated } = document.querySelector('script[data-authenticated]').dataset;
 
-  setupiDCoreContextListener((context) => {
+  setupiDCoreContextListener(async (context) => {
     window.context = context; // DEBUG
 
-    extendImageryWithStravaHeatmapLayers(context, authenticated); // TODO pass current authentication
+    await extendImageryWithStravaHeatmapLayers(context);
 
     setupOverlaysListeners();
-    setupAuthStatusChangeListener((authenticated) => {
-      // TODO update layers URL with &a&t
-
+    setupAuthStatusChangeListener(async (authenticated) => {
+      // await extendImageryWithStravaHeatmapLayers(context);
       refreshTiles(context);
     });
   });
 
   restoreiDContainer();
+
+  // DEBUG
+  window.toggleCredentials = () => {
+    window.postMessage({ type: 'toggleCredentials' }, window.location.origin);
+  };
 }
 
 main();

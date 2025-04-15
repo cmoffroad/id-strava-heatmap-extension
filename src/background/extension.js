@@ -30,7 +30,7 @@ export default {
 
   // Required by Firefox, which cannot handle redirects to local extension files—therefore, the resource must be loaded from the internet.
   heatmapFallbackUrl:
-    'https://raw.githubusercontent.com/cmoffroad/id-strava-heatmap-extension/refs/heads/master/assets/heatmap-fallback.png',
+    'https://raw.githubusercontent.com/cmoffroad/id-strava-heatmap-extension/refs/heads/master/assets/heatmap-fallback.png?v=1',
 
   // URLs for issue tracking
   issuesTrackerUrl: 'https://github.com/cmoffroad/id-strava-heatmap-extension/issues/',

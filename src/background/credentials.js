@@ -23,6 +23,13 @@ export async function resetCredentials() {
   return processCredentials(credentials);
 }
 
+export async function toggleCredentials() {
+  const credentials = await fetchCookies(STRAVA_COOKIE_URL, STRAVA_COOKIE_NAMES);
+  const { authenticated } = await browser.storage.local.get('authenticated');
+
+  return processCredentials(authenticated ? null : credentials);
+}
+
 async function processCredentials(credentials) {
   const authenticated = credentials !== null;
   const { authenticated: previousAuthenticated } =

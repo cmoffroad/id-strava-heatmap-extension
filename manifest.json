@@ -26,6 +26,7 @@
       "matches": ["https://www.openstreetmap.org/id*"],
       "js": [
         "lib/browser-polyfill.min.js",
+        "src/content/request-credentials.js",
         "src/content/inject-client.js",
         "src/content/monitor-auth.js",
         "src/content/check-updates.js"

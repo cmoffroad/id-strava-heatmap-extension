@@ -1,20 +1,29 @@
 import extension from './extension.js';
+import { toggleCredentials } from './credentials.js';
 
 const CONTEXT_MENU_ITEMS = [
   {
     id: 'forumSupport',
     title: 'Forum Support',
-    url: extension.forumSupportUrl,
+    action: () => browser.tabs.create({ url: extension.forumSupportUrl }),
   },
   {
     id: 'submitIssue',
     title: 'Submit Issue',
-    url: extension.issuesTrackerUrl,
+    action: () => browser.tabs.create({ url: extension.issuesTrackerUrl }),
   },
   {
     id: 'extensionPage',
     title: 'Extension Page',
-    url: extension.installationUrl,
+    action: () => browser.tabs.create({ url: extension.installationUrl }),
+  },
+  {
+    id: 'separtor',
+  },
+  {
+    id: 'toggleCredentials',
+    title: 'Toggle Credentials',
+    action: () => toggleCredentials(),
   },
 ];
 
@@ -37,8 +46,9 @@ export function createContextMenu() {
     CONTEXT_MENU_ITEMS.forEach(({ id, title }) => {
       browser.contextMenus.create({
         id,
-        parentId: mainMenu.id,
         title,
+        type: title ? 'normal' : 'separator',
+        parentId: mainMenu.id,
         contexts: mainMenu.contexts,
         documentUrlPatterns: mainMenu.documentUrlPatterns,
       });
@@ -51,8 +61,8 @@ export function createContextMenu() {
 export function onContextMenuClicked(info) {
   const clickedItem = CONTEXT_MENU_ITEMS.find(({ id }) => id === info.menuItemId);
 
-  if (clickedItem?.url) {
-    browser.tabs.create({ url: clickedItem.url });
+  if (clickedItem?.action) {
+    clickedItem.action();
   } else {
     console.warn(`Unknown or invalid context menu item clicked: ${info.menuItemId}`);
   }

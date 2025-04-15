@@ -1,7 +1,7 @@
 (async function () {
   console.debug('[StravaHeatmapExt] executing inject-client.js');
 
-  function injectClientScript(authenticated) {
+  function injectClientScript() {
     try {
       const host = window.location.host;
       const path = `src/clients/${host}/index.js`;
@@ -9,7 +9,7 @@
       script.src = browser.runtime.getURL(path);
       script.type = 'module';
       script.async = false;
-      script.dataset.authenticated = authenticated;
+      // script.dataset.authenticated = authenticated;
       script.onload = () => {
         // script.remove();
         console.debug('[StravaHeatmapExt] Injected client script.', path);
@@ -45,7 +45,6 @@
     }
   }
 
-  const authenticated = await browser.runtime.sendMessage('requestCredentials');
-  injectClientScript(authenticated);
+  injectClientScript();
   injectClientCSS();
 })();

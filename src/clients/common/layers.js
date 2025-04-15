@@ -38,10 +38,9 @@ function getLayersConfiguration() {
 }
 
 // Creates a layer configuration object
-function getLayerOption(index, activity, color) {
+function getLayerOption(index, activity, color, timestamp) {
   const activityName = formatStravaActivityLabel(activity);
   const colorEmoji = COLOR_OPTIONS[color] || '❓';
-  const timestamp = Date.now().toString();
 
   return {
     id: `strava-heatmap-${index}`,
@@ -60,9 +59,15 @@ export function getLayers(optionsCb) {
   }
 
   const layersConfiguration = getLayersConfiguration();
+  const timestamp = Date.now().toString();
 
   return layersConfiguration.map((config, index) => {
-    const baseLayerOption = getLayerOption(index + 1, config.activity, config.color);
+    const baseLayerOption = getLayerOption(
+      index + 1,
+      config.activity,
+      config.color,
+      timestamp
+    );
 
     return optionsCb ? optionsCb(baseLayerOption) : baseLayerOption;
   });

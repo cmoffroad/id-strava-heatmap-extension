@@ -23,6 +23,16 @@ export async function extendImageryWithStravaHeatmapLayers(context, authenticate
 	const extraLayers = getLayers(createStravaHeatmapLayerConfig);
 
 	const data = await context.background().ensureLoaded();
+
+	// data.imagery = [
+	// 	...data.imagery.filter((i) => !i.id.startsWith('strava-heatmap-')),
+	// 	...extraLayers,
+	// ];
+	// data.backgrounds = [
+	// 	...data.backgrounds.filter((i) => !i.id.startsWith('strava-heatmap-')),
+	// 	...extraLayers.map((l) => iD.rendererBackgroundSource(l)),
+	// ];
+
 	extraLayers.forEach((layer) => {
 		data.imagery.push(layer);
 		data.backgrounds.push(iD.rendererBackgroundSource(layer));
