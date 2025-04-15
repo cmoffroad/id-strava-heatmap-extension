@@ -20,11 +20,6 @@ async function main() {
   });
 
   restoreiDContainer();
-
-  // DEBUG
-  window.toggleCredentials = () => {
-    window.postMessage({ type: 'toggleCredentials' }, window.location.origin);
-  };
 }
 
 main();

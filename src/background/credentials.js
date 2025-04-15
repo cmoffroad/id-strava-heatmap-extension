@@ -25,12 +25,17 @@ export async function resetCredentials() {
 
 export async function toggleCredentials() {
   const credentials = await fetchCookies(STRAVA_COOKIE_URL, STRAVA_COOKIE_NAMES);
-  const { authenticated } = await browser.storage.local.get('authenticated');
-
-  return processCredentials(authenticated ? null : credentials);
+  if (credentials === null) {
+    browser.tabs.create({
+      url: `https://www.strava.com/login?redirect=${encodeURIComponent('/maps/global-heatmap')}`,
+    });
+  } else {
+    const { authenticated } = await browser.storage.local.get('authenticated');
+    return processCredentials(authenticated ? null : credentials, true);
+  }
 }
 
-async function processCredentials(credentials) {
+async function processCredentials(credentials, debug = false) {
   const authenticated = credentials !== null;
   const { authenticated: previousAuthenticated } =
     await browser.storage.local.get('authenticated');
@@ -43,5 +48,10 @@ async function processCredentials(credentials) {
   } else {
     console.debug('[StravaHeatmapExt] Autentication status unchanged', authenticated);
   }
+  await browser.action.setBadgeText({ text: '󠀠' });
+  await browser.action.setBadgeBackgroundColor({
+    color: authenticated ? 'green' : debug ? 'orange' : 'red',
+  });
+
   return authenticated;
 }

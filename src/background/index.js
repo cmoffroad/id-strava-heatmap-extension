@@ -1,7 +1,11 @@
 import '../../lib/browser-polyfill.min.js';
 
 import { createContextMenu, onContextMenuClicked } from './context-menu.js';
-import { requestCredentials, resetCredentials } from './credentials.js';
+import {
+  requestCredentials,
+  resetCredentials,
+  toggleCredentials,
+} from './credentials.js';
 import { showInstalledNotification } from './installs.js';
 import { updateHeatmapRules } from './rules.js';
 import { checkForUpdates } from './updates.js';
@@ -30,6 +34,7 @@ async function main() {
   browser.runtime.onMessage.addListener(onMessage);
   browser.runtime.onInstalled.addListener(onInstalled);
   browser.contextMenus.onClicked.addListener(onContextMenuClicked);
+  browser.action.onClicked.addListener(toggleCredentials);
 
   await requestCredentials();
 }

@@ -17,14 +17,6 @@ const CONTEXT_MENU_ITEMS = [
     title: 'Extension Page',
     action: () => browser.tabs.create({ url: extension.installationUrl }),
   },
-  {
-    id: 'separtor',
-  },
-  {
-    id: 'toggleCredentials',
-    title: 'Toggle Credentials',
-    action: () => toggleCredentials(),
-  },
 ];
 
 export function createContextMenu() {

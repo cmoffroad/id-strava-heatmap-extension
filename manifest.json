@@ -11,6 +11,7 @@
     "storage"
   ],
   "host_permissions": ["*://*.strava.com/*", "*://www.openstreetmap.org/*"],
+  "action": {},
   "background": {
     "service_worker": "src/background/index.js",
     "type": "module"
