@@ -49,7 +49,7 @@ export function setupOverlaysListeners() {
 	});
 
 	changeOverlayOpacity();
-	ensureOverlaysInHash();
+	// ensureOverlaysInHash();
 }
 
 function isOverlaysHidden() {

@@ -38,7 +38,7 @@ function getLayersConfiguration() {
 }
 
 // Creates a layer configuration object
-function getLayerOption(index, activity, color, timestamp) {
+function getLayerOption(index, activity, color, timestamp, authenticated) {
   const activityName = formatStravaActivityLabel(activity);
   const colorEmoji = COLOR_OPTIONS[color] || '❓';
 
@@ -47,17 +47,15 @@ function getLayerOption(index, activity, color, timestamp) {
     index,
     name: `${colorEmoji} Strava Heatmap ${activityName}`,
     description: `Shows ${activityName.toLowerCase()} aggregated, public Strava activities over the last year in ${colorEmoji} color.`,
-    template: `https://content-a.strava.com/identified/globalheat/${activity}/${color}/{z}/{x}/{y}.png?v=19&t=${timestamp}`,
-    zoomExtent: [0, 15],
+    template: authenticated
+      ? `https://content-a.strava.com/identified/globalheat/${activity}/${color}/{z}/{x}/{y}.png?v=19&t=${timestamp}`
+      : 'https://raw.githubusercontent.com/cmoffroad/id-strava-heatmap-extension/refs/heads/master/assets/heatmap-fallback.png?v=1&z={z}&x={x}&y{y}',
+    zoomExtent: authenticated ? [0, 15] : [0, 20],
   };
 }
 
 // Generates layer options with optional callback for extension
-export function getLayers(optionsCb) {
-  if (optionsCb && typeof optionsCb !== 'function') {
-    throw new Error('optionsCb must be a function if provided');
-  }
-
+export function getLayers(optionsCb, authenticated) {
   const layersConfiguration = getLayersConfiguration();
   const timestamp = Date.now().toString();
 
@@ -66,9 +64,10 @@ export function getLayers(optionsCb) {
       index + 1,
       config.activity,
       config.color,
-      timestamp
+      timestamp,
+      authenticated
     );
 
-    return optionsCb ? optionsCb(baseLayerOption) : baseLayerOption;
+    return optionsCb(baseLayerOption);
   });
 }

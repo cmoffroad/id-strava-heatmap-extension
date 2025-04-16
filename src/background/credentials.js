@@ -27,7 +27,7 @@ export async function toggleCredentials() {
   const credentials = await fetchCookies(STRAVA_COOKIE_URL, STRAVA_COOKIE_NAMES);
   if (credentials === null) {
     browser.tabs.create({
-      url: `https://www.strava.com/login?redirect=${encodeURIComponent('/maps/global-heatmap')}`,
+      url: `https://www.strava.com/login?redirect=${encodeURIComponent('https://www.strava.com/maps/global-heatmap')}`,
     });
   } else {
     const { authenticated } = await browser.storage.local.get('authenticated');
