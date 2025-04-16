@@ -1,4 +1,3 @@
-import extension from './extension.js';
 import { clearCookies, fetchCookies } from './cookies.js';
 import { updateHeatmapRules } from './rules.js';
 
@@ -11,54 +10,66 @@ const STRAVA_COOKIE_NAMES = [
 ];
 
 export async function requestCredentials() {
-  const credentials = await fetchCookies(STRAVA_COOKIE_URL, STRAVA_COOKIE_NAMES);
+  let credentials = await fetchCookies(STRAVA_COOKIE_URL, STRAVA_COOKIE_NAMES);
   console.debug('[StravaHeatmapExt] Credentials fetched:', credentials);
+
+  const { credentials: oldCredentials } = await browser.storage.local.get('credentials');
+
+  if (!credentials) {
+    try {
+      const response = await fetch(
+        'https://content-a.strava.com/identified/globalheat/all/hot/8/198/114.png?v=19'
+      );
+
+      if (response.status === 403 || !response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      credentials = oldCredentials; // fallback to old creds if tile request succeeds
+    } catch (error) {
+      console.warn(
+        '[StravaHeatmapExt] Failed to validate access, clearing stored credentials:',
+        error
+      );
+    }
+  }
 
   return processCredentials(credentials);
 }
 
 export async function resetCredentials() {
-  const credentials = await clearCookies(STRAVA_COOKIE_URL, STRAVA_COOKIE_NAMES);
+  await clearCookies(STRAVA_COOKIE_URL, STRAVA_COOKIE_NAMES);
   console.debug('[StravaHeatmapExt] Credentials cleared');
 
-  return processCredentials(credentials);
+  return processCredentials(null);
 }
 
 export async function toggleCredentials() {
-  const credentials = await fetchCookies(STRAVA_COOKIE_URL, STRAVA_COOKIE_NAMES);
-  if (credentials === null) {
+  const { credentials } = await browser.storage.local.get('credentials');
+  if (credentials) {
+    browser.tabs.create({
+      url: `https://www.strava.com/logout`,
+    });
+  } else {
     browser.tabs.create({
       url: `https://www.strava.com/login?redirect=${encodeURIComponent(
         'https://www.strava.com/maps/global-heatmap'
       )}`,
     });
-  } else {
-    browser.tabs.create({
-      url: `https://www.strava.com/logout`,
-    });
-  } /*else if (extension.isDevMode) {
-    const { authenticated } = await browser.storage.local.get('authenticated');
-    return processCredentials(authenticated ? null : credentials, true);
-  }*/
+  }
 }
 
-async function processCredentials(credentials, debug = false) {
-  const authenticated = credentials !== null;
-  const { authenticated: previousAuthenticated } = await browser.storage.local.get(
-    'authenticated'
-  );
-  if (authenticated != previousAuthenticated) {
-    await browser.storage.local.set({ authenticated });
-    console.debug('[StravaHeatmapExt] Set authenticated to:', authenticated);
+async function processCredentials(credentials) {
+  await browser.storage.local.set({ credentials });
+  console.debug('[StravaHeatmapExt] Storage credentials updated', credentials);
 
-    const rules = await updateHeatmapRules(credentials);
-    console.debug('[StravaHeatmapExt] Heatmap rules updated', rules);
-  } else {
-    console.debug('[StravaHeatmapExt] Autentication status unchanged', authenticated);
-  }
+  const authenticated = credentials !== null;
+  const rules = await updateHeatmapRules(credentials);
+  console.debug('[StravaHeatmapExt] Heatmap rules updated', rules);
+
   await browser.action.setBadgeText({ text: '󠀠' });
   await browser.action.setBadgeBackgroundColor({
-    color: authenticated ? 'green' : debug ? 'orange' : 'red',
+    color: authenticated ? 'green' : 'red',
   });
 
   return authenticated;

@@ -47,4 +47,6 @@ export async function updateHeatmapRules(credentials) {
       }
     }
   );
+
+  return [rule];
 }
