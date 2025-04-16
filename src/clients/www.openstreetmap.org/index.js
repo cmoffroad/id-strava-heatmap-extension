@@ -9,6 +9,10 @@ async function main() {
 
   setupiDCoreContextListener(async (context) => {
     window.context = context; // DEBUG
+    console.log(
+      '[StravaHeatmapExt] iD context initialization callback triggered',
+      context
+    );
 
     await initImagery(context, authenticated);
 

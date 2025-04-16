@@ -7,7 +7,7 @@ import {
   toggleCredentials,
 } from './credentials.js';
 import { showInstalledNotification } from './installs.js';
-import { clearAllRules, updateHeatmapRules } from './rules.js';
+import { clearAllRules } from './rules.js';
 import { checkForUpdates } from './updates.js';
 
 const MESSAGE_HANDLERS = {
