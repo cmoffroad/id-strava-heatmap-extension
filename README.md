@@ -1,6 +1,6 @@
 # iD Strava Heatmap Extension
 
-This browser extension integrates the [Strava Global Heatmap](https://www.strava.com/heatmap) seamlessly into the OpenStreetMap [iD editor](https://www.openstreetmap.org/edit?editor=id), enhancing your mapping experience by providing easy access to Strava activity data.
+This browser extension integrates the [Strava Global Heatmap](https://www.strava.com/maps/global-heatmap) seamlessly into the OpenStreetMap [iD editor](https://www.openstreetmap.org/edit?editor=id), enhancing your mapping experience by providing easy access to Strava activity data.
 
 <img src="./images/screenshot2.png" alt="Strava Heatmap Overlays" width="50%"/>
 
@@ -28,7 +28,7 @@ To get started, follow these steps:
 
 1. Install the extension in your browser.  
 2. Log in to [Strava](https://www.strava.com/login). If you don’t have an account, sign up for a free one.  
-3. Visit the [Strava Global Heatmap](https://www.strava.com/heatmap).  
+3. Visit the [Strava Global Heatmap](https://www.strava.com/maps/global-heatmap).  
 4. Open the [iD editor](https://www.openstreetmap.org/edit?editor=id).  
 5. In the iD editor, open **Background Settings** (shortcut: `B`).  
 6. Scroll down to the **Overlays** section.  
