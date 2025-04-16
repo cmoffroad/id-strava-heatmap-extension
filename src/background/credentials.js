@@ -28,18 +28,21 @@ export async function toggleCredentials() {
   const credentials = await fetchCookies(STRAVA_COOKIE_URL, STRAVA_COOKIE_NAMES);
   if (credentials === null) {
     browser.tabs.create({
-      url: `https://www.strava.com/login?redirect=${encodeURIComponent('https://www.strava.com/maps/global-heatmap')}`,
+      url: `https://www.strava.com/login?redirect=${encodeURIComponent(
+        'https://www.strava.com/maps/global-heatmap'
+      )}`,
     });
-  } else if (extension.isDevMode) {
+  } /*else if (extension.isDevMode) {
     const { authenticated } = await browser.storage.local.get('authenticated');
     return processCredentials(authenticated ? null : credentials, true);
-  }
+  }*/
 }
 
 async function processCredentials(credentials, debug = false) {
   const authenticated = credentials !== null;
-  const { authenticated: previousAuthenticated } =
-    await browser.storage.local.get('authenticated');
+  const { authenticated: previousAuthenticated } = await browser.storage.local.get(
+    'authenticated'
+  );
   if (authenticated != previousAuthenticated) {
     await browser.storage.local.set({ authenticated });
     console.debug('[StravaHeatmapExt] Set authenticated to:', authenticated);

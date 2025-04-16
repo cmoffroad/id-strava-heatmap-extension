@@ -19,9 +19,6 @@ export default {
   // Current extension version from the manifest
   versionNumber: manifest.version,
 
-  // add dev environment
-  isDevMode: !manifest.update_url,
-
   // browser name
   browserName,
 
