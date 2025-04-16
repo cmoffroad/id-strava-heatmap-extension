@@ -41,7 +41,6 @@ export async function extendImageryWithStravaHeatmapLayers(context, authenticate
 			source.id = 'custom';
 			source.template(layer.template);
 			source.zoomExtent = layer.zoomExtent;
-			source.description = layer.description;
 			source.id = layer.id;
 		} else {
 			imagery.backgrounds.push(iD.rendererBackgroundSource(layer));
