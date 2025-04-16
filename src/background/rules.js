@@ -1,23 +1,3 @@
-export async function clearAllRules() {
-  const removeRuleIds = Array.from({ length: 10 }, (_, i) => i + 1);
-  return browser.declarativeNetRequest.updateDynamicRules(
-    {
-      removeRuleIds,
-      addRules: [], // add nothing
-    },
-    () => {
-      if (browser.runtime.lastError) {
-        console.error(
-          '[StravaHeatmapExt] Failed to reset rules.',
-          browser.runtime.lastError
-        );
-      } else {
-        console.log('[StravaHeatmapExt] Reset rules.');
-      }
-    }
-  );
-}
-
 export async function updateHeatmapRules(credentials) {
   const condition = {
     regexFilter:
@@ -53,7 +33,7 @@ export async function updateHeatmapRules(credentials) {
 
   await browser.declarativeNetRequest.updateDynamicRules(
     {
-      removeRuleIds: [rule.id],
+      removeRuleIds: Array.from({ length: 10 }, (_, i) => i + 1),
       addRules: [rule],
     },
     () => {

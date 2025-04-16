@@ -32,6 +32,10 @@ export async function toggleCredentials() {
         'https://www.strava.com/maps/global-heatmap'
       )}`,
     });
+  } else {
+    browser.tabs.create({
+      url: `https://www.strava.com/logout`,
+    });
   } /*else if (extension.isDevMode) {
     const { authenticated } = await browser.storage.local.get('authenticated');
     return processCredentials(authenticated ? null : credentials, true);
