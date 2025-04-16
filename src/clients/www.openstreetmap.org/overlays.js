@@ -8,7 +8,7 @@ const storageKeyOpacity = opacityClassPrefix;
 
 export function setupOverlaysListeners() {
 	const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-	const altPrefix = isMac ? '⌥' : 'Alt+';
+	const altPrefix = isMac ? '⌥' : 'Alt';
 
 	document.body.style.setProperty(
 		`--${opacityClassPrefix}-help`,
@@ -38,18 +38,34 @@ export function setupOverlaysListeners() {
 	});
 
 	addHashChangeListener((oldHash, newHash) => {
+		const newValue = newHash.get('overlays');
+		const oldValue = oldHash.get('overlays');
 		// if overlays selection changed,
-		if (oldHash.get('overlays') !== newHash.get('overlays')) {
+		if (oldValue !== newValue) {
 			// do not hide overlays
 			toggleHiddenOverlays(false);
 
 			// keep track of last used overlays
-			localStorage.setItem(storageKeyLastUsed, newHash.get('overlays'));
+			if (newValue !== null) {
+				localStorage.setItem(storageKeyLastUsed, newValue);
+			}
 		}
 	});
 
 	changeOverlayOpacity();
-	// ensureOverlaysInHash();
+}
+
+export function getDefaultOverlayIds() {
+	const hash = getHashParams(location).get('overlays');
+	const lastUsed = localStorage.getItem(storageKeyLastUsed);
+
+	if (hash !== null) {
+		return hash.split(',');
+	} else if (lastUsed !== null) {
+		return lastUsed.split(',');
+	} else {
+		return ['strava-heatmap-1'];
+	}
 }
 
 function isOverlaysHidden() {
@@ -90,19 +106,4 @@ function updateOverlayOpacityClass(value) {
 		`--${opacityClassPrefix}-summary`,
 		`"Opacity: ${value}%"`
 	);
-}
-
-function ensureOverlaysInHash(location = window.location) {
-	const currentHashParams = getHashParams(location);
-
-	if (!currentHashParams.has('overlays')) {
-		const lastUsedOverlays = localStorage.getItem(storageKeyLastUsed);
-		if (lastUsedOverlays && lastUsedOverlays.trim() !== '') {
-			currentHashParams.set('overlays', lastUsedOverlays);
-			const newHash = `#${currentHashParams.toString()}`;
-			if (location.hash !== newHash) {
-				location.hash = newHash;
-			}
-		}
-	}
 }

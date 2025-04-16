@@ -21,12 +21,12 @@ async function fetchUpdatesJson(url, timeout = 5000) {
     const updates = await response.json();
 
     if (!updates || !Array.isArray(updates.versions) || !updates.latest_version) {
-      throw new Error('Invalid updates.json format');
+      throw new Error('[StravaHeatmapExt] Invalid updates.json format');
     }
 
     return updates;
   } catch (error) {
-    console.error('Error fetching updates.json:', error);
+    console.error('[StravaHeatmapExt] Error fetching updates.json:', error);
     return null;
   }
 }
@@ -37,7 +37,9 @@ function getUpdateInfo(updates) {
 
   const latestVersionNumber = updates.latest_version?.[extension.browserName];
   if (!latestVersionNumber) {
-    console.warn(`No latest version found for browser: ${extension.browserName}`);
+    console.warn(
+      `[StravaHeatmapExt] No latest version found for browser: ${extension.browserName}`
+    );
     return null;
   }
 
@@ -48,7 +50,7 @@ function getUpdateInfo(updates) {
 
   if (!currentVersion) {
     console.log(
-      `Development mode detected: ${extension.versionNumber} is not listed in updates.json.`
+      `[StravaHeatmapExt] Development mode detected: ${extension.versionNumber} is not listed in updates.json.`
     );
     return null; // Skip updates in development mode
   }
@@ -56,12 +58,14 @@ function getUpdateInfo(updates) {
   // Check if the latest version is actually newer
   if (!isNewerVersion(latestVersion.number, currentVersion.number)) {
     console.log(
-      `No update needed (current: v${currentVersion.number}, latest: v${latestVersion.number}).`
+      `[StravaHeatmapExt] No update needed (current: v${currentVersion.number}, latest: v${latestVersion.number}).`
     );
     return null;
   }
 
-  console.log(`Update available: ${currentVersion.number} → ${latestVersion.number}`);
+  console.log(
+    `[StravaHeatmapExt] Update available: ${currentVersion.number} → ${latestVersion.number}`
+  );
 
   return {
     ...latestVersion,

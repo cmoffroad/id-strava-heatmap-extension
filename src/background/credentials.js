@@ -1,3 +1,4 @@
+import extension from './extension.js';
 import { clearCookies, fetchCookies } from './cookies.js';
 import { updateHeatmapRules } from './rules.js';
 
@@ -29,7 +30,7 @@ export async function toggleCredentials() {
     browser.tabs.create({
       url: `https://www.strava.com/login?redirect=${encodeURIComponent('https://www.strava.com/maps/global-heatmap')}`,
     });
-  } else {
+  } else if (extension.isDevMode) {
     const { authenticated } = await browser.storage.local.get('authenticated');
     return processCredentials(authenticated ? null : credentials, true);
   }

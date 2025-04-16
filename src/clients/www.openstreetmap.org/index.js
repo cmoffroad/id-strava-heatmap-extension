@@ -1,6 +1,6 @@
 import { setupAuthStatusChangeListener } from '../common/auth.js';
 import { restoreiDContainer, setupiDCoreContextListener } from './id.js';
-import { extendImageryWithStravaHeatmapLayers } from './imagery.js';
+import { initImagery, updateImagery } from './imagery.js';
 import { setupOverlaysListeners } from './overlays.js';
 
 async function main() {
@@ -10,11 +10,11 @@ async function main() {
   setupiDCoreContextListener(async (context) => {
     window.context = context; // DEBUG
 
-    await extendImageryWithStravaHeatmapLayers(context, authenticated);
+    await initImagery(context, authenticated);
 
     setupOverlaysListeners();
     setupAuthStatusChangeListener(async (authenticated) => {
-      await extendImageryWithStravaHeatmapLayers(context, authenticated);
+      await updateImagery(context, authenticated);
     });
   });
 

@@ -7,7 +7,7 @@ import {
   toggleCredentials,
 } from './credentials.js';
 import { showInstalledNotification } from './installs.js';
-import { updateHeatmapRules } from './rules.js';
+import { clearAllRules, updateHeatmapRules } from './rules.js';
 import { checkForUpdates } from './updates.js';
 
 const MESSAGE_HANDLERS = {
@@ -26,6 +26,7 @@ async function onMessage(message) {
 }
 
 async function onInstalled({ reason }) {
+  clearAllRules();
   createContextMenu();
   showInstalledNotification(reason);
 }

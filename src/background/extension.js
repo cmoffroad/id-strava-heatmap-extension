@@ -19,6 +19,9 @@ export default {
   // Current extension version from the manifest
   versionNumber: manifest.version,
 
+  // add dev environment
+  isDevMode: !manifest.update_url,
+
   // browser name
   browserName,
 
@@ -27,10 +30,6 @@ export default {
 
   checkUpdatesUrl:
     'https://raw.githubusercontent.com/cmoffroad/id-strava-heatmap-extension/refs/heads/master/updates.json',
-
-  // Required by Firefox, which cannot handle redirects to local extension files—therefore, the resource must be loaded from the internet.
-  heatmapFallbackUrl:
-    'https://raw.githubusercontent.com/cmoffroad/id-strava-heatmap-extension/refs/heads/master/assets/heatmap-fallback.png?v=1',
 
   // URLs for issue tracking
   issuesTrackerUrl: 'https://github.com/cmoffroad/id-strava-heatmap-extension/issues/',
