@@ -24,18 +24,22 @@ async function onMessage(message) {
   return null;
 }
 
+async function onStartup() {
+  await requestCredentials();
+}
+
 async function onInstalled({ reason }) {
   createContextMenu();
   showInstalledNotification(reason);
+  onStartup();
 }
 
 async function main() {
   browser.runtime.onMessage.addListener(onMessage);
   browser.runtime.onInstalled.addListener(onInstalled);
+  browser.runtime.onStartup.addListener(onStartup);
   browser.contextMenus.onClicked.addListener(onContextMenuClicked);
   browser.action.onClicked.addListener(toggleCredentials);
-
-  await requestCredentials();
 }
 
 main();
