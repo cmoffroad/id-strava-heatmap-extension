@@ -15,7 +15,7 @@ export async function requestCredentials() {
 
   const { credentials: oldCredentials } = await browser.storage.local.get('credentials');
 
-  if (!credentials) {
+  if (!credentials && oldCredentials) {
     try {
       const response = await fetch(
         'https://content-a.strava.com/identified/globalheat/all/hot/8/198/114.png?v=19'

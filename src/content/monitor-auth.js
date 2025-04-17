@@ -6,15 +6,17 @@
       const { oldValue, newValue } = changes.credentials;
       console.debug(
         '[StravaHeatmapExt] Authenticated changed from',
-        oldValue,
+        !!oldValue,
         'to',
-        newValue
+        !!newValue
       );
-      console.debug('[StravaHeatmapExt] Broadcasting authenticated change to client');
-      window.postMessage(
-        { type: 'authStatusChanged', payload: newValue },
-        window.location.origin
-      );
+      if (newValue != oldValue) {
+        console.debug('[StravaHeatmapExt] Broadcasting authenticated change to client');
+        window.postMessage(
+          { type: 'authStatusChanged', payload: !!newValue },
+          window.location.origin
+        );
+      }
     }
   });
 })();
