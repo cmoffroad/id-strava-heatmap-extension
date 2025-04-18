@@ -47,9 +47,7 @@ export async function resetCredentials() {
 export async function toggleCredentials() {
   const { credentials } = await browser.storage.local.get('credentials');
   if (credentials) {
-    browser.tabs.create({
-      url: `https://www.strava.com/logout`,
-    });
+    // do nothing for now, later will open settings popup
   } else {
     browser.tabs.create({
       url: `https://www.strava.com/login?redirect=${encodeURIComponent(
