@@ -20,29 +20,18 @@ const CONTEXT_MENU_ITEMS = [
 ];
 
 export function createContextMenu() {
-  const mainMenu = {
-    id: 'mainMenu',
-    title: extension.name,
-    contexts: ['page'],
-    documentUrlPatterns: [
-      'https://www.openstreetmap.org/edit*',
-      'https://www.openstreetmap.org/id*',
-    ],
-  };
-
   try {
-    // Create root menu
-    browser.contextMenus.create(mainMenu);
-
     // Create submenus dynamically
     CONTEXT_MENU_ITEMS.forEach(({ id, title }) => {
       browser.contextMenus.create({
         id,
         title,
         type: title ? 'normal' : 'separator',
-        parentId: mainMenu.id,
-        contexts: mainMenu.contexts,
-        documentUrlPatterns: mainMenu.documentUrlPatterns,
+        contexts: ['action'],
+        documentUrlPatterns: [
+          'https://www.openstreetmap.org/edit*',
+          'https://www.openstreetmap.org/id*',
+        ],
       });
     });
   } catch (error) {

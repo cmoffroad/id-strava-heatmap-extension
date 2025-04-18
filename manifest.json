@@ -61,7 +61,6 @@
       "matches": ["*://www.openstreetmap.org/*"]
     }
   ],
-  "homepage_url": "https://github.com/cmoffroad/id-strava-heatmap-extension",
   "icons": {
     "48": "icons/icon-48.png"
   },

@@ -1,6 +1,6 @@
 import extension from './extension.js';
 
-const FEEDBACK = `For questions or issue reports, right-click and hover over "${extension.name}" to access helpful links.`;
+const FEEDBACK = `Need help or want to report an issue? Right-click the extension icon in the top-right corner of your browser. Can’t see it? Click the puzzle icon and pin it for quick access.`;
 
 const TITLES = {
   install: 'Welcome to the extension!',
