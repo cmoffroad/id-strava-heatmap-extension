@@ -20,8 +20,6 @@ export function setupOverlaysListeners() {
 			return;
 		}
 
-		console.log(event.key, event.code);
-
 		if (!event.shiftKey) return;
 
 		switch (event.key) {
