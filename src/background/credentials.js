@@ -56,7 +56,7 @@ async function processCredentials(credentials) {
   await browser.action.setTitle({
     title: authenticated
       ? 'Strava Heatmap ON — enable an overlay to view it'
-      : 'Strava Heatmap OFF — log in to Strava to view the heatmap',
+      : 'Strava Heatmap OFF — click here to log into Strava and show the heatmap',
   });
   await browser.action.setBadgeBackgroundColor({
     color: authenticated ? 'green' : 'red',

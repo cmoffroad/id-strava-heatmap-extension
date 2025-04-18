@@ -23,12 +23,21 @@ async function redirectComplete(tabId, sender) {
   }
 }
 
+async function openLogin(tab) {
+  await browser.tabs.create({
+    url: `https://www.strava.com/dashboard?redirect=${encodeURIComponent(
+      `/maps/global-heatmap?tabId=${tab.id}`
+    )}`,
+  });
+}
+
 async function onMessage(message, sender) {
   const MESSAGE_HANDLERS = {
     requestCredentials,
     resetCredentials,
     checkForUpdates,
     redirectComplete,
+    openLogin,
   };
 
   if (MESSAGE_HANDLERS[message.type]) {
@@ -54,11 +63,7 @@ async function onActionClicked(tab) {
   if (credentials) {
     // do nothing for now, later will open settings popup
   } else {
-    browser.tabs.create({
-      url: `https://www.strava.com/dashboard?redirect=${encodeURIComponent(
-        `/maps/global-heatmap?tabId=${tab.id}`
-      )}`,
-    });
+    openLogin(tab);
   }
 }
 
