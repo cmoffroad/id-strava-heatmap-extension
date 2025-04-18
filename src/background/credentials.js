@@ -66,6 +66,11 @@ async function processCredentials(credentials) {
   console.debug('[StravaHeatmapExt] Heatmap rules updated', rules);
 
   await browser.action.setBadgeText({ text: '󠀠' });
+  await browser.action.setTitle({
+    title: authenticated
+      ? 'Strava Heatmap ON — enable an overlay to view it'
+      : 'Strava Heatmap OFF — log in to Strava to view the heatmap',
+  });
   await browser.action.setBadgeBackgroundColor({
     color: authenticated ? 'green' : 'red',
   });
