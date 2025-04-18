@@ -44,19 +44,6 @@ export async function resetCredentials() {
   return processCredentials(null);
 }
 
-export async function toggleCredentials() {
-  const { credentials } = await browser.storage.local.get('credentials');
-  if (credentials) {
-    // do nothing for now, later will open settings popup
-  } else {
-    browser.tabs.create({
-      url: `https://www.strava.com/login?redirect=${encodeURIComponent(
-        'https://www.strava.com/maps/global-heatmap'
-      )}`,
-    });
-  }
-}
-
 async function processCredentials(credentials) {
   await browser.storage.local.set({ credentials });
   console.debug('[StravaHeatmapExt] Storage credentials updated', credentials);

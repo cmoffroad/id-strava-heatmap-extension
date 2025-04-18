@@ -1,5 +1,4 @@
 import extension from './extension.js';
-import { toggleCredentials } from './credentials.js';
 
 const CONTEXT_MENU_ITEMS = [
   {

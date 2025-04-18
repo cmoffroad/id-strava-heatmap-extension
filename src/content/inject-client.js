@@ -4,7 +4,9 @@
   async function requestCredentials() {
     try {
       // Send message to request credentials
-      const authenticated = await browser.runtime.sendMessage('requestCredentials');
+      const authenticated = await browser.runtime.sendMessage({
+        type: 'requestCredentials',
+      });
       console.log('[StravaHeatmapExt] Credentials requested.', authenticated);
       return authenticated;
     } catch (error) {

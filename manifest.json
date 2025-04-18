@@ -35,13 +35,18 @@
       "all_frames": true
     },
     {
+      "matches": ["https://www.strava.com/dashboard*"],
+      "js": ["src/content/strava-redirect.js"],
+      "run_at": "document_start"
+    },
+    {
       "matches": ["https://www.strava.com/login*", "https://www.strava.com/"],
-      "js": ["lib/browser-polyfill.min.js", "src/content/reset-credentials.js"],
+      "js": ["lib/browser-polyfill.min.js", "src/content/strava-login.js"],
       "run_at": "document_idle"
     },
     {
       "matches": ["https://www.strava.com/maps/global-heatmap*"],
-      "js": ["lib/browser-polyfill.min.js", "src/content/request-credentials.js"],
+      "js": ["lib/browser-polyfill.min.js", "src/content/strava-heatmap.js"],
       "run_at": "document_idle"
     }
   ],

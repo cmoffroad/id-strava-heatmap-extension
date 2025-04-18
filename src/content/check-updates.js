@@ -6,7 +6,7 @@
   // Function to check for software updates
   async function checkForUpdates() {
     try {
-      const updateInfo = await browser.runtime.sendMessage('checkForUpdates');
+      const updateInfo = await browser.runtime.sendMessage({ type: 'checkForUpdates' });
       console.log('[StravaHeatmapExt] Checked for updates.', updateInfo);
       return updateInfo;
     } catch (error) {
