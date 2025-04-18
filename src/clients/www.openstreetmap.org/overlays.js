@@ -7,12 +7,10 @@ const storageKeyLastUsed = 'overlays-last-used';
 const storageKeyOpacity = opacityClassPrefix;
 
 export function setupOverlaysListeners() {
-	const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-	const altPrefix = isMac ? '⌥' : 'Alt';
-
 	document.body.style.setProperty(
 		`--${opacityClassPrefix}-help`,
-		`"ℹ️ Use ⌨️ shortcuts ${altPrefix}+O to toggle all layers visibility, and ${altPrefix}+[ or ${altPrefix}+] to adjust opacity."`
+		`"ℹ️ Use ⌨️ shortcut Shift+Q to toggle all overlays visibility."`
+		// `"ℹ️ Use ⌨️ shortcuts Shift+Q to toggle all layers visibility, and ${altPrefix}+[ or ${altPrefix}+] to adjust opacity."`
 	);
 
 	document.addEventListener('keydown', (event) => {
@@ -22,18 +20,24 @@ export function setupOverlaysListeners() {
 			return;
 		}
 
-		if (!event.altKey) return;
+		console.log(event.key, event.code);
 
-		switch (event.code) {
-			case 'KeyO':
+		if (!event.shiftKey) return;
+
+		switch (event.key) {
+			case 'Q':
 				toggleHiddenOverlays();
 				break;
-			case 'BracketLeft':
-				changeOverlayOpacity(-opacityStep);
+			case 'W':
+				const osmLayer = context.layers().layer('osm');
+				osmLayer.enabled(!osmLayer.enabled());
 				break;
-			case 'BracketRight':
-				changeOverlayOpacity(opacityStep);
-				break;
+			// case 'BracketLeft':
+			// 	changeOverlayOpacity(-opacityStep);
+			// 	break;
+			// case 'BracketRight':
+			// 	changeOverlayOpacity(opacityStep);
+			// 	break;
 		}
 	});
 
@@ -52,7 +56,7 @@ export function setupOverlaysListeners() {
 		}
 	});
 
-	changeOverlayOpacity();
+	// changeOverlayOpacity();
 }
 
 export function getDefaultOverlayIds() {
@@ -74,36 +78,40 @@ function isOverlaysHidden() {
 
 function toggleHiddenOverlays(hidden) {
 	document.body.classList.toggle(hiddenClass, hidden);
-	changeOverlayOpacity();
-}
-
-function changeOverlayOpacity(step = 0) {
-	if (isOverlaysHidden()) {
-		document.body.style.setProperty(`--${opacityClassPrefix}-summary`, '"Hidden"');
-		return;
-	}
-
-	const oldOpacity = parseInt(localStorage.getItem(storageKeyOpacity)) || 100;
-	const newOpacity = Math.max(opacityStep, Math.min(oldOpacity + step, 100));
-
-	localStorage.setItem(storageKeyOpacity, newOpacity);
-
-	updateOverlayOpacityClass(newOpacity);
-}
-
-function updateOverlayOpacityClass(value) {
-	const current = [...document.body.classList].find((cls) =>
-		cls.startsWith(opacityClassPrefix)
-	);
-	if (current) document.body.classList.remove(current);
-
-	if (value < 100) {
-		document.body.classList.add(`${opacityClassPrefix}-${value}`);
-	}
-
-	document.body.style.setProperty(`--${opacityClassPrefix}`, value / 100);
 	document.body.style.setProperty(
 		`--${opacityClassPrefix}-summary`,
-		`"Opacity: ${value}%"`
+		isOverlaysHidden() ? '"Hidden"' : ''
 	);
+	// changeOverlayOpacity();
 }
+
+// function changeOverlayOpacity(step = 0) {
+// 	if (isOverlaysHidden()) {
+// 		document.body.style.setProperty(`--${opacityClassPrefix}-summary`, '"Hidden"');
+// 		return;
+// 	}
+
+// 	const oldOpacity = parseInt(localStorage.getItem(storageKeyOpacity)) || 100;
+// 	const newOpacity = Math.max(opacityStep, Math.min(oldOpacity + step, 100));
+
+// 	localStorage.setItem(storageKeyOpacity, newOpacity);
+
+// 	updateOverlayOpacityClass(newOpacity);
+// }
+
+// function updateOverlayOpacityClass(value) {
+// 	const current = [...document.body.classList].find((cls) =>
+// 		cls.startsWith(opacityClassPrefix)
+// 	);
+// 	if (current) document.body.classList.remove(current);
+
+// 	if (value < 100) {
+// 		document.body.classList.add(`${opacityClassPrefix}-${value}`);
+// 	}
+
+// 	document.body.style.setProperty(`--${opacityClassPrefix}`, value / 100);
+// 	document.body.style.setProperty(
+// 		`--${opacityClassPrefix}-summary`,
+// 		`"Opacity: ${value}%"`
+// 	);
+// }
