@@ -1,7 +1,11 @@
 import '../../lib/browser-polyfill.min.js';
 
 import { createContextMenu, onContextMenuClicked } from './context-menu.js';
-import { requestCredentials, resetCredentials } from './credentials.js';
+import {
+  expireCredentials,
+  requestCredentials,
+  resetCredentials,
+} from './credentials.js';
 import { showInstalledNotification } from './installs.js';
 import { checkForUpdates } from './updates.js';
 
@@ -33,6 +37,7 @@ async function openLogin(tab) {
 
 async function onMessage(message, sender) {
   const MESSAGE_HANDLERS = {
+    expireCredentials,
     requestCredentials,
     resetCredentials,
     checkForUpdates,

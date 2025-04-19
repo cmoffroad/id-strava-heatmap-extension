@@ -44,6 +44,16 @@ export async function resetCredentials() {
   return processCredentials(null);
 }
 
+export async function expireCredentials() {
+  const { credentials } = await browser.storage.local.get('credentials');
+  if (credentials) {
+    const expiredCredentials = credentials.replaceAll(/=/g, '=x_');
+    return processCredentials(expiredCredentials);
+  } else {
+    return null;
+  }
+}
+
 async function processCredentials(credentials) {
   await browser.storage.local.set({ credentials });
   console.debug('[StravaHeatmapExt] Storage credentials updated', credentials);

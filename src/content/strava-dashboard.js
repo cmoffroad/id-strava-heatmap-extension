@@ -1,10 +1,14 @@
-(function () {
+(async function () {
 	console.debug('[StravaHeatmapExt] executing content/strava-dashboard.js');
 
 	const url = new URL(window.location.href);
 	const redirect = url.searchParams.get('redirect')?.trim();
+	const expired = url.searchParams.has('expired');
 
-	if (typeof redirect === 'string' && redirect.startsWith('/')) {
+	if (expired) {
+		const credentials = await browser.runtime.sendMessage({ type: 'expireCredentials' });
+		console.log('[StravaHeatmapExt] Credentials expired.', credentials);
+	} else if (redirect?.startsWith('/')) {
 		console.debug('[StravaHeatmapExt] Redirecting to:', redirect);
 
 		// Prevent accidental reload loops
