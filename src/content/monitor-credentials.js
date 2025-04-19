@@ -1,5 +1,5 @@
 (() => {
-  console.debug('[StravaHeatmapExt] Setting auth change listener via storage');
+  console.debug('[StravaHeatmapExt] executing content/monitor-credentials.js');
   browser.storage.onChanged.addListener((changes, area) => {
     if (area === 'local' && 'credentials' in changes) {
       const { oldValue, newValue } = changes.credentials;

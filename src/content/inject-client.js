@@ -1,5 +1,5 @@
 (async function () {
-  console.debug('[StravaHeatmapExt] executing inject-client.js');
+  console.debug('[StravaHeatmapExt] executing content/inject-client.js');
 
   async function requestCredentials() {
     try {

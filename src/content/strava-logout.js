@@ -1,5 +1,5 @@
 (async function () {
-	console.debug('[StravaHeatmapExt] executing strava-login.js');
+	console.debug('[StravaHeatmapExt] executing content/strava-logout.js');
 
 	try {
 		// Reset stored credentials after logout or invalidation

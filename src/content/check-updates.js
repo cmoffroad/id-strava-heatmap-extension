@@ -1,5 +1,5 @@
 (function () {
-  console.debug('[StravaHeatmapExt] executing check-updates.js');
+  console.debug('[StravaHeatmapExt] executing content/check-updates.js');
 
   const manifest = browser.runtime.getManifest();
 

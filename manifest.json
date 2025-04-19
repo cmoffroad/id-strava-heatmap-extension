@@ -36,12 +36,12 @@
     },
     {
       "matches": ["https://www.strava.com/dashboard*"],
-      "js": ["src/content/strava-redirect.js"],
+      "js": ["src/content/strava-dashboard.js"],
       "run_at": "document_start"
     },
     {
-      "matches": ["https://www.strava.com/login*", "https://www.strava.com/"],
-      "js": ["lib/browser-polyfill.min.js", "src/content/strava-login.js"],
+      "matches": ["https://www.strava.com/"],
+      "js": ["lib/browser-polyfill.min.js", "src/content/strava-logout.js"],
       "run_at": "document_idle"
     },
     {

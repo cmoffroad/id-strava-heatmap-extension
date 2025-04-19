@@ -1,6 +1,6 @@
 (async function () {
 	try {
-		console.debug('[StravaHeatmapExt] executing strava-heatmap.js');
+		console.debug('[StravaHeatmapExt] executing content/strava-heatmap.js');
 
 		const url = new URL(window.location.href);
 		const tabIdParam = url.searchParams.get('tabId');

@@ -1,5 +1,5 @@
 (function () {
-	console.debug('[StravaHeatmapExt] executing strava-redirect.js');
+	console.debug('[StravaHeatmapExt] executing content/strava-dashboard.js');
 
 	const url = new URL(window.location.href);
 	const redirect = url.searchParams.get('redirect')?.trim();
