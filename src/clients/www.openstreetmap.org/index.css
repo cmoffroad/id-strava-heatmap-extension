@@ -23,9 +23,15 @@ body {
     }
   }
 
-  &[class*='overlays-opacity-']:not(.overlays-hidden) {
+  /*&[class*='overlays-opacity-']:not(.overlays-hidden) {
     .layer.layer-overlay {
       opacity: var(--overlays-opacity);
     }
-  }
+  }*/
+
+  /*.layer-overlay {
+    img[src*='heatmap-fallback'] {
+      pointer-events: auto;
+    }
+  }*/
 }

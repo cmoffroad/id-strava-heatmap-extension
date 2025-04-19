@@ -1,4 +1,5 @@
 import { setupAuthStatusChangeListener } from '../common/auth.js';
+import { setupHeatmapFallbackClickListener } from '../common/layers.js';
 import { restoreiDContainer, setupiDCoreContextListener } from './id.js';
 import { initImagery, updateImagery } from './imagery.js';
 import { setupOverlaysListeners } from './overlays.js';
@@ -20,6 +21,7 @@ async function main() {
     setupAuthStatusChangeListener(async (authenticated) => {
       await updateImagery(context, authenticated);
     });
+    // setupHeatmapFallbackClickListener(() => {});
   });
 
   restoreiDContainer();

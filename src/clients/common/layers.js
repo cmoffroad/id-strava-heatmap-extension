@@ -71,3 +71,27 @@ export function getLayers(optionsCb, authenticated) {
     return optionsCb(baseLayerOption);
   });
 }
+
+export function setupHeatmapFallbackClickListener(redirectUrl) {
+  document.body.addEventListener('click', (e) => {
+    // Left-click only
+    if (e.button !== 0) return;
+
+    // Target must be an <img>
+    const img = e.target instanceof HTMLImageElement ? e.target : null;
+    if (!img) return;
+
+    // Match the image source
+    if (img.src.includes('heatmap-fallback.png')) {
+      // Optional: ensure it's not a double-click or weird gesture
+      if (e.detail === 1) {
+        console.debug(
+          '[StravaHeatmapExt] Fallback heatmap image clicked:',
+          img,
+          redirectUrl
+        );
+        window.open(redirectUrl, '_blank');
+      }
+    }
+  });
+}
