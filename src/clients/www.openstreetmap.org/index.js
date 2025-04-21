@@ -15,13 +15,18 @@ async function main() {
       context
     );
 
+    // make sure ui fully loaded
+    await context.ui().ensureLoaded();
+
     await initImagery(context, authenticated);
 
     setupOverlaysListeners();
     setupAuthStatusChangeListener(async (authenticated) => {
       await updateImagery(context, authenticated);
     });
-    // setupHeatmapFallbackClickListener(() => {});
+
+    document.body.setAttribute('tabindex', '0');
+    document.body.focus();
   });
 
   restoreiDContainer();

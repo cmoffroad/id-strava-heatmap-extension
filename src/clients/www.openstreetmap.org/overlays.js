@@ -9,7 +9,7 @@ const storageKeyOpacity = opacityClassPrefix;
 export function setupOverlaysListeners() {
 	document.body.style.setProperty(
 		`--${opacityClassPrefix}-help`,
-		`"ℹ️ Use ⌨️ shortcut Shift+Q to toggle all overlays visibility."`
+		`"ℹ️ Use keyboard shortcut Shift+Q to toggle all overlays visibility."`
 		// `"ℹ️ Use ⌨️ shortcuts Shift+Q to toggle all layers visibility, and ${altPrefix}+[ or ${altPrefix}+] to adjust opacity."`
 	);
 
