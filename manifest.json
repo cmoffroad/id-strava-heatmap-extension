@@ -8,7 +8,8 @@
     "contextMenus",
     "declarativeNetRequest",
     "notifications",
-    "storage"
+    "storage",
+    "webRequest"
   ],
   "host_permissions": ["*://*.strava.com/*", "*://www.openstreetmap.org/*"],
   "action": {},
@@ -36,7 +37,7 @@
     },
     {
       "matches": ["https://www.strava.com/dashboard*"],
-      "js": ["lib/browser-polyfill.min.js", "src/content/strava-dashboard.js"],
+      "js": ["src/content/strava-dashboard.js"],
       "run_at": "document_start"
     },
     {

@@ -9,68 +9,88 @@ const STRAVA_COOKIE_NAMES = [
   'CloudFront-Signature',
 ];
 
-export async function requestCredentials() {
+const VALIDATION_TILE_URL =
+  'https://content-a.strava.com/identified/globalheat/all/hot/8/198/114.png?v=19';
+
+export async function validateCredentials() {
+  return new Promise(async (resolve) => {
+    try {
+      const response = await fetch(`${VALIDATION_TILE_URL}&t=${Date.now()}`);
+      resolve(response.ok ? null : `${response.status}`);
+    } catch (error) {
+      resolve(error.name);
+    }
+  });
+}
+
+export async function requestCredentials(skipValidation = false) {
   let credentials = await fetchCookies(STRAVA_COOKIE_URL, STRAVA_COOKIE_NAMES);
   console.debug('[StravaHeatmapExt] Credentials fetched:', credentials);
 
-  const { credentials: oldCredentials } = await browser.storage.local.get('credentials');
+  const { credentials: storedCredentials } =
+    await browser.storage.local.get('credentials');
 
-  if (!credentials && oldCredentials) {
-    try {
-      const response = await fetch(
-        'https://content-a.strava.com/identified/globalheat/all/hot/8/198/114.png?v=19'
-      );
+  if (!credentials && storedCredentials) {
+    console.debug('[StravaHeatmapExt] Falling back to stored credentials');
+    credentials = storedCredentials;
+  }
 
-      if (response.status === 403 || !response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
+  const rules = await updateHeatmapRules(credentials);
+  console.debug('[StravaHeatmapExt] Heatmap rules updated', rules);
 
-      credentials = oldCredentials; // fallback to old creds if tile request succeeds
-    } catch (error) {
-      console.warn(
-        '[StravaHeatmapExt] Failed to validate access, clearing stored credentials:',
-        error
-      );
+  // Validate credentials by attempting to access a protected tile
+  if (credentials && !skipValidation) {
+    const error = await validateCredentials();
+    if (['403'].includes(error)) {
+      await clearCookies(STRAVA_COOKIE_URL, STRAVA_COOKIE_NAMES);
+      await updateHeatmapRules(null);
+      credentials = null;
     }
   }
 
-  return processCredentials(credentials);
+  // Update local storage only if credentials changed
+  if (credentials !== storedCredentials) {
+    await browser.storage.local.set({ credentials });
+    console.debug('[StravaHeatmapExt] Stored credentials updated', credentials);
+  }
+
+  const authenticated = Boolean(credentials);
+  updateActionIcon(authenticated);
+
+  return authenticated;
 }
 
 export async function resetCredentials() {
   await clearCookies(STRAVA_COOKIE_URL, STRAVA_COOKIE_NAMES);
+  await browser.storage.local.set({
+    credentials: null,
+  });
   console.debug('[StravaHeatmapExt] Credentials cleared');
 
-  return processCredentials(null);
+  return requestCredentials(true);
 }
 
 export async function expireCredentials() {
-  const { credentials } = await browser.storage.local.get('credentials');
-  if (credentials) {
-    const expiredCredentials = credentials.replaceAll(/=/g, '=x_');
-    return processCredentials(expiredCredentials);
-  } else {
-    return null;
-  }
+  const credentials =
+    '_strava_idcf=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NDUxNDI3NjYsImlhdCI6MTc0NTA1NjM2NiwiYXRobGV0ZUlkIjo5OTcwODM1NSwidGltZXN0YW1wIjoxNzQ1MDU2MzY2fQ.cm-dbxMcuT6-nX8quL-5J0P6HdalxZp7yZxscf2T7MM; CloudFront-Key-Pair-Id=K3VK9UFQYD04PI; CloudFront-Policy=eyJTdGF0ZW1lbnQiOiBbeyJSZXNvdXJjZSI6Imh0dHBzOi8vKmNvbnRlbnQtKi5zdHJhdmEuY29tL2lkZW50aWZpZWQvKiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTc0NTE0Mjc2Nn19fV19; CloudFront-Signature=Cc3~gm4FZxsm~nFuYzXqOibwSi4dPhseKq5hY3fkbGpXUcykPWD82u6CgPp3E9ZjHBz7Sdz0K2vdtup9Btf6FPPjH212TUw4XyYm14G9xSW5hDgDP-p4XTNL6-LXSobaO8Meri3WEAIXi9RezSVgsYS4r6M9OXXwYjFisq4kXfF6xbrPuUsK5mEqlFvBpDLYP84MkRsSMogD6SWY8gpD0wKWoZpgh03HyoyDmary7cgm6LXnTU9pjxcziM4OkMQ4Q-rBAGBRtwmhQ18mIzawTKjxLjytT621fRHUaSBUzmT1t2DTosxpiPlCw8EyUlczkWc5kxphwxgxpstqN7f9vg__';
+  await clearCookies(STRAVA_COOKIE_URL, STRAVA_COOKIE_NAMES);
+  await browser.storage.local.set({
+    credentials,
+  });
+  return requestCredentials(true);
 }
 
-async function processCredentials(credentials) {
-  await browser.storage.local.set({ credentials });
-  console.debug('[StravaHeatmapExt] Storage credentials updated', credentials);
+async function updateActionIcon(authenticated) {
+  const text = ' ';
+  const title = authenticated
+    ? 'Strava Heatmap ON — enable an overlay to view it'
+    : 'Strava Heatmap OFF — click here to log into Strava and show the heatmap';
 
-  const authenticated = credentials !== null;
-  const rules = await updateHeatmapRules(credentials);
-  console.debug('[StravaHeatmapExt] Heatmap rules updated', rules);
+  const color = authenticated ? 'green' : 'red';
 
-  await browser.action.setBadgeText({ text: '󠀠' });
-  await browser.action.setTitle({
-    title: authenticated
-      ? 'Strava Heatmap ON — enable an overlay to view it'
-      : 'Strava Heatmap OFF — click here to log into Strava and show the heatmap',
-  });
-  await browser.action.setBadgeBackgroundColor({
-    color: authenticated ? 'green' : 'red',
-  });
-
-  return authenticated;
+  await Promise.all([
+    browser.action.setBadgeText({ text }),
+    browser.action.setTitle({ title }),
+    browser.action.setBadgeBackgroundColor({ color }),
+  ]);
 }

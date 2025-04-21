@@ -3,23 +3,18 @@
 
 	const url = new URL(window.location.href);
 	const redirect = url.searchParams.get('redirect')?.trim();
-	const expired = url.searchParams.has('expired');
 
-	if (expired) {
-		const credentials = await browser.runtime.sendMessage({ type: 'expireCredentials' });
-		console.log('[StravaHeatmapExt] Credentials expired.', credentials);
-	} else if (redirect?.startsWith('/')) {
-		console.debug('[StravaHeatmapExt] Redirecting to:', redirect);
+	const isValidRedirect = redirect?.startsWith('/');
+	const samePath = redirect === window.location.pathname;
 
-		// Prevent accidental reload loops
-		if (redirect !== window.location.pathname) {
+	if (isValidRedirect) {
+		if (!samePath) {
+			console.debug('[StravaHeatmapExt] Redirecting to:', redirect);
 			window.location.href = redirect;
 		} else {
 			console.debug(
 				'[StravaHeatmapExt] Redirect target is same as current path. Skipping.'
 			);
 		}
-	} else {
-		console.debug('[StravaHeatmapExt] No valid redirect found.');
 	}
 })();

@@ -7,6 +7,7 @@ import {
   resetCredentials,
 } from './credentials.js';
 import { showInstalledNotification } from './installs.js';
+import { watchTileErrors } from './tiles.js';
 import { checkForUpdates } from './updates.js';
 
 async function redirectComplete(tabId, sender) {
@@ -37,9 +38,9 @@ async function openLogin(tab) {
 
 async function onMessage(message, sender) {
   const MESSAGE_HANDLERS = {
-    expireCredentials,
     requestCredentials,
     resetCredentials,
+    expireCredentials,
     checkForUpdates,
     redirectComplete,
     openLogin,
@@ -72,12 +73,24 @@ async function onActionClicked(tab) {
   }
 }
 
+async function onTileError(url, reason) {
+  console.warn('[StravaHeatmapExt] Detected tile error:', reason, url);
+  if (['403', 'net::ERR_BLOCKED_BY_ORB'].includes(reason)) {
+    console.log('[StravaHeatmapExt] Detecting expired credentials, requesting new ones.');
+    await requestCredentials();
+    return true;
+  }
+  return false;
+}
+
 async function main() {
   browser.action.onClicked.addListener(onActionClicked);
   browser.contextMenus.onClicked.addListener(onContextMenuClicked);
   browser.runtime.onMessage.addListener(onMessage);
   browser.runtime.onInstalled.addListener(onInstalled);
   browser.runtime.onStartup.addListener(onStartup);
+
+  watchTileErrors(onTileError);
 }
 
 main();
