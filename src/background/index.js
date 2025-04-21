@@ -30,13 +30,13 @@ async function onMessage(message, sender) {
 }
 
 async function onStartup() {
+  await createContextMenu();
   await requestCredentials();
 }
 
 async function onInstalled({ reason }) {
-  createContextMenu();
-  showInstalledNotification(reason);
-  onStartup();
+  await showInstalledNotification(reason);
+  await onStartup();
 }
 
 async function onActionClicked(tab) {
@@ -44,7 +44,7 @@ async function onActionClicked(tab) {
   if (credentials) {
     // do nothing for now, later will open settings popup
   } else {
-    openLogin(tab);
+    await openLogin(tab);
   }
 }
 

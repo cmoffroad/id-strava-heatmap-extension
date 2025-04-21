@@ -18,11 +18,14 @@ const CONTEXT_MENU_ITEMS = [
   },
 ];
 
-export function createContextMenu() {
+export async function createContextMenu() {
   try {
+    // Clear existing menu
+    await browser.contextMenus.removeAll();
+
     // Create submenus dynamically
-    CONTEXT_MENU_ITEMS.forEach(({ id, title }) => {
-      browser.contextMenus.create({
+    const menuPromises = CONTEXT_MENU_ITEMS.map(({ id, title }) => {
+      return browser.contextMenus.create({
         id,
         title,
         type: title ? 'normal' : 'separator',
@@ -33,16 +36,19 @@ export function createContextMenu() {
         ],
       });
     });
+
+    // Wait for all context menus to be created
+    await Promise.all(menuPromises);
   } catch (error) {
     console.error('Error creating context menu:', error);
   }
 }
 
-export function onContextMenuClicked(info) {
+export async function onContextMenuClicked(info) {
   const clickedItem = CONTEXT_MENU_ITEMS.find(({ id }) => id === info.menuItemId);
 
   if (clickedItem?.action) {
-    clickedItem.action();
+    await clickedItem.action();
   } else {
     console.warn(`Unknown or invalid context menu item clicked: ${info.menuItemId}`);
   }

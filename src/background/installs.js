@@ -1,26 +1,22 @@
-import extension from './extension.js';
-
-const FEEDBACK =
-  'Need help or want to report an issue? Right-click the extension icon in the top-right corner. Can’t see it? Click the puzzle icon and pin it.';
-
 const TITLES = {
   install: 'Welcome to the extension!',
   update: 'Extension Updated!',
 };
 
-// Display a browser notification with a unique ID based on the reason and timestamp
-function showBasicNotification(reason, title, message, priority = 0) {
-  return browser.notifications.create(`${reason}-${Date.now()}`, {
+const FEEDBACK =
+  'Need help or want to report an issue? Right-click the extension icon in the top-right corner. Can’t see it? Click the puzzle icon and pin it.';
+
+export async function showInstalledNotification(reason) {
+  // Return early if no title exists for the given reason
+  const title = TITLES[reason];
+  if (!title) return;
+
+  const notificationId = `${reason}-${Date.now()}`;
+  await browser.notifications.create(notificationId, {
     type: 'basic',
     iconUrl: browser.runtime.getURL('icons/icon-48.png'),
     title,
-    message,
-    priority,
+    message: FEEDBACK,
+    priority: 0,
   });
-}
-
-export function showInstalledNotification(reason) {
-  if (TITLES[reason]) {
-    showBasicNotification(reason, TITLES[reason], FEEDBACK);
-  }
 }
