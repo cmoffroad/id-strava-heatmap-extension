@@ -86,7 +86,7 @@ async function updateActionIcon(authenticated) {
     : `🔴 Strava Heatmap OFF:\n\nClick here or press Ctrl+Shift+S to log into Strava and view the heatmap.`;
 
   const color = authenticated ? 'green' : 'red';
-  const text = ' ';
+  const text = '󠀠';
 
   await Promise.all([
     browser.action.setTitle({ title }),
