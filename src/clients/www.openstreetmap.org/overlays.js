@@ -1,4 +1,5 @@
 import { addHashChangeListener, getHashParams } from '../common/hash.js';
+import { addKeyboardBinding } from '../common/keyboard.js';
 
 const opacityStep = 10;
 const opacityClassPrefix = 'overlays-opacity';
@@ -7,36 +8,17 @@ const storageKeyLastUsed = 'overlays-last-used';
 const storageKeyOpacity = opacityClassPrefix;
 
 export function setupOverlaysListeners() {
+	const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+	const altPrefix = isMac ? '⌥' : 'Alt';
+
 	document.body.style.setProperty(
 		`--${opacityClassPrefix}-help`,
-		`"ℹ️ Use keyboard shortcut Shift+Q to toggle all overlays visibility."`
-		// `"ℹ️ Use ⌨️ shortcuts Shift+Q to toggle all layers visibility, and ${altPrefix}+[ or ${altPrefix}+] to adjust opacity."`
+		`"ℹ️ Use the keyboard shortcut ${altPrefix}+Q to toggle the visibility of all overlays."`
+		// `"ℹ️ Use ⌨️ shortcuts Shift+Q to toggle all ayers visibiliy, and ${altPrefix}+[ or ${altPrefix}+] to adjust opacity."`
 	);
 
-	document.addEventListener('keydown', (event) => {
-		// Prevent execution if focused on an input, textarea, or content editable element.
-		const tagName = event.target.tagName;
-		if (tagName === 'INPUT' || tagName === 'TEXTAREA' || event.target.isContentEditable) {
-			return;
-		}
-
-		if (!event.shiftKey) return;
-
-		switch (event.key) {
-			case 'Q':
-				toggleHiddenOverlays();
-				break;
-			case 'W':
-				const osmLayer = context.layers().layer('osm');
-				osmLayer.enabled(!osmLayer.enabled());
-				break;
-			// case 'BracketLeft':
-			// 	changeOverlayOpacity(-opacityStep);
-			// 	break;
-			// case 'BracketRight':
-			// 	changeOverlayOpacity(opacityStep);
-			// 	break;
-		}
+	addKeyboardBinding({ code: 'KeyQ', altKey: true }, () => {
+		toggleHiddenOverlays();
 	});
 
 	addHashChangeListener((oldHash, newHash) => {

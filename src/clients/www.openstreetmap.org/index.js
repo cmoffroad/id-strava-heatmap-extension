@@ -25,6 +25,7 @@ async function main() {
       await updateImagery(context, authenticated);
     });
 
+    // ensure document is focused to listen to keyboard events
     document.body.setAttribute('tabindex', '0');
     document.body.focus();
   });
