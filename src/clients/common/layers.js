@@ -49,7 +49,7 @@ function getLayerOption(index, activity, color, timestamp, authenticated) {
     description: `Shows ${activityName.toLowerCase()} aggregated, public Strava activities over the last year in ${colorEmoji} color.`,
     template: authenticated
       ? `https://content-a.strava.com/identified/globalheat/${activity}/${color}/{z}/{x}/{y}.png?v=19&t=${timestamp}`
-      : 'https://raw.githubusercontent.com/cmoffroad/id-strava-heatmap-extension/refs/heads/master/assets/heatmap-fallback.png?v=1&z={z}&x={x}&y{y}',
+      : 'https://raw.githubusercontent.com/cmoffroad/id-strava-heatmap-extension/refs/heads/master/assets/heatmap-fallback-v2.png?z={z}&x={x}&y{y}',
     zoomExtent: authenticated ? [0, 15] : [0, 20],
   };
 }

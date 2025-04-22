@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Strava Tile Message</title>
+    <style>
+      body {
+        background: #222;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      canvas {
+        border: 1px solid #555;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="tile" width="256" height="256"></canvas>
+
+    <script>
+      const canvas = document.getElementById('tile');
+      const ctx = canvas.getContext('2d');
+
+      const fontSize = 16;
+      const lineHeight = 22;
+      const padding = 16;
+      const maxWidth = canvas.width - 2 * padding;
+      const font = `bold ${fontSize}px "Helvetica Neue", Helvetica, Arial, sans-serif`;
+      const color = '#FC4C02';
+      const message =
+        'Click the Strava Heatmap extension icon or press Ctrl+Shift+S to log into Strava and enable the heatmap.';
+
+      ctx.fillStyle = color;
+      ctx.font = font;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+
+      // Text wrapping function returns wrapped lines
+      function getWrappedLines(text, maxWidth) {
+        const words = text.split(' ');
+        const lines = [];
+        let line = '';
+        for (let i = 0; i < words.length; i++) {
+          const testLine = line + words[i] + ' ';
+          const metrics = ctx.measureText(testLine);
+          const testWidth = metrics.width;
+          if (testWidth > maxWidth && i > 0) {
+            lines.push(line.trim());
+            line = words[i] + ' ';
+          } else {
+            line = testLine;
+          }
+        }
+        lines.push(line.trim());
+        return lines;
+      }
+
+      const lines = getWrappedLines(message, maxWidth);
+      const textHeight = lines.length * lineHeight;
+      const startY = (canvas.height - textHeight) / 2;
+
+      lines.forEach((line, i) => {
+        ctx.fillText(line, canvas.width / 2, startY + i * lineHeight);
+      });
+    </script>
+  </body>
+</html>
