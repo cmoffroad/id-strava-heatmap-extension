@@ -19,7 +19,7 @@
     "clickAction": {
       "suggested_key": {
         "default": "Ctrl+Shift+S",
-        "mac": "Command+Shift+S"
+        "mac": "MacCtrl+Shift+S"
       },
       "description": "Trigger extension icon click"
     }

@@ -81,13 +81,9 @@ export async function expireCredentials() {
 }
 
 async function updateActionIcon(authenticated) {
-  const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-  const ctrlPrefix = isMac ? '⌘' : 'Alt';
-  const keyboardShortcut = `${ctrlPrefix}+Shift+S`;
-
   const title = authenticated
     ? '🟢 Strava Heatmap ON:\n\nEnable an overlay to view it.'
-    : `🔴 Strava Heatmap OFF:\n\nClick here or press ${keyboardShortcut} to log into Strava and view the heatmap.`;
+    : `🔴 Strava Heatmap OFF:\n\nClick here or press Ctrl+Shift+S to log into Strava and view the heatmap.`;
 
   const color = authenticated ? 'green' : 'red';
   const text = ' ';
