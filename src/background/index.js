@@ -50,7 +50,7 @@ async function onActionClicked(tab) {
 
 async function onTileError(url, reason) {
   console.warn('[StravaHeatmapExt] Detected tile error:', reason, url);
-  if (['403', 'net::ERR_BLOCKED_BY_ORB'].includes(reason)) {
+  if (['403', 'net::ERR_BLOCKED_BY_ORB', 'NS_BINDING_ABORTED'].includes(reason)) {
     console.log('[StravaHeatmapExt] Detecting expired credentials, requesting new ones.');
     await requestCredentials();
     return true;
