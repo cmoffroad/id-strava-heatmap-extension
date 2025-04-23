@@ -30,10 +30,6 @@ export async function createContextMenu() {
         title,
         type: title ? 'normal' : 'separator',
         contexts: ['action'],
-        documentUrlPatterns: [
-          'https://www.openstreetmap.org/edit*',
-          'https://www.openstreetmap.org/id*',
-        ],
       });
     });
 
