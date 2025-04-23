@@ -38,17 +38,15 @@ export function setupOverlaysListeners() {
 	});
 
 	addHashChangeListener((oldHash, newHash) => {
-		const newValue = newHash.get('overlays');
-		const oldValue = oldHash.get('overlays');
+		const newValue = newHash.get('overlays') ?? '';
+		const oldValue = oldHash.get('overlays') ?? '';
 		// if overlays selection changed,
 		if (oldValue !== newValue) {
 			// do not hide overlays
 			toggleHiddenOverlays(false);
 
-			// keep track of last used overlays
-			if (newValue !== null) {
-				localStorage.setItem(storageKeyLastUsed, newValue);
-			}
+			// keep track of last used overlays fallback to empty string
+			localStorage.setItem(storageKeyLastUsed, newValue);
 		}
 	});
 
@@ -60,9 +58,9 @@ export function getDefaultOverlayIds() {
 	const lastUsed = localStorage.getItem(storageKeyLastUsed);
 
 	if (hash !== null) {
-		return hash.split(',');
+		return hash.split(',').filter(Boolean);
 	} else if (lastUsed !== null) {
-		return lastUsed.split(',');
+		return lastUsed.split(',').filter(Boolean);
 	} else {
 		return ['strava-heatmap-1'];
 	}
