@@ -83,7 +83,7 @@ export async function expireCredentials() {
 async function updateActionIcon(authenticated) {
   const title = authenticated
     ? '🟢 Strava Heatmap ON:\n\nEnable an overlay to view it.'
-    : `🔴 Strava Heatmap OFF:\n\nClick here or press Ctrl+Shift+S to log into Strava and view the heatmap.`;
+    : `🔴 Strava Heatmap OFF:\n\nClick here to log into Strava and view the heatmap.`;
 
   const color = authenticated ? 'green' : 'red';
   const text = '󠀠';

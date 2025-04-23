@@ -15,15 +15,6 @@
   ],
   "host_permissions": ["*://*.strava.com/*", "*://www.openstreetmap.org/*"],
   "action": {},
-  "commands": {
-    "clickAction": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+S",
-        "mac": "MacCtrl+Shift+S"
-      },
-      "description": "Trigger extension icon click"
-    }
-  },
   "background": {
     "service_worker": "src/background/index.js",
     "type": "module"

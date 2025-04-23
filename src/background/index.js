@@ -58,20 +58,12 @@ async function onTileError(url, reason) {
   return false;
 }
 
-async function onCommand(command, tab) {
-  console.log(`[StravaHeatmapExt] Detected command: ${command}`, tab);
-  if (command === 'clickAction') {
-    onActionClicked(tab);
-  }
-}
-
 async function main() {
   browser.action.onClicked.addListener(onActionClicked);
   browser.contextMenus.onClicked.addListener(onContextMenuClicked);
   browser.runtime.onMessage.addListener(onMessage);
   browser.runtime.onInstalled.addListener(onInstalled);
   browser.runtime.onStartup.addListener(onStartup);
-  browser.commands.onCommand.addListener(onCommand);
 
   watchTileErrors(onTileError);
 }
