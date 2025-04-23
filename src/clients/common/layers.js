@@ -38,7 +38,7 @@ function getLayersConfiguration() {
 }
 
 // Creates a layer configuration object
-function getLayerOption(index, activity, color, timestamp, authenticated) {
+function getLayerOption(index, activity, color, timestamp, authenticated, version) {
   const activityName = formatStravaActivityLabel(activity);
   const colorEmoji = COLOR_OPTIONS[color] || '❓';
 
@@ -49,13 +49,13 @@ function getLayerOption(index, activity, color, timestamp, authenticated) {
     description: `Shows ${activityName.toLowerCase()} aggregated, public Strava activities over the last year in ${colorEmoji} color.`,
     template: authenticated
       ? `https://content-a.strava.com/identified/globalheat/${activity}/${color}/{z}/{x}/{y}.png?v=19&t=${timestamp}`
-      : 'https://raw.githubusercontent.com/cmoffroad/id-strava-heatmap-extension/refs/heads/master/assets/heatmap-fallback-v2.png?z={z}&x={x}&y{y}',
+      : `https://raw.githubusercontent.com/cmoffroad/id-strava-heatmap-extension/refs/heads/v${version}/assets/heatmap-fallback.png?v=1&z={z}&x={x}&y={y}`,
     zoomExtent: authenticated ? [0, 15] : [0, 20],
   };
 }
 
 // Generates layer options with optional callback for extension
-export function getLayers(optionsCb, authenticated) {
+export function getLayers(optionsCb, authenticated, version) {
   const layersConfiguration = getLayersConfiguration();
   const timestamp = Date.now().toString();
 
@@ -65,33 +65,10 @@ export function getLayers(optionsCb, authenticated) {
       config.activity,
       config.color,
       timestamp,
-      authenticated
+      authenticated,
+      version
     );
 
     return optionsCb(baseLayerOption);
-  });
-}
-
-export function setupHeatmapFallbackClickListener(redirectUrl) {
-  document.body.addEventListener('click', (e) => {
-    // Left-click only
-    if (e.button !== 0) return;
-
-    // Target must be an <img>
-    const img = e.target instanceof HTMLImageElement ? e.target : null;
-    if (!img) return;
-
-    // Match the image source
-    if (img.src.includes('heatmap-fallback.png')) {
-      // Optional: ensure it's not a double-click or weird gesture
-      if (e.detail === 1) {
-        console.debug(
-          '[StravaHeatmapExt] Fallback heatmap image clicked:',
-          img,
-          redirectUrl
-        );
-        window.open(redirectUrl, '_blank');
-      }
-    }
   });
 }

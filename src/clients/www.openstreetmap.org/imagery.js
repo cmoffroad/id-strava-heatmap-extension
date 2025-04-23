@@ -20,8 +20,8 @@ function createStravaHeatmapLayerConfig({
 	};
 }
 
-export async function initImagery(context, authenticated) {
-	const stravaLayers = getLayers(createStravaHeatmapLayerConfig, authenticated);
+export async function initImagery(context, authenticated, version) {
+	const stravaLayers = getLayers(createStravaHeatmapLayerConfig, authenticated, version);
 
 	const background = context.background();
 	const imagery = await background.ensureLoaded();
@@ -54,8 +54,8 @@ export async function initImagery(context, authenticated) {
 	);
 }
 
-export async function updateImagery(context, authenticated) {
-	const stravaLayers = getLayers(createStravaHeatmapLayerConfig, authenticated);
+export async function updateImagery(context, authenticated, version) {
+	const stravaLayers = getLayers(createStravaHeatmapLayerConfig, authenticated, version);
 
 	const background = context.background();
 

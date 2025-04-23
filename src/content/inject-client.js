@@ -16,13 +16,16 @@
 
   function injectClientScript(authenticated) {
     try {
+      const manifest = browser.runtime.getManifest();
       const host = window.location.host;
       const path = `src/clients/${host}/index.js`;
       const script = document.createElement('script');
+      script.id = 'strava-heatmap-client';
       script.src = browser.runtime.getURL(path);
       script.type = 'module';
       script.async = false;
       script.dataset.authenticated = authenticated;
+      script.dataset.version = manifest.version;
       script.onload = () => {
         // script.remove();
         console.debug('[StravaHeatmapExt] Injected client script.', path);
