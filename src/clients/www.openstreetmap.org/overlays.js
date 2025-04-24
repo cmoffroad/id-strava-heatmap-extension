@@ -25,7 +25,7 @@ export function setupOverlaysListeners() {
 
 		if (!event.shiftKey) return;
 
-		switch (event.key) {
+		switch (event.key.toUpperCase()) {
 			case 'Q':
 				toggleHiddenOverlays();
 				break;
