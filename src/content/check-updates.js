@@ -19,13 +19,12 @@
   function formatUpdateMessage(updateInfo) {
     const { number, changes } = updateInfo;
     return `
-    A new version of the ${manifest.name} extension (${number}) is available.
+A new version of the ${manifest.name} extension (v${number}) is available!
 
-    Please update to access the latest features and improvements:
-    ${changes.map((change) => `- ${change}`).join('\n')}
+Update now to access the latest features and improvements:
+${changes.map((change) => `• ${change}`).join('\n')}
 
-    Click OK to proceed to the update page.
-  `;
+Click OK to go to the extension update page.`;
   }
 
   // Function to handle the user confirmation and redirect if necessary
