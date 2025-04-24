@@ -2,6 +2,14 @@
 
 ## Versions
 
+### `0.10.0` (2025-04-24)
+
+- Extension Icon: Shows Strava authentication state with login on click
+- Cookie Handling: Auto-refreshes cookies and prompts re-login when expired.
+- Overlay Menu: Improved colors, Shift+Q toggles visibility, remembers last settings.
+- Fallback UX: Adds login guidance on blurred tiles.
+- Context Menu: Moved to the extension icon.
+
 ### `0.9.3` (2025-03-30)
 
 - Updated Strava URLs and expanded cookie support.
@@ -20,5 +28,5 @@
 
 ## Latest Available Version
 
-- Chrome: `0.9.2`
+- Chrome: `0.9.3`
 - Firefox: `0.9.3`

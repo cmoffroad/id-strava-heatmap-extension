@@ -1,6 +1,17 @@
 {
   "versions": [
     {
+      "number": "0.10.0",
+      "date": "2025-04-24",
+      "changes": [
+        "Extension Icon: Shows Strava authentication state with login on click",
+        "Cookie Handling: Auto-refreshes cookies and prompts re-login when expired.",
+        "Overlay Menu: Improved colors, Shift+Q toggles visibility, remembers last settings.",
+        "Fallback UX: Adds login guidance on blurred tiles.",
+        "Context Menu: Moved to the extension icon."
+      ]
+    },
+    {
       "number": "0.9.3",
       "date": "2025-03-30",
       "changes": [
