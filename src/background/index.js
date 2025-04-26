@@ -10,14 +10,12 @@ import { showInstalledNotification } from './installs.js';
 import { initLayerPresets } from './layers.js';
 import { redirectComplete, openLogin } from './tabs.js';
 import { watchTileErrors } from './tiles.js';
-import { checkForUpdates } from './updates.js';
 
 async function onMessage(message, sender) {
   const MESSAGE_HANDLERS = {
     requestCredentials,
     resetCredentials,
     expireCredentials,
-    checkForUpdates,
     redirectComplete,
     openLogin,
   };

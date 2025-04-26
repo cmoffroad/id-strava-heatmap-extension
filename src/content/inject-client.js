@@ -1,6 +1,20 @@
 (async function () {
   console.debug('[StravaHeatmapExt] executing content/inject-client.js');
 
+  function getManifestVersion() {
+    try {
+      const manifest = browser.runtime.getManifest();
+      const manifestVersion = manifest.version;
+      console.log(
+        `[StravaHeatmapExt] Loaded manifest version ${manifestVersion}`,
+        manifest
+      );
+      return manifestVersion;
+    } catch (error) {
+      console.error('[StravaHeatmapExt] Error retrieving manifest version:', error);
+    }
+  }
+
   async function retrieveLayerPresets() {
     try {
       // Send message to request credentials
@@ -8,7 +22,7 @@
       console.log('[StravaHeatmapExt] Layer presets retrieved.', layers);
       return layers;
     } catch (error) {
-      console.error('[StravaHeatmapExt] Error retrieving layer presets :', error);
+      console.error('[StravaHeatmapExt] Error retrieving layer presets:', error);
     }
   }
 
@@ -25,9 +39,8 @@
     }
   }
 
-  function injectClientScript(layerPresets, authenticated) {
+  function injectClientScript(layerPresets, authenticated, manifestVersion) {
     try {
-      const manifest = browser.runtime.getManifest();
       const host = window.location.host;
       const path = `src/clients/${host}/index.js`;
       const script = document.createElement('script');
@@ -36,7 +49,7 @@
       script.type = 'module';
       script.async = false;
       script.dataset.authenticated = authenticated;
-      script.dataset.version = manifest.version;
+      script.dataset.version = manifestVersion;
       script.dataset.layers = layerPresets;
       script.onload = () => {
         // script.remove();
@@ -73,8 +86,10 @@
     }
   }
 
+  const manifestVersion = getManifestVersion();
   const layerPresets = await retrieveLayerPresets();
   const authenticated = await requestCredentials();
-  injectClientScript(layerPresets, authenticated);
+
+  injectClientScript(layerPresets, authenticated, manifestVersion);
   injectClientCSS();
 })();

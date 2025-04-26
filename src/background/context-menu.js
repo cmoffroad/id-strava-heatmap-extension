@@ -1,20 +1,19 @@
-import extension from './extension.js';
-
 const CONTEXT_MENU_ITEMS = [
   {
     id: 'forumSupport',
     title: 'Forum Support',
-    action: () => browser.tabs.create({ url: extension.forumSupportUrl }),
+    action: () =>
+      browser.tabs.create({
+        url: 'https://community.openstreetmap.org/t/new-strava-heatmap-extension-for-id/100544',
+      }),
   },
   {
     id: 'submitIssue',
     title: 'Submit Issue',
-    action: () => browser.tabs.create({ url: extension.issuesTrackerUrl }),
-  },
-  {
-    id: 'extensionPage',
-    title: 'Extension Page',
-    action: () => browser.tabs.create({ url: extension.installationUrl }),
+    action: () =>
+      browser.tabs.create({
+        url: 'https://github.com/cmoffroad/id-strava-heatmap-extension/issues/',
+      }),
   },
 ];
 

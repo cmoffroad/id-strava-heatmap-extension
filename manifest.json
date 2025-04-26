@@ -3,6 +3,7 @@
   "name": "iD Strava Heatmap",
   "description": "Easily overlay the Strava Global Heatmap in your iD editor and gain valuable insights into popular routes and activity patterns.",
   "version": "0.11.0",
+  "homepage_url": "https://github.com/cmoffroad/id-strava-heatmap-extension",
   "permissions": [
     "cookies",
     "contextMenus",
@@ -29,8 +30,7 @@
       "js": [
         "lib/browser-polyfill.min.js",
         "src/content/inject-client.js",
-        "src/content/monitor-credentials.js",
-        "src/content/check-updates.js"
+        "src/content/monitor-credentials.js"
       ],
       "run_at": "document_end",
       "all_frames": true
