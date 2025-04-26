@@ -7,6 +7,7 @@ import {
   resetCredentials,
 } from './credentials.js';
 import { showInstalledNotification } from './installs.js';
+import { initLayerPresets } from './layers.js';
 import { redirectComplete, openLogin } from './tabs.js';
 import { watchTileErrors } from './tiles.js';
 import { checkForUpdates } from './updates.js';
@@ -30,6 +31,7 @@ async function onMessage(message, sender) {
 }
 
 async function onStartup() {
+  await initLayerPresets();
   await createContextMenu();
   await requestCredentials();
 }

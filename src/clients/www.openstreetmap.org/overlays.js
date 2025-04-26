@@ -6,7 +6,7 @@ const hiddenClass = 'overlays-hidden';
 const storageKeyLastUsed = 'overlays-last-used';
 const storageKeyOpacity = opacityClassPrefix;
 
-export function setupOverlaysListeners() {
+export function setupOverlaysListeners(context) {
 	// const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
 	// const altPrefix = isMac ? '⌥' : 'Alt';
 

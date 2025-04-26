@@ -1,29 +1,10 @@
-import { getLayers } from '../common/layers.js';
+import { getLayerConfigs } from '../common/layers.js';
 import { getDefaultOverlayIds } from './overlays.js';
 
-function createStravaHeatmapLayerConfig({
-	index,
-	name,
-	description,
-	template,
-	zoomExtent,
-}) {
-	return {
-		id: `strava-heatmap-${index}`,
-		name: `${new Array(index).join('󠀠')}` + name,
-		description,
-		template,
-		terms_url:
-			'https://wiki.openstreetmap.org/wiki/Strava#Data_Permission_-_Allowed_for_tracing!',
-		zoomExtent,
-		overlay: true,
-	};
-}
+export async function initImagery(context, layerPresets, authenticated, version) {
+	const stravaConfigs = getLayerConfigs(layerPresets, authenticated, version);
 
-export async function initImagery(context, authenticated, version) {
-	const stravaLayers = getLayers(createStravaHeatmapLayerConfig, authenticated, version);
-
-	const background = context.background();
+	const background = window.context.background();
 	const imagery = await background.ensureLoaded();
 
 	// Find currently visible Strava overlay layers
@@ -32,8 +13,15 @@ export async function initImagery(context, authenticated, version) {
 		.forEach((layer) => background.toggleOverlayLayer(layer));
 
 	// create or update existing strava sources
-	stravaLayers.forEach((layer) => {
-		imagery.backgrounds.push(iD.rendererBackgroundSource(layer));
+	stravaConfigs.forEach((config) => {
+		imagery.backgrounds.push(
+			iD.rendererBackgroundSource({
+				...config,
+				overlay: true,
+				terms_url:
+					'https://wiki.openstreetmap.org/wiki/Strava#Data_Permission_-_Allowed_for_tracing!',
+			})
+		);
 	});
 
 	await background.init();
@@ -49,13 +37,13 @@ export async function initImagery(context, authenticated, version) {
 	});
 
 	console.log(
-		'[StravaHeatmapExt] Initialized iD imagery with Strava layers',
-		stravaLayers
+		'[StravaHeatmapExt] Initialized iD imagery with Strava layer configs',
+		stravaConfigs
 	);
 }
 
-export async function updateImagery(context, authenticated, version) {
-	const stravaLayers = getLayers(createStravaHeatmapLayerConfig, authenticated, version);
+export async function updateImagery(context, layerPresets, authenticated, version) {
+	const stravaConfigs = getLayerConfigs(layerPresets, authenticated, version);
 
 	const background = context.background();
 
@@ -68,13 +56,13 @@ export async function updateImagery(context, authenticated, version) {
 	visibleStravaSources.forEach((layer) => background.toggleOverlayLayer(layer));
 
 	// create or update existing strava sources
-	stravaLayers.forEach((layer) => {
-		const source = background.findSource(layer.id);
+	stravaConfigs.forEach((config) => {
+		const source = background.findSource(config.id);
 		if (source) {
 			source.id = 'custom';
-			source.template(layer.template);
-			source.zoomExtent = layer.zoomExtent;
-			source.id = layer.id;
+			source.template(config.template);
+			source.zoomExtent = config.zoomExtent;
+			source.id = config.id;
 		} else {
 			console.warn(`[StravaHeatmapExt] Missing overlay source for update: ${id}`);
 		}
@@ -85,5 +73,8 @@ export async function updateImagery(context, authenticated, version) {
 	// Restore previously visible Strava overlays
 	visibleStravaSources.forEach((layer) => background.toggleOverlayLayer(layer));
 
-	console.log('[StravaHeatmapExt] Updated iD imagery with Strava layers', stravaLayers);
+	console.log(
+		'[StravaHeatmapExt] Updated iD imagery with Strava layer configs',
+		stravaConfigs
+	);
 }

@@ -25,27 +25,14 @@ function formatStravaActivityLabel(param) {
   return clean.replace(/E\s/g, 'E-');
 }
 
-// Retrieves the default layer configurations for the Strava heatmap
-function getLayersConfiguration() {
-  const defaultConfigs = [
-    { activity: 'all', color: 'hot' },
-    { activity: 'ride', color: 'purple' },
-    { activity: 'run', color: 'orange' },
-    { activity: 'water', color: 'blue' },
-    { activity: 'winter', color: 'gray' },
-  ];
-  return defaultConfigs;
-}
-
 // Creates a layer configuration object
-function getLayerOption(index, activity, color, timestamp, authenticated, version) {
+function getLayerConfig(position, activity, color, timestamp, authenticated, version) {
   const activityName = formatStravaActivityLabel(activity);
   const colorEmoji = COLOR_OPTIONS[color] || '❓';
 
   return {
-    id: `strava-heatmap-${index}`,
-    index,
-    name: `${colorEmoji} Strava Heatmap ${activityName}`,
+    id: `strava-heatmap-${position}`,
+    name: `${new Array(position).join('󠀠')}${colorEmoji} Strava Heatmap ${activityName}`,
     description: `Shows ${activityName.toLowerCase()} aggregated, public Strava activities over the last year in ${colorEmoji} color.`,
     template: authenticated
       ? `https://content-a.strava.com/identified/globalheat/${activity}/${color}/{z}/{x}/{y}.png?v=19&t=${timestamp}`
@@ -55,20 +42,26 @@ function getLayerOption(index, activity, color, timestamp, authenticated, versio
 }
 
 // Generates layer options with optional callback for extension
-export function getLayers(optionsCb, authenticated, version) {
-  const layersConfiguration = getLayersConfiguration();
+export function getLayerConfigs(layerPresets, authenticated, version) {
   const timestamp = Date.now().toString();
 
-  return layersConfiguration.map((config, index) => {
-    const baseLayerOption = getLayerOption(
-      index + 1,
-      config.activity,
-      config.color,
-      timestamp,
-      authenticated,
-      version
-    );
+  return layerPresets.map(({ activity, color }, index) =>
+    getLayerConfig(index + 1, activity, color, timestamp, authenticated, version)
+  );
+}
 
-    return optionsCb(baseLayerOption);
+export function setupLayerPresetsChangeListener(callback) {
+  window.addEventListener('message', (event) => {
+    if (event.source !== window) return; // ignore messages from iframes
+    if (event.data.type === 'layerPresetsChanged') {
+      callback(event.data.payload);
+    }
+  });
+}
+
+export function parseLayersPresets(string) {
+  return string.split(';').map((item) => {
+    const [activity, color] = item.split(':');
+    return { activity, color };
   });
 }
