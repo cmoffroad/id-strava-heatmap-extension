@@ -32,7 +32,7 @@
       "js": [
         "lib/browser-polyfill.min.js",
         "src/content/inject-client.js",
-        "src/content/monitor-credentials.js"
+        "src/content/watch-storage.js"
       ],
       "run_at": "document_end",
       "all_frames": true
