@@ -13,7 +13,9 @@
     "webRequest"
   ],
   "host_permissions": ["*://*.strava.com/*", "*://www.openstreetmap.org/*"],
-  "action": {},
+  "action": {
+    "default_popup": ""
+  },
   "background": {
     "service_worker": "src/background/index.js",
     "type": "module"

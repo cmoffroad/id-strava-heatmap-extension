@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="./settings.css" />
+  </head>
+  <body>
+    <div id="settings">
+      <div class="toolbar">
+        <h2>Strava Heatmap</h2>
+        <h2 id="close-settings">✖️</h2>
+      </div>
+      <div>
+        <h3>Configure Layers</h3>
+        <ul id="layer-list"></ul>
+        <button disabled id="add-layer">&nbsp;+&nbsp; Add Layer</button>
+      </div>
+      <button id="apply-settings">Apply changes</button>
+    </div>
+    <script src="../../../lib/browser-polyfill.min.js"></script>
+    <script src="./settings.js" type="module"></script>
+  </body>
+</html>

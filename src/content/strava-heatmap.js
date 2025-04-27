@@ -22,7 +22,7 @@
 			if (credentials && Number.isInteger(tabId)) {
 				await browser.runtime.sendMessage({
 					type: 'redirectComplete',
-					data: tabId,
+					payload: tabId,
 				});
 			}
 		}

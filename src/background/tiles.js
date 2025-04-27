@@ -4,10 +4,10 @@ export async function watchTileErrors(callback) {
 
   let lastErrorTime = 0;
 
-  async function maybeTrigger(url, reason) {
+  async function maybeTrigger(tabId, url, reason) {
     const now = Date.now();
     if (now - lastErrorTime > cooldown) {
-      if (await callback(url, reason)) {
+      if (await callback(tabId, url, reason)) {
         lastErrorTime = now;
       }
     }
@@ -16,7 +16,7 @@ export async function watchTileErrors(callback) {
   browser.webRequest.onCompleted.addListener(
     (details) => {
       if (details.type === 'image' && details.statusCode !== 200) {
-        maybeTrigger(details.url, `${details.statusCode}`);
+        maybeTrigger(details.tabId, details.url, `${details.statusCode}`);
       }
     },
     { urls }
@@ -25,7 +25,7 @@ export async function watchTileErrors(callback) {
   browser.webRequest.onErrorOccurred.addListener(
     (details) => {
       if (details.type === 'image') {
-        maybeTrigger(details.url, details.error);
+        maybeTrigger(details.tabId, details.url, details.error);
       }
     },
     { urls }

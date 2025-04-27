@@ -1,0 +1,96 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 1em;
+  width: 350px;
+}
+
+h2,
+h3,
+p {
+  margin: 0;
+  margin-bottom: 0.5rem;
+}
+
+.toolbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: start;
+}
+
+#close-settings {
+  cursor: pointer;
+}
+
+#apply-settings {
+  padding: 0.5rem 0.25rem;
+
+  &:not(:disabled) {
+    font-weight: bold;
+    background: #fc4c02;
+    color: white;
+  }
+
+  &:disabled {
+    border: none;
+  }
+}
+
+#settings {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+#layer-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.layer {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  background: #f0f0f0;
+  padding: 0.5em 0.5em;
+  border-radius: 8px;
+  margin-bottom: 0.5em;
+
+  .icon {
+    width: 15px;
+    font-size: 1.25rem;
+    text-align: center;
+  }
+
+  .drag-handle {
+    cursor: grab;
+    font-size: 1.25rem;
+  }
+
+  select {
+    flex: 1;
+    padding: 0.25em;
+  }
+
+  .layer-remove {
+    padding: 0.25em;
+    font-size: 1.25em;
+    border: none;
+    cursor: pointer;
+  }
+}
+
+#add-layer {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  background: #f0f0f0;
+  padding: 0.5em 0.5em;
+  border-radius: 8px;
+  margin-bottom: 0.5em;
+  width: 100%;
+  border-color: transparent;
+  cursor: pointer;
+}

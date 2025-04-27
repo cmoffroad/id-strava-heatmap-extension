@@ -1,14 +1,34 @@
 // Available color schemes for the heatmap
-const COLOR_OPTIONS = {
-  blue: '🔵',
-  hot: '🔥',
-  gray: '⚪',
-  purple: '🟣',
-  bluered: '🔴',
-  orange: '🟠',
+const COLORS = {
+  hot: ['🔥', 'Hot'],
+  blue: ['🔵', 'Blue'],
+  gray: ['⚪', 'Gray'],
+  purple: ['🟣', 'Purple'],
+  bluered: ['🔴', 'Blue-Red'],
+  orange: ['🟠', 'Orange'],
 };
 
-function formatStravaActivityLabel(param) {
+const ACTIVITIES = {
+  _: ['all', 'run', 'ride', 'water', 'run'],
+  water: ['kayak', 'surf', 'swim'],
+};
+
+export const COLOR_OPTIONS = Object.keys(COLORS).map((key) => [
+  key,
+  formatLayerColor(key),
+]);
+
+export const ACTIVITY_OPTIONS = Object.entries(ACTIVITIES).map(([group, values]) => [
+  formatLayerActivity(group),
+  values.map((value) => [value, formatLayerActivity(value)]),
+]);
+
+function formatLayerColor(value) {
+  const [emoji, label] = COLORS[value] || ['❓', value];
+  return `${emoji} ${label}`;
+}
+
+function formatLayerActivity(param) {
   // Remove "sport_" prefix if present
   let clean = param.replace(/^sport_/, '');
 
@@ -27,7 +47,7 @@ function formatStravaActivityLabel(param) {
 
 // Creates a layer configuration object
 function getLayerConfig(position, activity, color, timestamp, authenticated, version) {
-  const activityName = formatStravaActivityLabel(activity);
+  const activityName = formatLayerActivity(activity);
   const colorEmoji = COLOR_OPTIONS[color] || '❓';
 
   return {

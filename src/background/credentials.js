@@ -88,9 +88,15 @@ async function updateActionIcon(authenticated) {
   const color = authenticated ? 'green' : 'red';
   const text = '󠀠';
 
-  await Promise.all([
-    browser.action.setTitle({ title }),
-    browser.action.setBadgeBackgroundColor({ color }),
-    browser.action.setBadgeText({ text }),
-  ]);
+  await browser.action.setTitle({ title });
+  await browser.action.setBadgeBackgroundColor({ color });
+  await browser.action.setBadgeText({ text });
+
+  if (authenticated) {
+    await browser.action.setPopup({
+      popup: 'src/background/popups/settings.html',
+    });
+  } else {
+    await browser.action.setPopup({ popup: '', tabId });
+  }
 }

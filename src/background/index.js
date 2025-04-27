@@ -7,7 +7,7 @@ import {
   resetCredentials,
 } from './credentials.js';
 import { showInstalledNotification } from './installs.js';
-import { initLayerPresets } from './layers.js';
+import { resetLayerPresets } from './layers.js';
 import { redirectComplete, openLogin } from './tabs.js';
 import { watchTileErrors } from './tiles.js';
 
@@ -21,7 +21,7 @@ async function onMessage(message, sender) {
   };
 
   if (MESSAGE_HANDLERS[message.type]) {
-    return MESSAGE_HANDLERS[message.type](message.data, sender);
+    return MESSAGE_HANDLERS[message.type](message.payload, sender);
   }
 
   console.warn(`Unknown message received: ${message}`);
@@ -29,7 +29,7 @@ async function onMessage(message, sender) {
 }
 
 async function onStartup() {
-  await initLayerPresets();
+  await resetLayerPresets();
   await createContextMenu();
   await requestCredentials();
 }
@@ -48,7 +48,7 @@ async function onActionClicked(tab) {
   }
 }
 
-async function onTileError(url, reason) {
+async function onTileError(tabId, url, reason) {
   console.warn('[StravaHeatmapExt] Detected tile error:', reason, url);
   if (['403', 'net::ERR_BLOCKED_BY_ORB', 'NS_BINDING_ABORTED'].includes(reason)) {
     console.log('[StravaHeatmapExt] Detecting expired credentials, requesting new ones.');
