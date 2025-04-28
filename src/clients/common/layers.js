@@ -1,7 +1,7 @@
 // Available color schemes for the heatmap
 const COLORS = {
-  hot: ['🔥', 'Hot'],
   blue: ['🔵', 'Blue'],
+  hot: ['🔥', 'Hot'],
   gray: ['⚪', 'Gray'],
   purple: ['🟣', 'Purple'],
   bluered: ['🔴', 'Blue-Red'],
@@ -9,8 +9,68 @@ const COLORS = {
 };
 
 const ACTIVITIES = {
-  _: ['all', 'run', 'ride', 'water', 'run'],
-  water: ['kayak', 'surf', 'swim'],
+  all: 'All Sports',
+  run: 'All Foot Sports',
+  sport_Run: 'Run',
+  sport_TrailRun: 'Trail Run',
+  sport_Walk: 'Walk',
+  sport_Hike: 'Hike',
+  ride: 'All Cycle Sports',
+  sport_Ride: 'Ride',
+  sport_MountainBikeRide: 'Mountain Bike Ride',
+  sport_GravelRide: 'Gravel Ride',
+  sport_EBikeRide: 'E-Bike Ride',
+  sport_EMountainBikeRide: 'E-Mountain Bike Ride',
+  sport_Velomobile: 'Velomobile',
+  water: 'All Water Sports',
+  sport_Canoeing: 'Canoe',
+  sport_Kayaking: 'Kayaking',
+  sport_Kitesurf: 'Kitesurf',
+  sport_Rowing: 'Rowing',
+  sport_Sail: 'Sail',
+  sport_StandUpPaddling: 'Stand Up Paddling',
+  sport_Surfing: 'Surfing',
+  sport_Swim: 'Swim',
+  sport_Windsurf: 'Windsurf',
+  winter: 'All Winter Sports',
+  sport_AlpineSki: 'Alpine Ski',
+  sport_BackcountrySki: 'Backcountry Ski',
+  sport_IceSkate: 'Ice Skate',
+  sport_NordicSki: 'Nordic Ski',
+  sport_Snowboard: 'Snowboard',
+  sport_Snowshoe: 'Snowshoe',
+};
+
+const ACTIVITY_GROUPS = {
+  _: ['all', 'run', 'ride', 'water', 'winter'],
+  'Foot Sports': ['sport_Run', 'sport_TrailRun', 'sport_Walk', 'sport_Hike'],
+  'Cycle Sports': [
+    'sport_Ride',
+    'sport_MountainBikeRide',
+    'sport_GravelRide',
+    'sport_EBikeRide',
+    'sport_EMountainBikeRide',
+    'sport_Velomobile',
+  ],
+  'Water Sports': [
+    'sport_Canoeing',
+    'sport_Kayaking',
+    'sport_Kitesurf',
+    'sport_Rowing',
+    'sport_Sail',
+    'sport_StandUpPaddling',
+    'sport_Surfing',
+    'sport_Swim',
+    'sport_Windsurf',
+  ],
+  'Winter Sports': [
+    'sport_AlpineSki',
+    'sport_BackcountrySki',
+    'sport_IceSkate',
+    'sport_NordicSki',
+    'sport_Snowboard',
+    'sport_Snowshoe',
+  ],
 };
 
 export const COLOR_OPTIONS = Object.keys(COLORS).map((key) => [
@@ -18,9 +78,9 @@ export const COLOR_OPTIONS = Object.keys(COLORS).map((key) => [
   formatLayerColor(key),
 ]);
 
-export const ACTIVITY_OPTIONS = Object.entries(ACTIVITIES).map(([group, values]) => [
-  formatLayerActivity(group),
-  values.map((value) => [value, formatLayerActivity(value)]),
+export const ACTIVITY_OPTIONS = Object.entries(ACTIVITY_GROUPS).map(([group, values]) => [
+  group,
+  values.map((value) => [value, ACTIVITIES[value]]),
 ]);
 
 function formatLayerColor(value) {
@@ -28,27 +88,10 @@ function formatLayerColor(value) {
   return `${emoji} ${label}`;
 }
 
-function formatLayerActivity(param) {
-  // Remove "sport_" prefix if present
-  let clean = param.replace(/^sport_/, '');
-
-  // Split camelCase or PascalCase into words
-  clean = clean.replace(/([a-z])([A-Z])/g, '$1 $2');
-
-  // Capitalize each word
-  clean = clean
-    .split(' ')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-
-  // Fix known patterns like "E Bike" → "E-Bike"
-  return clean.replace(/E\s/g, 'E-');
-}
-
 // Creates a layer configuration object
 function getLayerConfig(position, activity, color, timestamp, authenticated, version) {
-  const activityName = formatLayerActivity(activity);
-  const colorEmoji = COLOR_OPTIONS[color] || '❓';
+  const activityName = ACTIVITIES[activity];
+  const [colorEmoji] = COLORS[color] || '❓';
 
   return {
     id: `strava-heatmap-${position}`,
