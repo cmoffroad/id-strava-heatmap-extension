@@ -9,7 +9,7 @@ import {
 import { showInstalledNotification } from './installs.js';
 import { resetLayerPresets } from './layers.js';
 import { redirectComplete, openLogin } from './tabs.js';
-import { watchTileErrors } from './tiles.js';
+import { watchTileErrors, watchTileFallback } from './tiles.js';
 
 async function onMessage(message, sender) {
   const MESSAGE_HANDLERS = {
@@ -49,13 +49,20 @@ async function onActionClicked(tab) {
 }
 
 async function onTileError(tabId, url, reason) {
-  console.warn('[StravaHeatmapExt] Detected tile error:', reason, url);
+  console.warn('[StravaHeatmapExt] Detected tile error:', tabId, url, reason);
   if (['403', 'net::ERR_BLOCKED_BY_ORB', 'NS_BINDING_ABORTED'].includes(reason)) {
     console.log('[StravaHeatmapExt] Detecting expired credentials, requesting new ones.');
     await requestCredentials();
+    // TODO show toast message
     return true;
   }
   return false;
+}
+
+async function onTileFallback(tabId, url, reason) {
+  console.debug('[StravaHeatmapExt] Detected tile fallback:', tabId, url, reason);
+  // TODO show toast message
+  return true;
 }
 
 async function main() {
@@ -66,6 +73,7 @@ async function main() {
   browser.runtime.onStartup.addListener(onStartup);
 
   watchTileErrors(onTileError);
+  watchTileFallback(onTileFallback);
 }
 
 main();
