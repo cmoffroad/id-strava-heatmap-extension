@@ -1,5 +1,5 @@
 import { setupAuthStatusChangeListener } from '../common/auth.js';
-import { parseLayersPresets, setupLayerPresetsChangeListener } from '../common/layers.js';
+import { parseLayerPresets, setupLayerPresetsChangeListener } from '../common/layers.js';
 import { restoreiDContainer, setupiDCoreContextListener } from './id.js';
 import { initImagery, updateImagery } from './imagery.js';
 import { setupOverlaysListeners } from './overlays.js';
@@ -10,7 +10,7 @@ async function main() {
   const version = script.dataset.version;
 
   let authenticated = script.dataset.authenticated === 'true';
-  let layerPresets = parseLayersPresets(script.dataset.layers);
+  let layerPresets = parseLayerPresets(script.dataset.layers);
 
   setupiDCoreContextListener(async (context) => {
     window.context = context; // DEBUG

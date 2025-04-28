@@ -122,7 +122,7 @@ export function setupLayerPresetsChangeListener(callback) {
   });
 }
 
-export function parseLayersPresets(string) {
+export function parseLayerPresets(string) {
   return string.split(';').map((item) => {
     const [activity, color] = item.split(':');
     return { activity, color };
