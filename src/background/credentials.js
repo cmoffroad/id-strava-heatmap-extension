@@ -97,6 +97,6 @@ async function updateActionIcon(authenticated) {
       popup: 'src/background/popups/settings.html',
     });
   } else {
-    await browser.action.setPopup({ popup: '', tabId });
+    await browser.action.setPopup({ popup: '' });
   }
 }
