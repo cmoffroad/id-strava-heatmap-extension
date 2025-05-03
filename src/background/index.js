@@ -9,7 +9,7 @@ import {
 import { showInstalledNotification } from './installs.js';
 import { resetLayerPresets } from './layers.js';
 import { redirectComplete, openLogin } from './tabs.js';
-import { watchTileErrors, watchTileFallback } from './tiles.js';
+import { watchTiles } from './tiles.js';
 
 async function onMessage(message, sender) {
   const MESSAGE_HANDLERS = {
@@ -44,25 +44,27 @@ async function onActionClicked(tab) {
   if (credentials) {
     // do nothing for now, later will open settings popup
   } else {
-    await openLogin(tab);
+    await openLogin(tab.id);
   }
 }
 
-async function onTileError(tabId, url, reason) {
-  console.warn('[StravaHeatmapExt] Detected tile error:', tabId, url, reason);
-  if (['403', 'net::ERR_BLOCKED_BY_ORB', 'NS_BINDING_ABORTED'].includes(reason)) {
-    console.log('[StravaHeatmapExt] Detecting expired credentials, requesting new ones.');
-    await requestCredentials();
-    // TODO show toast message
-    return true;
-  }
-  return false;
+async function showLoginPrompt(tabId) {
+  await browser.action.setPopup({
+    popup: `src/background/popups/error.html?tabId=${tabId}`,
+    tabId,
+  });
+  await browser.action.openPopup();
+}
+
+async function onTileExpired(tabId, url, reason) {
+  console.log('[StravaHeatmapExt] Detecting expired credentials, requesting new ones.');
+  await requestCredentials();
+  await showLoginPrompt(tabId);
 }
 
 async function onTileFallback(tabId, url, reason) {
   console.debug('[StravaHeatmapExt] Detected tile fallback:', tabId, url, reason);
-  // TODO show toast message
-  return true;
+  await showLoginPrompt(tabId);
 }
 
 async function main() {
@@ -72,8 +74,20 @@ async function main() {
   browser.runtime.onInstalled.addListener(onInstalled);
   browser.runtime.onStartup.addListener(onStartup);
 
-  watchTileErrors(onTileError);
-  watchTileFallback(onTileFallback);
+  watchTiles(
+    onTileExpired,
+    ['*://*.strava.com/identified/globalheat/*/*/*.png*'],
+    [403, 'net::ERR_BLOCKED_BY_ORB', 'NS_BINDING_ABORTED'],
+    10000
+  );
+  watchTiles(
+    onTileFallback,
+    [
+      'https://raw.githubusercontent.com/cmoffroad/id-strava-heatmap-extension/refs/heads/*/assets/heatmap-fallback.png*',
+    ],
+    [200, 304],
+    30000
+  );
 }
 
 main();

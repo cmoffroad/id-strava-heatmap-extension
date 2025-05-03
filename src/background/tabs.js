@@ -16,10 +16,10 @@ export async function redirectComplete(tabId, sender) {
   }
 }
 
-export async function openLogin(tab) {
+export async function openLogin(tabId) {
   await browser.tabs.create({
     url: `https://www.strava.com/dashboard?redirect=${encodeURIComponent(
-      `/maps/global-heatmap?tabId=${tab.id}`
+      `/maps/global-heatmap?tabId=${tabId}`
     )}`,
   });
 }
