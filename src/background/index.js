@@ -57,7 +57,12 @@ async function showLoginPrompt(tabId) {
 }
 
 async function onTileExpired(tabId, url, reason) {
-  console.log('[StravaHeatmapExt] Detecting expired credentials, requesting new ones.');
+  console.log(
+    '[StravaHeatmapExt] Detecting expired credentials, requesting new ones.',
+    tabId,
+    url,
+    reason
+  );
   await requestCredentials();
   await showLoginPrompt(tabId);
 }
