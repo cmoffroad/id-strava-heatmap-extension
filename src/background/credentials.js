@@ -27,8 +27,9 @@ export async function requestCredentials(skipValidation = false) {
   let credentials = await fetchCookies(STRAVA_COOKIE_URL, STRAVA_COOKIE_NAMES);
   console.debug('[StravaHeatmapExt] Credentials fetched:', credentials);
 
-  const { credentials: storedCredentials } =
-    await browser.storage.local.get('credentials');
+  const { credentials: storedCredentials } = await browser.storage.local.get(
+    'credentials'
+  );
 
   if (!credentials && storedCredentials) {
     console.debug('[StravaHeatmapExt] Falling back to stored credentials');
@@ -94,7 +95,7 @@ async function updateActionIcon(authenticated) {
 
   if (authenticated) {
     await browser.action.setPopup({
-      popup: 'src/background/popups/settings.html',
+      popup: 'src/popups/settings.html',
     });
   } else {
     await browser.action.setPopup({ popup: '' });

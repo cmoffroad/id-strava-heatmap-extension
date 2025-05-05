@@ -1,12 +1,12 @@
-import Sortable from '../../../lib/sortablejs@1.15.0.esm.min.js';
+import Sortable from '../../lib/sortablejs@1.15.0.esm.min.js';
 
 import {
   formatLayerPresets,
   getLayerPresets,
   setLayerPresets,
-  resetLayerPresets,
-} from '../layers.js';
-import { ACTIVITY_OPTIONS, COLOR_OPTIONS } from '../../clients/common/layers.js';
+} from '../background/layers.js';
+
+import { ACTIVITY_OPTIONS, COLOR_OPTIONS } from '../clients/common/layers.js';
 
 const MAX_LAYERS = 8;
 

@@ -50,7 +50,7 @@ async function onActionClicked(tab) {
 
 async function showLoginPrompt(tabId) {
   await browser.action.setPopup({
-    popup: `src/background/popups/error.html?tabId=${tabId}`,
+    popup: `src/popups/error.html?tabId=${tabId}`,
     tabId,
   });
   await browser.action.openPopup();
