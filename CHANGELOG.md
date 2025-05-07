@@ -2,6 +2,10 @@
 
 ## Versions
 
+### `0.10.1` (2025-05-07)
+
+- Fixed Shift+Q overlay toggle keyboard shorcut conflicting with area squaring.
+
 ### `0.10.0` (2025-04-24)
 
 - Extension Icon: Shows Strava authentication state with login on click
