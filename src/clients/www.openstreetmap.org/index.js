@@ -21,7 +21,7 @@ async function main() {
 
     await initImagery(context, authenticated, version);
 
-    setupOverlaysListeners();
+    setupOverlaysListeners(context);
     setupAuthStatusChangeListener(async (authenticated) => {
       await updateImagery(context, authenticated, version);
     });

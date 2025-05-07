@@ -6,7 +6,7 @@ const hiddenClass = 'overlays-hidden';
 const storageKeyLastUsed = 'overlays-last-used';
 const storageKeyOpacity = opacityClassPrefix;
 
-export function setupOverlaysListeners() {
+export function setupOverlaysListeners(context) {
 	// const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
 	// const altPrefix = isMac ? '⌥' : 'Alt';
 
@@ -16,25 +16,17 @@ export function setupOverlaysListeners() {
 		// `"ℹ️ Use ⌨️ shortcuts Shift+Q to toggle all ayers visibiliy, and ${altPrefix}+[ or ${altPrefix}+] to adjust opacity."`
 	);
 
-	document.addEventListener('keydown', (event) => {
-		// Prevent execution if focused on an input, textarea, or content editable element.
-		const tagName = event.target.tagName;
-		if (tagName === 'INPUT' || tagName === 'TEXTAREA' || event.target.isContentEditable) {
-			return;
-		}
+	context.keybinding().on(iD.uiCmd('⇧Q'), function (d3_event) {
+		d3_event.stopImmediatePropagation();
+		d3_event.preventDefault();
+		toggleHiddenOverlays();
+	});
 
-		if (!event.shiftKey) return;
-
-		switch (event.key.toUpperCase()) {
-			case 'Q':
-				toggleHiddenOverlays();
-				break;
-			case 'W':
-				const osmLayer = context.layers().layer('osm');
-				osmLayer.enabled(!osmLayer.enabled());
-				break;
-		}
-		return;
+	context.keybinding().on(iD.uiCmd('⇧W'), function (d3_event) {
+		d3_event.stopImmediatePropagation();
+		d3_event.preventDefault();
+		const osmLayer = context.layers().layer('osm');
+		osmLayer.enabled(!osmLayer.enabled());
 	});
 
 	addHashChangeListener((oldHash, newHash) => {
@@ -77,6 +69,41 @@ function toggleHiddenOverlays(hidden) {
 		isOverlaysHidden() ? '"Hidden"' : ''
 	);
 	// changeOverlayOpacity();
+}
+
+export async function injectOverlaysShortcuts() {
+	await iD.fileFetcher.get('shortcuts');
+	const cache = iD.fileFetcher.cache?.();
+	const browsingTab = cache?.shortcuts?.find((s) => s.tab === 'browsing');
+	const rows = browsingTab?.columns?.[0]?.rows;
+
+	if (!Array.isArray(rows)) {
+		console.warn(
+			'[StravaHeatmapExt] Shortcuts cache is unavailable or not in expected format.'
+		);
+		return;
+	}
+
+	const targetIndex = rows.findIndex(
+		(r) => r.text === 'shortcuts.browsing.display_options.map_data'
+	);
+	if (targetIndex === -1) return;
+
+	const customShortcuts = [
+		{
+			modifiers: ['⇧'],
+			shortcuts: ['Q'],
+			// text: 'Toggle Overlays',
+			text: 'shortcuts.browsing.display_options.map_data',
+		},
+		{
+			modifiers: ['⇧'],
+			shortcuts: ['W'],
+			text: 'shortcuts.browsing.display_options.map_data',
+		},
+	];
+
+	rows.splice(targetIndex, 1, ...customShortcuts);
 }
 
 // function changeOverlayOpacity(step = 0) {
