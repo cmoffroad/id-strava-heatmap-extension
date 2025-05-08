@@ -2,7 +2,7 @@ body {
   font-family: sans-serif;
   margin: 0;
   padding: 1em;
-  width: 350px;
+  width: 400px;
 }
 
 h2,
@@ -21,20 +21,6 @@ p {
 
 #close-settings {
   cursor: pointer;
-}
-
-#apply-settings {
-  padding: 0.5rem 0.25rem;
-
-  &:not(:disabled) {
-    font-weight: bold;
-    background: #fc4c02;
-    color: white;
-  }
-
-  &:disabled {
-    border: none;
-  }
 }
 
 #settings {
@@ -74,6 +60,10 @@ p {
     padding: 0.25em;
   }
 
+  select.invalid {
+    border: 1px solid red;
+  }
+
   .layer-remove {
     padding: 0.25em;
     font-size: 1.25em;
@@ -85,12 +75,74 @@ p {
 #add-layer {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5em;
-  background: #f0f0f0;
-  padding: 0.5em 0.5em;
-  border-radius: 8px;
-  margin-bottom: 0.5em;
+  background: white;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 0.5em;
+  border-radius: 6px;
   width: 100%;
-  border-color: transparent;
   cursor: pointer;
+  font-weight: 500;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+#add-layer:hover:enabled {
+  background: #f9f9f9;
+  border-color: #999;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+}
+
+#add-layer:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+#reset-settings {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 0.85em;
+  text-decoration: underline;
+  padding: 6px 4px 4px;
+  display: block;
+  margin: 0 0 4px auto;
+}
+
+#reset-settings:hover {
+  color: #000;
+}
+
+#apply-settings {
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background: #fc4c02;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+#apply-settings:hover:enabled,
+#apply-settings:focus-visible:enabled {
+  background: #e44402;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+#apply-settings:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  font-weight: normal;
+  background: #ccc;
+  color: #fff;
+  box-shadow: none;
 }

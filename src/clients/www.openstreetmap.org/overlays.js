@@ -6,16 +6,7 @@ const hiddenClass = 'overlays-hidden';
 const storageKeyLastUsed = 'overlays-last-used';
 const storageKeyOpacity = opacityClassPrefix;
 
-export function setupOverlaysListeners(context) {
-	// const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-	// const altPrefix = isMac ? '⌥' : 'Alt';
-
-	document.body.style.setProperty(
-		`--${opacityClassPrefix}-help`,
-		`"ℹ️ Use the keyboard shortcut Shift+Q to toggle the visibility of all overlays."`
-		// `"ℹ️ Use ⌨️ shortcuts Shift+Q to toggle all ayers visibiliy, and ${altPrefix}+[ or ${altPrefix}+] to adjust opacity."`
-	);
-
+export function bindOverlaysShortcuts(context) {
 	context.keybinding().on(iD.uiCmd('⇧Q'), function (d3_event) {
 		d3_event.stopImmediatePropagation();
 		d3_event.preventDefault();
@@ -28,6 +19,14 @@ export function setupOverlaysListeners(context) {
 		const osmLayer = context.layers().layer('osm');
 		osmLayer.enabled(!osmLayer.enabled());
 	});
+}
+
+export function setupOverlaysListeners() {
+	document.body.style.setProperty(
+		`--${opacityClassPrefix}-help`,
+		`"ℹ️ Use the keyboard shortcut Shift+Q to toggle the visibility of all overlays."`
+		// `"ℹ️ Use ⌨️ shortcuts Shift+Q to toggle all ayers visibiliy, and ${altPrefix}+[ or ${altPrefix}+] to adjust opacity."`
+	);
 
 	addHashChangeListener((oldHash, newHash) => {
 		const newValue = newHash.get('overlays') ?? '';
@@ -54,7 +53,7 @@ export function getDefaultOverlayIds() {
 	} else if (lastUsed !== null) {
 		return lastUsed.split(',').filter(Boolean);
 	} else {
-		return ['strava-heatmap-1'];
+		return ['strava-heatmap-all'];
 	}
 }
 

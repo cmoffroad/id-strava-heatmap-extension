@@ -1,7 +1,7 @@
 import { setupAuthStatusChangeListener } from '../common/auth.js';
 import { parseLayerPresets, setupLayerPresetsChangeListener } from '../common/layers.js';
 import { restoreiDContainer, setupiDCoreContextListener } from './id.js';
-import { initImagery, updateImagery } from './imagery.js';
+import { applyImagery } from './imagery.js';
 import { setupOverlaysListeners } from './overlays.js';
 
 async function main() {
@@ -22,17 +22,17 @@ async function main() {
     // make sure ui fully loaded
     await context.ui().ensureLoaded();
 
-    await initImagery(context, layerPresets, authenticated, version);
+    await applyImagery(context, layerPresets, authenticated, version);
 
     setupOverlaysListeners(context);
     setupAuthStatusChangeListener(async (newAuthenticated) => {
       authenticated = newAuthenticated;
-      await updateImagery(context, layerPresets, authenticated, version);
+      await applyImagery(context, layerPresets, authenticated, version);
     });
 
     setupLayerPresetsChangeListener(async (layers) => {
       layerPresets = parseLayerPresets(layers);
-      await updateImagery(context, layerPresets, authenticated, version);
+      await applyImagery(context, layerPresets, authenticated, version);
     });
 
     // ensure document is focused to listen to keyboard events

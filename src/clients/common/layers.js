@@ -42,7 +42,7 @@ const ACTIVITIES = {
 };
 
 const ACTIVITY_GROUPS = {
-  _: ['all', 'run', 'ride', 'water', 'winter'],
+  'Top Categories': ['all', 'run', 'ride', 'water', 'winter'],
   'Foot Sports': ['sport_Run', 'sport_TrailRun', 'sport_Walk', 'sport_Hike'],
   'Cycle Sports': [
     'sport_Ride',
@@ -94,7 +94,7 @@ function getLayerConfig(position, activity, color, timestamp, authenticated, ver
   const [colorEmoji] = COLORS[color] || '❓';
 
   return {
-    id: `strava-heatmap-${position}`,
+    id: `strava-heatmap-${activity}`,
     name: `${new Array(position).join('󠀠')}${colorEmoji} Strava Heatmap ${activityName}`,
     description: `Shows ${activityName.toLowerCase()} aggregated, public Strava activities over the last year in ${colorEmoji} color.`,
     template: authenticated

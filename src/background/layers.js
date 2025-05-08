@@ -40,3 +40,12 @@ export async function getLayerPresets() {
 export function formatLayerPresets(layerPresets) {
 	return layerPresets.map(({ activity, color }) => `${activity}:${color}`).join(';');
 }
+
+export function validateLayerPresets(layerPresets) {
+	for (const { activity, color } of layerPresets) {
+		if (activity === undefined || color === undefined) {
+			return false;
+		}
+	}
+	return true;
+}
