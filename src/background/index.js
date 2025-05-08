@@ -48,12 +48,13 @@ async function onActionClicked(tab) {
   }
 }
 
+// disable for now as it can cause issues with popup display
 async function showLoginPrompt(tabId) {
-  await browser.action.setPopup({
-    popup: `src/popups/error.html?tabId=${tabId}`,
-    tabId,
-  });
-  await browser.action.openPopup();
+  // await browser.action.setPopup({
+  //   popup: `src/popups/error.html?tabId=${tabId}`,
+  //   tabId,
+  // });
+  // await browser.action.openPopup();
 }
 
 async function onTileExpired(tabId, url, reason) {
