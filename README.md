@@ -2,7 +2,7 @@
 
 This browser extension integrates the [Strava Global Heatmap](https://www.strava.com/maps/global-heatmap) seamlessly into the OpenStreetMap [iD editor](https://www.openstreetmap.org/edit?editor=id), enhancing your mapping experience by providing easy access to Strava activity data.
 
-<img src="./images/screenshot3.png" alt="Strava Heatmap Overlays" width="100%"/>
+<img src="./images/screenshot1.png" width="48%"/>&nbsp;<img src="./images/screenshot2.png" width="48%"/>
 
 ## Installation / Updates
 
@@ -16,23 +16,18 @@ See the [Changelog](./CHANGELOG.md) for details.
 
 Follow these steps to activate the Strava Heatmap in the iD editor:
 
-1. **Install the extension** in your browser and **pin it** for easy access.
-2. Open the [iD editor](https://www.openstreetmap.org/edit?editor=id).
-3. Press `B` or click **Background Settings**, then scroll to the **Overlays** section.
-4. Select **Strava Heatmap (All)** for all activity types, or choose a specific layer: **Ride**, **Run**, **Water**, or **Winter**.
-5. Click the extension icon to **log in to Strava** and enable the heatmap. Don’t have an account? [Sign up here](https://www.strava.com/).
-6. Use `Shift+Q` to toggle overlay visibility, and `Shift+W` to toggle data visibility.
+1. Install the extension in your browser and pin it to your toolbar.
+2. Go to https://www.openstreetmap.org/edit?editor=id to open the iD editor.
+3. Press B or click Background Settings, then scroll to the Overlays section.
+4. Select any Strava Heatmap overlay from the list.
+5. Click the red extension icon to log in to Strava. Sign up here if needed: https://www.strava.com/
+6. After logging in, click the green extension icon to set activity type, color, and opacity.
+7. Press Shift+Q to toggle overlay visibility, and Shift+W to toggle data visibility.
 
 ### Troubleshooting
 
 **Q: “Click the Strava Heatmap extension icon to log into Strava and enable the heatmap.” — What does this mean?**  
 **A:** This message appears if you're not logged in to Strava and haven’t visited the [Strava Global Heatmap](https://www.strava.com/heatmap). Just click the extension icon to sign in and authorize access.
-
-**Q: The heatmap appears blurry — how can I fix it?**  
-**A:** Ensure you’re using the **latest version** of the extension. Older versions may display lower-quality tiles or fail to load properly.
-
-**Q: How can I choose a different activity type or heatmap color?**  
-**A:** This feature will be available in the next version of the extension. Stay tuned!
 
 ### Feature and Bug Requests
 
