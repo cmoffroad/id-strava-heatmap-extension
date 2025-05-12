@@ -2,6 +2,11 @@
 
 ## Versions
 
+### `0.11.0` (2025-05-12)
+
+- Add popup with configurable Strava layers (activity type and color options).
+- Remove unneeded check-updates mechanism.
+
 ### `0.10.1` (2025-05-07)
 
 - Fixed Shift+Q overlay toggle keyboard shorcut conflicting with area squaring.
