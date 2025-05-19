@@ -2,7 +2,7 @@
 
 ## Versions
 
-### `0.11.1` (2025-05-20)
+### `0.11.1` (2025-05-19)
 
 - Fixed selection of previously used overlays.
 
