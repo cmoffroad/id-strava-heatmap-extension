@@ -2,6 +2,10 @@
 
 ## Versions
 
+### `0.11.1` (2025-05-20)
+
+- Fixed selection of previously used overlays.
+
 ### `0.11.0` (2025-05-12)
 
 - Add popup with configurable Strava layers (activity type and color options).
