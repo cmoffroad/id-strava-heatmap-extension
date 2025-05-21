@@ -22,12 +22,6 @@ export function bindOverlaysShortcuts(context) {
   });
 }
 
-function updateHashParamsWithoutEvent(newParams) {
-  const url = new URL(location);
-  url.hash = `#${decodeURIComponent(newParams.toString())}`;
-  history.replaceState(null, '', url);
-}
-
 async function reorderOverlaysHash(background, hashValue) {
   const imagery = await background.ensureLoaded();
 
@@ -120,9 +114,9 @@ function updateOverlaySummary() {
   document.body.style.setProperty(overlaysSummaryVar, `"${status}"`);
 }
 
-export function updateOverlaysHelpText() {
+function updateOverlaysHelpText() {
   const helpText = [
-    'ℹ️ Use [Shift+Q] to toggle overlay visibility: visible or hidden.',
+    'ℹ️ Use [Shift+Q] to toggle overlay visibility.',
     'Your last used overlays will be remembered across sessions.',
   ]
     .join(' ')
