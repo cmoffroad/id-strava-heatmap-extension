@@ -1,19 +1,20 @@
 import { getHashParams } from '../common/hash.js';
 
-const opacityStep = 10;
-const opacityClassPrefix = 'overlays-opacity';
-const hiddenClass = 'overlays-hidden';
+const overlaysHelpVar = `--overlays-help`;
+const overlaysSummaryVar = `--overlays-summary`;
+const overlaysHiddenClass = 'overlays-hidden';
 const storageKeyLastUsed = 'overlays-last-used';
-const storageKeyOpacity = opacityClassPrefix;
 
 export function bindOverlaysShortcuts(context) {
-  context.keybinding().on(iD.uiCmd('⇧Q'), function (d3_event) {
+  const keybinding = context.keybinding();
+
+  keybinding.on(iD.uiCmd('⇧Q'), function (d3_event) {
     d3_event.stopImmediatePropagation();
     d3_event.preventDefault();
-    toggleHiddenOverlays();
+    toggleOverlaysVisibility();
   });
 
-  context.keybinding().on(iD.uiCmd('⇧W'), function (d3_event) {
+  keybinding.on(iD.uiCmd('⇧W'), function (d3_event) {
     d3_event.stopImmediatePropagation();
     d3_event.preventDefault();
     const osmLayer = context.layers().layer('osm');
@@ -21,56 +22,123 @@ export function bindOverlaysShortcuts(context) {
   });
 }
 
-export function setupOverlaysListeners() {
-  document.body.style.setProperty(
-    `--${opacityClassPrefix}-help`,
-    `"ℹ️ Use the keyboard shortcut Shift+Q to toggle the visibility of all overlays."`
-    // `"ℹ️ Use ⌨️ shortcuts Shift+Q to toggle all ayers visibiliy, and ${altPrefix}+[ or ${altPrefix}+] to adjust opacity."`
-  );
+function updateHashParamsWithoutEvent(newParams) {
+  const url = new URL(location);
+  url.hash = `#${decodeURIComponent(newParams.toString())}`;
+  history.replaceState(null, '', url);
+}
 
-  document.addEventListener('change', (event) => {
+async function reorderOverlaysHash(background, hashValue) {
+  const imagery = await background.ensureLoaded();
+
+  // Get the preferred Strava layer order from background sources
+  const stravaLayerIds = imagery.backgrounds
+    .filter((b) => b.id.startsWith('strava-heatmap-'))
+    .map((b) => b.id)
+    .reverse();
+
+  // Convert input value to array
+  const inputIds = hashValue.split(',').filter(Boolean);
+
+  // Separate Strava and non-Strava layers
+  const stravaInInput = inputIds.filter((id) => stravaLayerIds.includes(id));
+  const others = inputIds.filter((id) => !stravaLayerIds.includes(id));
+
+  // Reorder Strava layers based on the predefined order
+  const sortedStrava = stravaLayerIds.filter((id) => stravaInInput.includes(id));
+
+  // Combine: others first (non-Strava), then sorted Strava layers
+  const reordered = [...others, ...sortedStrava];
+
+  return reordered.join(',');
+}
+
+export async function setupOverlaysListeners(context) {
+  document.addEventListener('change', async (event) => {
     const target = event.target;
-
     if (
       target instanceof HTMLElement &&
       target.matches('input[type="checkbox"][name="layers"]')
     ) {
       // Ensure overlays are visible when toggling layer checkboxes
-      toggleHiddenOverlays(false);
+      toggleOverlaysVisibility(true);
 
       // Save the current overlay state (or empty string if none)
-      const newValue = getHashParams(location).get('overlays') ?? '';
+      const hashParams = getHashParams(location);
+      const newValue = hashParams.get('overlays') ?? '';
+      await adjustOverlaysOrder(context.background(), newValue, true);
+
+      // Save the last used overlays in local storage
       localStorage.setItem(storageKeyLastUsed, newValue);
     }
   });
 
-  // changeOverlayOpacity();
+  // execute once
+  updateOverlaysHelpText();
+  updateOverlaySummary();
+
+  await injectOverlaysShortcuts();
 }
 
-export function getDefaultOverlayIds() {
+export async function adjustOverlaysOrder(background, newValue, reset) {
+  const adjustedValue = await reorderOverlaysHash(background, newValue);
+
+  if (adjustedValue === newValue) return;
+
+  if (reset) {
+    background
+      .overlayLayerSources()
+      .forEach((layer) => background.toggleOverlayLayer(layer));
+  }
+
+  adjustedValue
+    .split(',')
+    .filter(Boolean)
+    .forEach((id) => {
+      const source = background.findSource(id);
+      if (source) {
+        background.toggleOverlayLayer(source);
+      } else {
+        console.warn(
+          `[StravaHeatmapExt] Missing overlay source for initialization: ${id}`
+        );
+      }
+    });
+}
+
+export function getDefaultOverlaysHash() {
   const hash = getHashParams(location).get('overlays');
   const lastUsed = localStorage.getItem(storageKeyLastUsed);
 
-  if (hash !== null) {
-    return hash.split(',').filter(Boolean);
-  } else if (lastUsed !== null) {
-    return lastUsed.split(',').filter(Boolean);
+  return hash ?? lastUsed ?? 'strava-heatmap-all';
+}
+
+function updateOverlaySummary() {
+  const status = document.body.classList.contains(overlaysHiddenClass)
+    ? 'Hidden'
+    : 'Visible';
+  document.body.style.setProperty(overlaysSummaryVar, `"${status}"`);
+}
+
+export function updateOverlaysHelpText() {
+  const helpText = [
+    'ℹ️ Use [Shift+Q] to toggle overlay visibility: visible or hidden.',
+    'Your last used overlays will be remembered across sessions.',
+  ]
+    .join(' ')
+    .trim();
+
+  document.body.style.setProperty(overlaysHelpVar, `"${helpText}"`);
+}
+
+function toggleOverlaysVisibility(forceVisible) {
+  const body = document.body;
+  if (forceVisible === true) {
+    body.classList.remove(overlaysHiddenClass);
   } else {
-    return ['strava-heatmap-all'];
+    body.classList.toggle(overlaysHiddenClass);
   }
-}
-
-function isOverlaysHidden() {
-  return document.body.classList.contains(hiddenClass);
-}
-
-function toggleHiddenOverlays(hidden) {
-  document.body.classList.toggle(hiddenClass, hidden);
-  document.body.style.setProperty(
-    `--${opacityClassPrefix}-summary`,
-    isOverlaysHidden() ? '"Hidden"' : ''
-  );
-  // changeOverlayOpacity();
+  updateOverlaySummary();
 }
 
 export async function injectOverlaysShortcuts() {
@@ -95,46 +163,14 @@ export async function injectOverlaysShortcuts() {
     {
       modifiers: ['⇧'],
       shortcuts: ['Q'],
-      // text: 'Toggle Overlays',
-      text: 'shortcuts.browsing.display_options.map_data',
+      text: 'Toggle Overlays Visibility',
     },
     {
       modifiers: ['⇧'],
       shortcuts: ['W'],
-      text: 'shortcuts.browsing.display_options.map_data',
+      text: 'shortcuts.browsing.display_options.osm_data',
     },
   ];
 
   rows.splice(targetIndex, 1, ...customShortcuts);
 }
-
-// function changeOverlayOpacity(step = 0) {
-// 	if (isOverlaysHidden()) {
-// 		document.body.style.setProperty(`--${opacityClassPrefix}-summary`, '"Hidden"');
-// 		return;
-// 	}
-
-// 	const oldOpacity = parseInt(localStorage.getItem(storageKeyOpacity)) || 100;
-// 	const newOpacity = Math.max(opacityStep, Math.min(oldOpacity + step, 100));
-
-// 	localStorage.setItem(storageKeyOpacity, newOpacity);
-
-// 	updateOverlayOpacityClass(newOpacity);
-// }
-
-// function updateOverlayOpacityClass(value) {
-// 	const current = [...document.body.classList].find((cls) =>
-// 		cls.startsWith(opacityClassPrefix)
-// 	);
-// 	if (current) document.body.classList.remove(current);
-
-// 	if (value < 100) {
-// 		document.body.classList.add(`${opacityClassPrefix}-${value}`);
-// 	}
-
-// 	document.body.style.setProperty(`--${opacityClassPrefix}`, value / 100);
-// 	document.body.style.setProperty(
-// 		`--${opacityClassPrefix}-summary`,
-// 		`"Opacity: ${value}%"`
-// 	);
-// }

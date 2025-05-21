@@ -24,7 +24,8 @@ async function main() {
 
     await applyImagery(context, layerPresets, authenticated, version);
 
-    setupOverlaysListeners(context);
+    await setupOverlaysListeners(context);
+
     setupAuthStatusChangeListener(async (newAuthenticated) => {
       authenticated = newAuthenticated;
       await applyImagery(context, layerPresets, authenticated, version);
