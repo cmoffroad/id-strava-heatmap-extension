@@ -116,8 +116,8 @@ function updateOverlaySummary() {
 
 function updateOverlaysHelpText() {
   const helpText = [
-    'ℹ️ Use [Shift+Q] to toggle overlay visibility.',
-    'Your last used overlays will be remembered across sessions.',
+    'ℹ️ Use [Shift+Q] to toggle the visibility of all overlays.',
+    'Previously used overlays persist between sessions.',
   ]
     .join(' ')
     .trim();

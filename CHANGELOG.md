@@ -2,6 +2,11 @@
 
 ## Versions
 
+### `0.12.0` (2025-05-23)
+
+- Preserve layer stacking order based on the popup configuration
+- Add the Shift+Q shortcut to the keyboard shortcuts help panel
+
 ### `0.11.1` (2025-05-19)
 
 - Fixed selection of previously used overlays.
